@@ -26,7 +26,6 @@ public class PlayListActivity extends AppCompatActivity {
     //listing
     ListView listView;
     PlaylistAdapter adapter;
-//    PlaylistView viewArr[] = new PlaylistView[200]; //list의 각 아이템들의 view값을 담고 있다. 일단 최대 200개로 해보자.
 
     int tempPos = -1, tempPos2 = -1;
 
@@ -79,28 +78,6 @@ public class PlayListActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //PlayActivity위의 activity 모두 삭제
                 System.out.println("stopPoint in PlayListActivity : " + (playCount - position));
                 startActivity(intent);
-
-//                if (alarmTimeArr[(playCount - 1) - position].equals("일반 메모")) {
-//                    mText.setText("일반 메모");
-//                } else {
-//                    String[] words = alarmTimeArr[(playCount - 1) - position].split(":");
-//                    if (Integer.parseInt(words[3]) < 10) words[3] = '0' + words[3];
-//                    if (Integer.parseInt(words[4]) < 10) words[4] = '0' + words[4];
-//                    String timeRegistered = words[3] + ":" + words[4] + "(" + words[1] + "월" + words[2] + "일" + ")";
-//                    mText.setText(timeRegistered);
-//                }
-//
-//
-//                Toast.makeText(getApplicationContext(), (playCount - 1) - position + " " + position, Toast.LENGTH_SHORT).show();
-//                System.out.println("재성 " + ((playCount - 1) - position) + " " + position);
-//                //voicePlayer stop이후, 바로 startPlaying시 문제가 발생하여, stop이 완료될 때까지 좀 기다린 후 start한다.
-//                try {
-//                    Thread.sleep(500);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-                //isEnd = true;
-//                Main2Activity.mVoicePlayer.startPlaying(SampleRate, BufferSize, playCount - position);
             }
         });
     }
@@ -179,7 +156,6 @@ public class PlayListActivity extends AppCompatActivity {
             } else {
                 view.textView.setBackgroundColor(Color.WHITE);
             }
-//            viewArr[position] = view;
 
             return view;
         }

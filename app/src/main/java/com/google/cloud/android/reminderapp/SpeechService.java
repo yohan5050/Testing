@@ -125,8 +125,6 @@ public class SpeechService extends Service {
                 }
             }
 
-            System.out.println("dddddd");
-
             if (text != null) {
                 for (Listener listener : mListeners) {
                     listener.onSpeechRecognized(text, isFinal);
@@ -159,19 +157,13 @@ public class SpeechService extends Service {
                 }
             }
 
-            System.out.println("dddddd2 " + text);
-
             if (text != null) {
                 for (Listener listener : mListeners) {
                     listener.onSpeechRecognized(text, true);
                 }
             }
-
-            //추가
-
             else if(text == null)
             {
-                System.out.println("dddddd3 " + mListeners);
                 for (Listener listener : mListeners) {
                     listener.onSpeechRecognized("", false);
                 }
@@ -400,7 +392,6 @@ public class SpeechService extends Service {
 
             // Schedule access token refresh before it expires
             if (mHandler != null) {
-                System.out.println("What is null ? : " + mHandler + accessToken);
                 mHandler.postDelayed(mFetchAccessTokenRunnable,
                         Math.max(accessToken.getExpirationTime().getTime()
                                 - System.currentTimeMillis()
@@ -515,5 +506,4 @@ public class SpeechService extends Service {
         }
 
     }
-
 }

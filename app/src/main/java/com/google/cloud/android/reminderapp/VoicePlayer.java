@@ -147,7 +147,6 @@ public class VoicePlayer {
 
         if(i == -1) {
             mIsPlaying = false; //재생이 끝났음을 체크.
-            System.out.println("play count : " + playCount);
             Message message2 = PlayActivity.vhandler.obtainMessage(1, "stop");
             PlayActivity.vhandler.sendMessage(message2);
         }
@@ -178,11 +177,9 @@ public class VoicePlayer {
      */
     public void playWaveFileAlarm(int SampleRate,int mBufferSize, String filename) {
         mIsPlaying = true;
-        System.out.println("in playWaveFileAlarm");
         int cnt = 0;
         while(true) {
             cnt++;
-            System.out.println("in playWaveFileAlarm Count : " + cnt);
             if(cnt > 11) {
 //                mIsPlaying = false; //mIsPlaying 이 true여야 device.callOnClick했을 때, 화면전환이 됨 그리고 그 때 어차피 mIsPlaying 이 false로 바뀜
                 return;

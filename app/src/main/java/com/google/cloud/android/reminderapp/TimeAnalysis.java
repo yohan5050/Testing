@@ -86,7 +86,6 @@ public class TimeAnalysis {
         curMinute = Integer.parseInt(temp[4]);
         //curSecond = Integer.parseInt(temp[5]);
 
-        System.out.println("cur : " + curYear + " " + curMonth + " " + curDay + " " + curHour + " " + curMinute + " ");
         curA = temp[6];
         calA = temp[6];
 
@@ -119,7 +118,6 @@ public class TimeAnalysis {
                 break;
         }
 
-        System.out.println("cur : " + curDayOfWeek);
 
         //24시간 기준으로 오전과 오후를 나눈다
         if (curA.equals("오전") && curHour == 12) {
@@ -141,13 +139,11 @@ public class TimeAnalysis {
         calMinute = curMinute;
 
         String curTime = curYear + ":" + curMonth + ":" + curDay + ":" + curHour + ":" + curMinute ;
-        System.out.println("CurTime : " + curTime);
         //정규식 표현식에서 계산 값 추출
         extractManager(target);
 
         //String calTime = calYear + "년 " + calMonth + "월 " + calDay + "일 " + calHour + "시 " + calMinute + "분 ";
         String calTime = calYear + ":" + calMonth + ":" + calDay + ":" + calHour + ":" + calMinute ;
-        System.out.println("CalTime : " + calTime);
         //추출한 표현값 리턴
 
         //시간표현이 없을 때 일반 메모로 인식하기 위해 note라는 문자열을 리턴함.
@@ -337,7 +333,6 @@ public class TimeAnalysis {
         regex = "[다다음날|다음날|내일|낼|명일|모레|내일모레|내일모래|낼모레|낼모래|모래|글피|익일|명일]+";
         int ret = extract100(searchTarget, regex);
         if (ret > 0) {
-            //System.out.println("DDDD" + isNextDay);
             isNextDay = true;
             calDay += ret;
             int day_num = days[calMonth];
@@ -656,12 +651,10 @@ public class TimeAnalysis {
             System.out.println("extract1");
             isExtracted = true;
             result = matcher.group(0);
-//            temp = result.trim().split("시간|분");
-//            addTime(0, Integer.parseInt(temp[0].trim()), Integer.parseInt(temp[1].trim()));
+
             temp = result.replaceAll(" ", "").split("시간|분");
 
             addTime(0, Integer.parseInt(temp[0].replaceAll(" ", "")), Integer.parseInt(temp[1].replaceAll(" ", "")));
-            //System.out.println("test : " + calHour + " " + calMinute);
 
             if(calHour < 12)
                 calA = "오전";
@@ -687,8 +680,7 @@ public class TimeAnalysis {
             System.out.println("extract30");
             isExtracted = true;
             result = matcher.group(0);
-//            temp = result.trim().split("시간|분");
-//            addTime(0, Integer.parseInt(temp[0].trim()), Integer.parseInt(temp[1].trim()));
+
             temp = result.replaceAll(" ", "").split("시간");
             addTime(0, Integer.parseInt(temp[0].replaceAll(" ", "")), 30);
 
@@ -717,7 +709,6 @@ public class TimeAnalysis {
             isExtracted = true;
             result = matcher.group(0);
             temp = result.split("시간");
-            //addTime(0, Integer.parseInt(temp[0].trim()), 0);
             addTime(0, Integer.parseInt(temp[0].replaceAll(" ", "")), 0);
 
             if(calHour < 12)
@@ -748,7 +739,6 @@ public class TimeAnalysis {
             result = result.replaceAll("오후", "");
             temp = result.split("시|분");
 
-            //atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].trim()), Integer.parseInt(temp[1].trim()));
             atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), Integer.parseInt(temp[1].replaceAll(" ", "")));
         }
         return isExtracted;
@@ -775,7 +765,7 @@ public class TimeAnalysis {
             result = result.replaceAll("오전", "");
             result = result.replaceAll("오후", "");
             temp = result.split("시");
-            //atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].trim()), 30);
+
             atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), 30);
         }
         return isExtracted;
@@ -1035,10 +1025,8 @@ public class TimeAnalysis {
      * @return boolean 해당 정규식을 통해서 시간표현이 추출되었는지 여부
      */
     public boolean extract13(String searchTarget, String regex) { //다음주, 다다음주 월,화~일요일
-        //System.out.println("ddd " + searchTarget);
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(searchTarget);
-        //System.out.println("dddd");
 
         boolean isExtracted = false;
         String result = "";
@@ -1051,7 +1039,6 @@ public class TimeAnalysis {
             isNextDay = true;
             isExtracted = true;
             result = matcher.group(0).replaceAll(" ", "");
-            //System.out.println("요일 "+result);
 
             if (result.length() == 7) {
                 week = result.substring(0, 4); //다다음주
@@ -1104,14 +1091,12 @@ public class TimeAnalysis {
             if (wMap.get(curDayOfWeek) < wMap.get(dayofweek)) {
                 //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (0 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 0 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
-                System.out.println("요일을 하고 있다 " + result );
-                //System.out.println("test : " + calweekday + " " + curHour + " " + calHour);
+
                 calDay += calweekday;
 
             } else if (wMap.get(curDayOfWeek) >= wMap.get(dayofweek)) {
                 //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (1 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 1 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
-                System.out.println("test22 : " + calweekday + " " + curHour + " " + calHour);
                 calDay += calweekday;
             }
 
@@ -1154,7 +1139,7 @@ public class TimeAnalysis {
                 calHour += 12;
 
             if (calHour * 60 + calMinute < curHour * 60 + curMinute && !isNextDay) {
-                System.out.println("IS NEXT DAY : " + isNextDay);
+
                 calDay += 1;
                 int day_num = days[calMonth];
                 calMonth += calDay / day_num;
@@ -1166,7 +1151,7 @@ public class TimeAnalysis {
         } else if (result.equals("오전") || calA.equals("오전")) { //오전
             calA = "오전";
             if (calHour * 60 + calMinute < curHour * 60 + curMinute && !isNextDay) {
-                System.out.println("IS NEXT DAY : " + isNextDay);
+
                 calDay += 1;
                 int day_num = days[calMonth];
                 calMonth += calDay / day_num;
@@ -1187,13 +1172,10 @@ public class TimeAnalysis {
                 }
             }
 
-            System.out.println("test : " + calYear + " " + calMonth + " " + calDay + " " + calHour + " " + calMinute + !isNextDay);
-            System.out.println("test : " + curYear + " " + curMonth + " " + curDay + " " + curHour + " " + curMinute + !isNextDay);
 
             if (calHour * 60 + calMinute < curHour * 60 + curMinute && !isNextDay && (calYear * 365 + calMonth * 30 + calDay) <= (curYear * 365 + curMonth * 30 + curDay)) {
                 System.out.println("extract201 : " + calMonth + " " + calDay + " " + calHour + " " + calMinute);
                 System.out.println("extract201");
-                System.out.println("IS NEXT DAY : " + isNextDay);
                 calDay += 1;
                 int day_num = days[calMonth];
                 calMonth += calDay == day_num ? 0 : calDay / day_num;
@@ -1243,9 +1225,7 @@ public class TimeAnalysis {
                 temp = result.split("시|분");
                 atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), Integer.parseInt(temp[1].replaceAll(" ", "")));
 
-                //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (hMap.get(week) * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = hMap.get(week) * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
-                //System.out.println(dayofweek + " " + wMap.get(dayofweek) + " " + curDayOfWeek + " " + wMap.get(curDayOfWeek) + "calweekday :" + calweekday);
                 calDay += calweekday;
             } else if (result.substring(0, 3).equals("다음주")) {
                 week = result.substring(0, 3);
@@ -1255,8 +1235,6 @@ public class TimeAnalysis {
                 temp = result.split("시|분");
                 atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), Integer.parseInt(temp[1].replaceAll(" ", "")));
 
-                System.out.println("test : " + Integer.parseInt(temp[0].replaceAll(" ", "")) + " " + Integer.parseInt(temp[1].replaceAll(" ", "")));
-                //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (hMap.get(week) * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = hMap.get(week) * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
             }
@@ -1306,8 +1284,6 @@ public class TimeAnalysis {
                 temp = result.split("시");
                 atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), 30);
 
-                //System.out.println("test : "+ Integer.parseInt(temp[0].replaceAll(" ", "")) + " " + Integer.parseInt(temp[1].replaceAll(" ", "")));
-                //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (hMap.get(week) * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = hMap.get(week) * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
             } else if (result.substring(0, 3).equals("다음주")) {
@@ -1318,8 +1294,6 @@ public class TimeAnalysis {
                 temp = result.split("시");
                 atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), 30);
 
-                //System.out.println("test : "+ Integer.parseInt(temp[0].replaceAll(" ", "")) + " " + Integer.parseInt(temp[1].replaceAll(" ", "")));
-                //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (hMap.get(week) * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = hMap.get(week) * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
             }
@@ -1354,7 +1328,6 @@ public class TimeAnalysis {
 
         while (matcher.find()) {
             System.out.println("In extract17");
-            // System.out.println("In matcher.find()");
             isNextDay = true;
             isExtracted = true;
             result = matcher.group(0).replaceAll(" ", "");
@@ -1369,8 +1342,6 @@ public class TimeAnalysis {
                 temp = result.split("시");
                 atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), 0);
 
-                //System.out.println("test : "+ Integer.parseInt(temp[0].replaceAll(" ", "")) + " " + Integer.parseInt(temp[1].replaceAll(" ", "")));
-                //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (hMap.get(week) * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = hMap.get(week) * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
             } else if (result.substring(0, 3).equals("다음주")) {
@@ -1381,8 +1352,6 @@ public class TimeAnalysis {
                 temp = result.split("시");
                 atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), 0);
 
-                //System.out.println("test : "+ Integer.parseInt(temp[0].replaceAll(" ", "")) + " " + Integer.parseInt(temp[1].replaceAll(" ", "")));
-                //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (hMap.get(week) * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = hMap.get(week) * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
             }
@@ -1416,7 +1385,6 @@ public class TimeAnalysis {
 
         while (matcher.find()) {
             System.out.println("In extract18");
-            // System.out.println("In matcher.find()");
             isExtracted = true;
 
             result = matcher.group(0).replaceAll(" ", "");
@@ -1428,7 +1396,6 @@ public class TimeAnalysis {
             temp = result.split("시|분");
 
             atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), Integer.parseInt(temp[1].replaceAll(" ", "")));
-            System.out.println("test : " + Integer.parseInt(temp[0].replaceAll(" ", "")) + " " + Integer.parseInt(temp[1].replaceAll(" ", "")));
 
             //시간바꿔주기 위한것
             regex = "오전|오후";
@@ -1437,26 +1404,18 @@ public class TimeAnalysis {
             if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour * 60 + curMinute <= calHour * 60 + calMinute) {
                 //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (0 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 0 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
-                //System.out.println("요일을 하고 있다 " + result );
-                System.out.println("test : " + calweekday + " " + curHour + " " + calHour);
                 calDay += calweekday;
 
             } else if (wMap.get(curDayOfWeek) >= wMap.get(dayofweek)) {
-                //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (1 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 1 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
-                //System.out.println("test : " + calweekday + " " + curHour + " " + calHour);
                 calDay += calweekday;
             }
 
-            //System.out.println("test333 : " +  curHour + " " + calHour);
             int day_num = days[curMonth];
             calMonth += calDay / day_num;
             calDay = calDay % day_num == 0 ? day_num : calDay % day_num;
             calYear += calMonth / 12;
             calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
-
-            //System.out.println("test : " +result);
-            //System.out.println(matcher.group(0));
         }
         return isExtracted;
     }
@@ -1484,7 +1443,6 @@ public class TimeAnalysis {
 
             isNextDay = true;
             System.out.println("extract19");
-            // System.out.println("In matcher.find()");
 
             isExtracted = true;
             result = matcher.group(0).replaceAll(" ", "");
@@ -1496,21 +1454,16 @@ public class TimeAnalysis {
             temp = result.split("시");
 
             atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), 30);
-            System.out.println("test : " + Integer.parseInt(temp[0].replaceAll(" ", "")) + " " + 30);
-            System.out.println("test4: " + wMap.get(curDayOfWeek) + " " + wMap.get(dayofweek) + " " + curHour + " " + calHour);
 
             //TODO 오류 수정 바람
             if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour <= calHour) {
                 //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (0 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 0 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
-                System.out.println("test3: " + calweekday);
-
             } else if (wMap.get(curDayOfWeek) >= wMap.get(dayofweek)) {
                 //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (1 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 1 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
-                System.out.println("test4: " + calweekday);
             }
 
 
@@ -1519,9 +1472,6 @@ public class TimeAnalysis {
             calDay = calDay % day_num == 0 ? day_num : calDay % day_num;
             calYear += calMonth / 12;
             calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
-
-            //System.out.println("test : " +result);
-            //System.out.println(matcher.group(0));
         }
         return isExtracted;
     }
@@ -1547,7 +1497,6 @@ public class TimeAnalysis {
 
         while (matcher.find()) {
             System.out.println("extract20");
-            // System.out.println("In matcher.find()");
 
             isNextDay = true;
             isExtracted = true;
@@ -1561,7 +1510,6 @@ public class TimeAnalysis {
             temp = result.split("시");
 
             atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), 0);
-            System.out.println("test : " + Integer.parseInt(temp[0].replaceAll(" ", "")) + " " + 0);
 
             //시간바꿔주기 위한것
             regex = "오전|오후";
@@ -1584,9 +1532,6 @@ public class TimeAnalysis {
             calDay = calDay % day_num == 0 ? day_num : calDay % day_num;
             calYear += calMonth / 12;
             calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
-
-            //System.out.println("test : " +result);
-            //System.out.println(matcher.group(0));
         }
         return isExtracted;
     }
@@ -1612,7 +1557,6 @@ public class TimeAnalysis {
 
         while (matcher.find()) {
             System.out.println("extract21");
-            // System.out.println("In matcher.find()");
             isNextDay = true;
             isExtracted = true;
 
@@ -1625,7 +1569,6 @@ public class TimeAnalysis {
 
             temp = result.split("시|분");
             atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), Integer.parseInt(temp[1].replaceAll(" ", "")));
-            System.out.println("test : " + Integer.parseInt(temp[0].replaceAll(" ", "")) + " " + Integer.parseInt(temp[1].replaceAll(" ", "")));
 
             if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour * 60 + curMinute <= calHour * 60 + calMinute) {
                 //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (0 * 7 + wMap.get(dayofweek) - 1));
@@ -1643,11 +1586,6 @@ public class TimeAnalysis {
             calDay = calDay % day_num == 0 ? day_num : calDay % day_num;
             calYear += calMonth / 12;
             calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
-
-            //System.out.println("test : " +result);
-
-
-            //System.out.println(matcher.group(0));
         }
         return isExtracted;
     }
@@ -1673,7 +1611,6 @@ public class TimeAnalysis {
 
         while (matcher.find()) {
             System.out.println("extract22");
-            // System.out.println("In matcher.find()");
 
             isNextDay = true;
             isExtracted = true;
@@ -1687,7 +1624,6 @@ public class TimeAnalysis {
             temp = result.split("시");
 
             atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), 30);
-            System.out.println("test : " + Integer.parseInt(temp[0].replaceAll(" ", "")) + " " + 30);
 
             if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour <= calHour) {
                 //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (0 * 7 + wMap.get(dayofweek) - 1));
@@ -1729,7 +1665,6 @@ public class TimeAnalysis {
 
         while (matcher.find()) {
             System.out.println("extract23");
-            // System.out.println("In matcher.find()");
 
             isNextDay = true;
             isExtracted = true;
@@ -1742,7 +1677,6 @@ public class TimeAnalysis {
             result = result.substring(0, result.length() - 3);
             temp = result.split("시");
             atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), 0);
-            System.out.println("test : " + Integer.parseInt(temp[0].replaceAll(" ", "")) + " " + 0);
 
             if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour <= calHour) {
                 //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (0 * 7 + wMap.get(dayofweek) - 1));
@@ -1760,11 +1694,6 @@ public class TimeAnalysis {
             calDay = calDay % day_num == 0 ? day_num : calDay % day_num;
             calYear += calMonth / 12;
             calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
-
-            //System.out.println("test : " +result);
-
-
-            //System.out.println(matcher.group(0));
         }
         return isExtracted;
     }
@@ -1784,7 +1713,6 @@ public class TimeAnalysis {
 
         while (matcher.find()) {
             System.out.println("extract102");
-            // System.out.println("In matcher.find()");
             isNextDay = true;
         }
         return true;
@@ -1799,14 +1727,13 @@ public class TimeAnalysis {
      * @param m 분
      */
     public void addTime(int d, int h, int m) {
-        System.out.println(d + " " + h + " " + m);
 
         calMinute = curMinute + m;
         calHour = curHour + h;
         calDay = curDay + d;
         calMonth = curMonth;
         calYear = curYear;
-        System.out.println("val hey : " + calDay + " " + calHour + " " + calMinute);
+
         calHour += calMinute / 60;
         calMinute = calMinute % 60;
         calDay += calHour / 24;
@@ -1832,7 +1759,7 @@ public class TimeAnalysis {
      * @param m 분
      */
     public void atTime(int y, int M, int d, int h, int m) {
-        System.out.println("hour : " + h + " " + "minute : " + m);
+
         calYear = y;
         calMonth = M;
         calDay = d;

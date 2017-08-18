@@ -1,13 +1,8 @@
 package com.google.cloud.android.reminderapp;
 
 import android.Manifest;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.os.IBinder;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -38,9 +33,6 @@ public class Main2Activity extends AppCompatActivity {
 //        record = (Button) findViewById(R.id.record);
 //        play = (Button) findViewById(R.id.play);
         countList = (Button) findViewById(R.id.countlist);
-//        countList.bringToFront();
-//        countList.invalidate();
-
     }
 
     @Override
@@ -51,9 +43,6 @@ public class Main2Activity extends AppCompatActivity {
         String pCntStr = "" + playCount;
         countList.setText(pCntStr);
 
-//        // Prepare Cloud Speech API
-//        bindService(new Intent(this, SpeechService.class), mServiceConnection, BIND_AUTO_CREATE);
-        // Start listening to voices
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
                 == PackageManager.PERMISSION_GRANTED) {
         } else if (ActivityCompat.shouldShowRequestPermissionRationale(this,
@@ -71,18 +60,6 @@ public class Main2Activity extends AppCompatActivity {
         super.onBackPressed();
         finish();
     }
-//    /**
-//     * MainActivity가 멈출 때, SpeechService를 종료한다.
-//     */
-//    @Override
-//    protected void onStop() {
-//        // Stop Cloud Speech API
-//        mSpeechService.removeListener(mSpeechServiceListener);
-//        unbindService(mServiceConnection);
-//        mSpeechService = null;
-//
-//        super.onStop();
-//    }
 
     public void onButtonRecordClicked(View v) {
         Intent intent = new Intent(getApplicationContext(), RecordActivity.class);
@@ -114,21 +91,6 @@ public class Main2Activity extends AppCompatActivity {
         }
     }
 
-//    private final ServiceConnection mServiceConnection = new ServiceConnection() {
-//
-//        @Override
-//        public void onServiceConnected(ComponentName componentName, IBinder binder) {
-//            mSpeechService = SpeechService.from(binder);
-//            mSpeechService.addListener(mSpeechServiceListener);
-//        }
-//
-//        @Override
-//        public void onServiceDisconnected(ComponentName componentName) {
-//            mSpeechService = null;
-//        }
-//
-//    };
-
     /**
      * 녹음과 관련된 Permission을 유저에게 확인받기 위해 다이얼로그를 띄운다.
      */
@@ -157,25 +119,4 @@ public class Main2Activity extends AppCompatActivity {
     private final VoiceRecorder.Callback mVoiceCallback = new VoiceRecorder.Callback() {
 
     };
-
-//    /**
-//     * 구글 STT 서버로 부터 분석된 텍스트를 받아 onCreate에 있는 handler로 전송시킨다.
-//     *
-//     * @param text 파일의 음성을 텍스트로 변경한 값
-//     * @param isFinal 구글 STT 서버로부터 텍스트를 받았는지 아닌지 확인하는 값
-//     */
-//    private final SpeechService.Listener mSpeechServiceListener =
-//            new SpeechService.Listener() {
-//                @Override
-//                public void onSpeechRecognized(final String text, final boolean isFinal) {
-//
-//
-////                    if (mText2 != null) {
-////                        //if (isFinal) {
-////                        Message message = handler.obtainMessage(1, text);
-////                        handler.sendMessage(message);
-////                        //}
-////                    }
-//                }
-//            };
 }

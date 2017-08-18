@@ -58,32 +58,28 @@ public class RecNoTimeActivity extends AppCompatActivity {
 
             if (contentValue.length() > 24) {
                 cutvalue = contentValue.substring(0, 8) + "\n" + contentValue.substring(8, 16) + "\n" + contentValue.substring(16, 23) + "..";
-            } else if (contentValue.length() > 16) {
+            }
+            else if (contentValue.length() > 16) {
                 cutvalue = contentValue.substring(0, 8) + "\n" + contentValue.substring(8, 16) + "\n" + contentValue.substring(16, contentValue.length());
-            } else if (contentValue.length() > 8) {
+            }
+            else if (contentValue.length() > 8) {
                 cutvalue = contentValue.substring(0, 8) + "\n" + contentValue.substring(8, contentValue.length());
-            } else {
+            }
+            else {
                 cutvalue = contentValue.substring(0, contentValue.length());
             }
 
-            // 두줄 처리일 경우
-            /*
-            if (contentValue.length() > 16) {
-                cutvalue = contentValue.substring(0, 8) + "\n" + contentValue.substring(8, 15)  + "..";
-            } else if (contentValue.length() > 8) {
-                cutvalue = contentValue.substring(0, 8) + "\n" + contentValue.substring(8,contentValue.length());
-            } else {
-                cutvalue = contentValue.substring(0, contentValue.length());
-            }
-            */
-        } else if (i == 2) {
+        }
+        else if (i == 2) {
 
             //두줄 처리
             if (contentValue.length() > 16) {
                 cutvalue = contentValue.substring(0, 8) + "\n" + contentValue.substring(8, 15) + "..";
-            } else if (contentValue.length() > 8) {
+            }
+            else if (contentValue.length() > 8) {
                 cutvalue = contentValue.substring(0, 8) + "\n" + contentValue.substring(8, contentValue.length());
-            } else {
+            }
+            else {
                 cutvalue = contentValue.substring(0, contentValue.length());
             }
 
@@ -91,7 +87,8 @@ public class RecNoTimeActivity extends AppCompatActivity {
 
             if (contentValue.length() > 8) {
                 cutvalue = contentValue.substring(0, 6) + "..";
-            } else {
+            }
+            else {
                 cutvalue = contentValue.substring(0, contentValue.length());
             }
 

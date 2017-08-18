@@ -57,10 +57,6 @@ public class PlayInfoActivity extends AppCompatActivity {
 
             mText1.setText("<녹음시간>" + "\n" + recordTime(fileNameArr[playingPos]) );
             mText2.setText("<알람시간>" + "\n" + timeRegistered);
-//            mText2.setText("<녹음시간>" + "\n" +
-//                    recordTime(fileNameArr[playingPos]) + "\n" +
-//                    "<알람시간>" + "\n" +
-//                    timeRegistered);
         }
     }
 

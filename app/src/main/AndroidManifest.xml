@@ -58,7 +58,6 @@
         <activity android:name=".PlayListActivity" />
         <activity android:name=".AlarmActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".DeleteActivity"></activity>
     </application>
 
 </manifest>
