@@ -5,18 +5,12 @@ import android.content.SharedPreferences;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.os.Handler;
 import android.os.Message;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Serializable;
 
 /**
  * 이 클래스는 DB로부터 녹음된 파일명을 받아와 해당 파일을 재생하는 역할을 수행한다.
@@ -92,9 +86,6 @@ public class VoicePlayer {
         String contentValue[] = db.getAllContent();
         int cnt = fileName.length; //목록에서 선택 시 playCount값이 변하기 때문에... 이렇게 따로 cnt에 저장해놓자.
 
-//       if(playCount == -1) //재생버튼을 눌러서 재생이 시작되는 경우 ( 이 외에는 목록의 파일을 클릭해서 재생 시작하는 경우임)
-//            playCount = fileName.length;
-//        int i; //전역변수로 선언하겠음 (stopPlayin에서 현재 재생 중인 파일의 위치를 return하기 위해서)
         for(i=playCount-1;i>=0;i--){
             int count = 0;
             byte[] data = new byte[mBufferSize];
@@ -106,9 +97,6 @@ public class VoicePlayer {
             //재생 중 화면 처리
             Message message = PlayActivity.vhandler.obtainMessage(1, alarmTime[i]+":"+contentValue[i] + ":" + i);
             PlayActivity.vhandler.sendMessage(message);
-
-//            Message message4 = MainActivity.phandler.obtainMessage(1, cnt - 1 - i);
-//            MainActivity.phandler.sendMessage(message3);
 
             try {
                 //Toast.makeText(context.getApplicationContext(),"현재 재생중인 파일 " + fileName[i] +"",Toast.LENGTH_SHORT).show();
@@ -181,7 +169,7 @@ public class VoicePlayer {
         while(true) {
             cnt++;
             if(cnt > 11) {
-//                mIsPlaying = false; //mIsPlaying 이 true여야 device.callOnClick했을 때, 화면전환이 됨 그리고 그 때 어차피 mIsPlaying 이 false로 바뀜
+                mIsPlaying = false;
                 return;
             }
             int count = 0;
@@ -209,16 +197,11 @@ public class VoicePlayer {
                     break;
                 }
 
-
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
-//        Message message5 = MainActivity.vhandler.obtainMessage(1, "stop");
-//        MainActivity.vhandler.sendMessage(message5);
-//        MainActivity.device.callOnClick();
     }
 }

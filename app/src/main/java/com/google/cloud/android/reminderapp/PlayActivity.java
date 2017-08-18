@@ -96,7 +96,7 @@ public class PlayActivity extends AppCompatActivity {
                                         onStart();
                                     }
                                 })
-                        .setNegativeButton("아니오",
+                        .setNegativeButton("아니요",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         //dialog를 취소하고 해당 파일부터 다시 재생한다
@@ -208,11 +208,11 @@ public class PlayActivity extends AppCompatActivity {
         String fileNameArr[] = db.getAllFileName();
         String alarmTimeArr[] = db.getAllAlarmTime();
         db.delete(fileNameArr[playingPos]);
-        playingPos--;
 
         //파일 이름에 해당하는 알람이 있으면 취소////////////////////////////////////////////
         SharedPreferences tempPref = getSharedPreferences("piPref", MODE_PRIVATE);
         int rCode = tempPref.getInt(fileNameArr[playingPos], -1); //fileNameArr[playingPos]에 해당하는 값이 없으면 -1을 받아온다.
+        System.out.println("알람삭제 : " + rCode);
         if(rCode != -1) {
             AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent("com.google.cloud.android.reminderapp.ALARM_START");
@@ -222,5 +222,7 @@ public class PlayActivity extends AppCompatActivity {
                 sender.cancel();
             }
         }
+
+        playingPos--;
     }
 }

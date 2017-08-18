@@ -37,13 +37,14 @@ public class AlarmSoundService extends Service {
         context.startActivity(alarmScreenIntent);
 
         if(Main2Activity.mVoiceRecorder.mIsRecording) {
-            Main2Activity.mVoiceRecorder.stopRecording();
+            String fileName = Main2Activity.mVoiceRecorder.stopRecording(); //fileName을 이용해서 나중에 삭제도 구현하자.
             RecordActivity.timer.cancel(); //** 잊기 쉬움. 주의!
-
+            RecordActivity.RActivity.finish();
             System.out.println("녹음 중에 알람이 울린다");
             //db에서 해당 음성 파일을 삭제하는 작업이 필요하지만, 현재 구현상 STT전에 멈추면,
             //db에 파일이름이 저장되지 않아서 큰 상관은 없어보인다. 단, 내장 메모리에는 음성 파일이 저장돼 있다.
             //그래서 녹음 중 알람이 울릴 때가 되면 녹음을 중지시키고 알람을 울리게 하는 기능이 겉으로 볼 땐 큰 문제 없을 것 같다.
+            //fileName을 이용해서 나중에 삭제도 구현하자.
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -53,18 +54,10 @@ public class AlarmSoundService extends Service {
 
         String temp = intent.getStringExtra("filename");
 
-//        if(!MainActivity.powerOn) {
-//            Toast.makeText(this, "알람이 울립니다. " + temp, Toast.LENGTH_LONG).show();
-//            return START_NOT_STICKY;
-//        }
-
-
         Toast.makeText(this, "알람이 울립니다. " + temp, Toast.LENGTH_LONG).show();
 
         //녹음이 종료된 직후 녹음 결과 화면이 나올 때 알람이 울릴 경우에 UI처리 필요.
         //하지만 결과 화면이 알람이 실행된 직후에 출력되는 타이밍이라면... 이 방법으로는 처리가 안된다...
-//        recordUIInvisible();
-
         class BackgroundTask extends AsyncTask<String, String, String> {
             protected void onPreExecute() {
                 Main2Activity.mVoicePlayer.stopPlaying();

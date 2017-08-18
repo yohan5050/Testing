@@ -1,32 +1,25 @@
 package com.google.cloud.android.reminderapp;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
+import android.app.Activity;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.os.IBinder;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Calendar;
 
 
 public class RecordActivity extends AppCompatActivity {
-
+    public static Activity RActivity; // AlarmSoundService에서 사용됨
     DataBase db;
-    public static CountDownTimer timer;
+    public static CountDownTimer timer; //AlarmSoundService에서 사용
     TextView mText;
     Button stopBtn;
     int value;
@@ -42,6 +35,7 @@ public class RecordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
 
+        RActivity = this;
         db = Main2Activity.getDBInstance();
         stopBtn = (Button) findViewById(R.id.button);
         mText = (TextView) findViewById(R.id.text);

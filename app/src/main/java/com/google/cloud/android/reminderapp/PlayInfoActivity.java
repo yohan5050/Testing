@@ -47,7 +47,7 @@ public class PlayInfoActivity extends AppCompatActivity {
         String[] fileNameArr = db.getAllFileName();
 
         if (alarmTimeArr[playingPos].equals("일반 메모")) {
-            mText1.setText("<녹음시간>" + "\n"
+            mText1.setText("녹음시간" + "\n"
                     + recordTime(fileNameArr[playingPos]));
         } else {
             String[] words = alarmTimeArr[playingPos].split(":");
@@ -55,8 +55,8 @@ public class PlayInfoActivity extends AppCompatActivity {
             if (Integer.parseInt(words[4]) < 10) words[4] = '0' + words[4];
             String timeRegistered = words[3] + ":" + words[4] + "(" + words[1] + "월" + words[2] + "일" + ")";
 
-            mText1.setText("<녹음시간>" + "\n" + recordTime(fileNameArr[playingPos]) );
-            mText2.setText("<알람시간>" + "\n" + timeRegistered);
+            mText1.setText("녹음시간" + "\n" + recordTime(fileNameArr[playingPos]) );
+            mText2.setText("알람시간" + "\n" + timeRegistered);
         }
     }
 

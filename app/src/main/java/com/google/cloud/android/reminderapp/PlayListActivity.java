@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class PlayListActivity extends AppCompatActivity {
 
-    public static Activity PLactivity;
+    public static Activity PLactivity; //PlayActivity에서 사용됨
     DataBase db;
 
     //listing
