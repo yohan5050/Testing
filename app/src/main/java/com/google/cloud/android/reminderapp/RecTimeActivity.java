@@ -1,5 +1,6 @@
 package com.google.cloud.android.reminderapp;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import java.util.Calendar;
 
 public class RecTimeActivity extends AppCompatActivity {
+    public static Activity RTActivity;
     String fileName, returnedValue, alarmTime, contentValue;
     DataBase db;
     TextView textView;
@@ -24,6 +26,7 @@ public class RecTimeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rec_time);
 
+        RTActivity = this;
         db = Main2Activity.getDBInstance();
         textView = (TextView) findViewById(R.id.text);
 

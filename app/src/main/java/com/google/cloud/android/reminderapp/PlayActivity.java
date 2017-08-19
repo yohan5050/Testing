@@ -194,9 +194,9 @@ public class PlayActivity extends AppCompatActivity {
         String cutvalue = "";
         if (contentValue.length() > 27) {
             cutvalue = contentValue.substring(0, 9) + "\n" + contentValue.substring(8, 18) + "\n" + contentValue.substring(18, 27) + "..";
-        } else if (contentValue.length() > 16) {
+        } else if (contentValue.length() > 18) {
             cutvalue = contentValue.substring(0, 9) + "\n" + contentValue.substring(9, 18) + "\n" + contentValue.substring(18, contentValue.length());
-        } else if (contentValue.length() > 8) {
+        } else if (contentValue.length() > 9) {
             cutvalue = contentValue.substring(0, 9) + "\n" + contentValue.substring(9, contentValue.length());
         } else {
             cutvalue = contentValue.substring(0, contentValue.length());

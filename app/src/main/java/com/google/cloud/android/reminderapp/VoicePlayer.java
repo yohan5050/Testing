@@ -170,7 +170,7 @@ public class VoicePlayer {
             cnt++;
             if(cnt > 11) {
                 mIsPlaying = false;
-                return;
+//                return; // mIsPlaying이 false가 되어 아래쪽에서 while문을 break탈출한다. (결국 총 12번 재생)
             }
             int count = 0;
             byte[] data = new byte[mBufferSize];
@@ -194,6 +194,9 @@ public class VoicePlayer {
                 fis.close();
 
                 if(!mIsPlaying) {
+                    //알람이 끝나면 AlarmActivity로 알람이 끝났음을 알린다.
+                    Message message = AlarmActivity.ahandler.obtainMessage(1, "stop");
+                    AlarmActivity.ahandler.sendMessage(message);
                     break;
                 }
 
