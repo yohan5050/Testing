@@ -50,7 +50,11 @@ public class AlarmSoundService extends Service {
 
         //녹음 중이라면 녹음 종료
         if(Main2Activity.mVoiceRecorder != null && Main2Activity.mVoiceRecorder.mIsRecording) {
-            String fileName = Main2Activity.mVoiceRecorder.stopRecording(); //fileName을 이용해서 나중에 삭제도 구현하자.
+            String fileName = Main2Activity.mVoiceRecorder.stopRecording();
+
+            //DB에는 fileName이 저장되지 않았지만, 음성 파일 자체는 내부 저장소에 저장되어 있으므로 삭제한다.
+            context.deleteFile(fileName);
+
             RecordActivity.timer.cancel(); //** 잊기 쉬움. 주의!
             RecordActivity.RActivity.finish();
             System.out.println("녹음 중에 알람이 울린다");

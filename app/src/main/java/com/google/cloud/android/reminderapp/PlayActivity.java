@@ -183,15 +183,18 @@ public class PlayActivity extends AppCompatActivity {
         super.onStart();
 
         Intent intent = getIntent();
-        //시작하는 지점 정보(int)가 없으면 db에서 모든파일의 개수 얻어와서 가장 최근 녹음파일부터 재생 시작
+        //list에서 음성 파일을 선택한 경우 해당 위치를 전달 받는다.
         if(playCount == -2) playCount = intent.getIntExtra("playcount", -1);
+        //시작하는 지점 정보(int)가 없으면 db에서 모든파일의 개수 얻어와서 가장 최근 녹음파일부터 재생 시작
         if(playCount == -1) playCount = db.getAllPlayListNum();
 
         //가장 최근 녹음 파일부터 재생 시작
         //플레이리스트 업데이트
 //        makeList2();
-        if (playCount == 0) {
+        if(db.getAllPlayListNum() == 0) { //if (playCount == 0) { //이렇게 할 경우 맨 마지막(맨 아래) 음성 파일을 삭제 후 이쪽으로 들어온다.
             Toast.makeText(getApplicationContext(), "재생할 목록이 비어있습니다.", Toast.LENGTH_SHORT).show();
+            textView.setText("재생할 파일이 없습니다.");
+            finish();
             return;
         }
         if (!Main2Activity.mVoicePlayer.isPlaying()) {
@@ -250,7 +253,13 @@ public class PlayActivity extends AppCompatActivity {
     public void delFunction() {
         String fileNameArr[] = db.getAllFileName();
         String alarmTimeArr[] = db.getAllAlarmTime();
+
+        //db에서 파일이름 삭제
         db.delete(fileNameArr[playingPos]);
+
+        //내부 저장소의 음성파일 삭제
+        Context context = getApplicationContext();
+        context.deleteFile(fileNameArr[playingPos]);
 
         //파일 이름에 해당하는 알람이 있으면 취소////////////////////////////////////////////
         SharedPreferences tempPref = getSharedPreferences("piPref", MODE_PRIVATE);
@@ -266,6 +275,7 @@ public class PlayActivity extends AppCompatActivity {
             }
         }
 
+        //삭제했으면, 다음 파일부터 재생을 해야 한다. playingPos -= 1
         playingPos--;
     }
 }
