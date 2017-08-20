@@ -41,7 +41,8 @@ public class RecNoTimeActivity extends AppCompatActivity {
 
         db.insert(fileName, "일반 메모", returnedValue);
         System.out.println("db에 일반메모 저장");
-        textView.setText(recordCutValue(returnedValue.replaceAll(" ", ""), 1));
+//        textView.setText(recordCutValue(returnedValue.replaceAll(" ", ""), 1));
+        textView.setText(returnedValue.replaceAll(" ", ""));
     }
 
     @Override
@@ -51,19 +52,19 @@ public class RecNoTimeActivity extends AppCompatActivity {
     }
 
     //녹음 후 화면에 표시해주는 것을 설정해준다.
-    public String recordCutValue(String contentValue, int i) {
+    public String recordCutValue(String contentValue, int i) { //기기에 따라 화면의 한 줄에 들어갈 수 있는 글자 수가 다를 수 있고, 화면도 크기 때문에 사용 안 할 예정.
         String cutvalue = "";
 
         if (i == 1) {
 
-            if (contentValue.length() > 24) {
-                cutvalue = contentValue.substring(0, 8) + "\n" + contentValue.substring(8, 16) + "\n" + contentValue.substring(16, 23) + "..";
+            if (contentValue.length() > 27) {
+                cutvalue = contentValue.substring(0, 9) + "\n" + contentValue.substring(8, 18) + "\n" + contentValue.substring(18, 27) + "..";
             }
-            else if (contentValue.length() > 16) {
-                cutvalue = contentValue.substring(0, 8) + "\n" + contentValue.substring(8, 16) + "\n" + contentValue.substring(16, contentValue.length());
+            else if (contentValue.length() > 18) {
+                cutvalue = contentValue.substring(0, 9) + "\n" + contentValue.substring(9, 18) + "\n" + contentValue.substring(18, contentValue.length());
             }
-            else if (contentValue.length() > 8) {
-                cutvalue = contentValue.substring(0, 8) + "\n" + contentValue.substring(8, contentValue.length());
+            else if (contentValue.length() > 9) {
+                cutvalue = contentValue.substring(0, 9) + "\n" + contentValue.substring(9, contentValue.length());
             }
             else {
                 cutvalue = contentValue.substring(0, contentValue.length());
@@ -73,11 +74,11 @@ public class RecNoTimeActivity extends AppCompatActivity {
         else if (i == 2) {
 
             //두줄 처리
-            if (contentValue.length() > 16) {
-                cutvalue = contentValue.substring(0, 8) + "\n" + contentValue.substring(8, 15) + "..";
+            if (contentValue.length() > 18) {
+                cutvalue = contentValue.substring(0, 9) + "\n" + contentValue.substring(9, 18) + "..";
             }
-            else if (contentValue.length() > 8) {
-                cutvalue = contentValue.substring(0, 8) + "\n" + contentValue.substring(8, contentValue.length());
+            else if (contentValue.length() > 9) {
+                cutvalue = contentValue.substring(0, 9) + "\n" + contentValue.substring(9, contentValue.length());
             }
             else {
                 cutvalue = contentValue.substring(0, contentValue.length());
@@ -85,8 +86,8 @@ public class RecNoTimeActivity extends AppCompatActivity {
 
             //한줄 처리일 경우
 
-            if (contentValue.length() > 8) {
-                cutvalue = contentValue.substring(0, 6) + "..";
+            if (contentValue.length() > 9) {
+                cutvalue = contentValue.substring(0, 7) + "..";
             }
             else {
                 cutvalue = contentValue.substring(0, contentValue.length());

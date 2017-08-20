@@ -73,11 +73,14 @@ public class AlarmSoundService extends Service {
             protected void onPreExecute() {
                 if(Main2Activity.mVoicePlayer != null)
                     Main2Activity.mVoicePlayer.stopPlaying();
-//                try {
-//                    Thread.sleep(1000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
+                //기존 재생을 중지 후에 알람을 울릴 것인데, stopPlaying으로 중지하지만
+                //완전히 중지가 되지 않아 바로 알람을 재생할 경우 문제가 생긴다. Illegal state exception
+                //그래서 thread로 1초정도 여유를 두고 중지가 완료되도록 한다.
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
 
             protected String doInBackground(String ... values) {

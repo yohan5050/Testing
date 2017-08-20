@@ -83,7 +83,7 @@ public class VoicePlayer {
     public void playWaveFile(int SampleRate,int mBufferSize) {
         String fileName[] = db.getAllFileName();
         String alarmTime[] = db.getAllAlarmTime();
-        String contentValue[] = db.getAllContent();
+        String returnedValue[] = db.getAllContent(); //contentValue -> returnedValue로 수정. (시간표현, 내용이 모두 포함된 원본이므로)
         int cnt = fileName.length; //목록에서 선택 시 playCount값이 변하기 때문에... 이렇게 따로 cnt에 저장해놓자.
 
         for(i=playCount-1;i>=0;i--){
@@ -95,7 +95,7 @@ public class VoicePlayer {
             }
 
             //재생 중 화면 처리
-            Message message = PlayActivity.vhandler.obtainMessage(1, alarmTime[i]+":"+contentValue[i] + ":" + i);
+            Message message = PlayActivity.vhandler.obtainMessage(1, alarmTime[i] + ":" + returnedValue[i] + ":" + i);
             PlayActivity.vhandler.sendMessage(message);
 
             try {

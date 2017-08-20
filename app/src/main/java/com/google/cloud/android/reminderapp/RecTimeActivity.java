@@ -61,10 +61,12 @@ public class RecTimeActivity extends AppCompatActivity {
         if (contentValue.equals("")) {
             textView.setText(timeRegistered + "\n" + "내용 없음");
             alarmText = timeRegistered;
-        } else {
-            //나중에 recordCutValue함수도 정리하기 2번 코드에 필요한 기능만 남기기
-            textView.setText(timeRegistered + "\n" + recordCutValue(contentValue, 2));
-            alarmText = timeRegistered + "\n" + recordCutValue(contentValue, 2);
+        }
+        else {
+//            textView.setText(timeRegistered + "\n" + recordCutValue(contentValue, 2));
+//            alarmText = timeRegistered + "\n" + recordCutValue(contentValue, 2);
+            textView.setText(timeRegistered + "\n" + contentValue);
+            alarmText = timeRegistered + "\n" + contentValue;
         }
 
         db.insert(fileName, alarmTime, returnedValue);
@@ -99,11 +101,11 @@ public class RecTimeActivity extends AppCompatActivity {
         mm = Integer.parseInt(words[4]);
         mCalendar.set(yy, MM - 1, dd, hh, mm, 0);
 
-        Intent mAlarmIntent = new Intent("com.google.cloud.android.reminderapp.ALARM_START");
+        Intent mAlarmIntent = new Intent("com.google.cloud.android.reminderapp.ALARM_START"); //AlarmSoundService
         mAlarmIntent.putExtra("filename", fileName);
         mAlarmIntent.putExtra("alarmtext", alarmText);
         System.out.println("알람텍스트 in RecTimeActivity : " + alarmText);
-//                        mAlarmIntent.putExtra("OBJECT", voicePlayer);
+
         PendingIntent mPendingIntent =
                 PendingIntent.getBroadcast(
                         getApplicationContext(),
@@ -127,47 +129,44 @@ public class RecTimeActivity extends AppCompatActivity {
     }
 
     //녹음 후 화면에 표시해주는 것을 설정해준다.
-    public String recordCutValue(String contentValue, int i) {
+    public String recordCutValue(String contentValue, int i) { //기기에 따라 화면의 한 줄에 들어갈 수 있는 글자 수가 다를 수 있고, 화면도 크기 때문에 사용 안 할 예정.
         String cutvalue = "";
 
         if (i == 1) {
 
-            if (contentValue.length() > 24) {
-                cutvalue = contentValue.substring(0, 8) + "\n" + contentValue.substring(8, 16) + "\n" + contentValue.substring(16, 23) + "..";
-            } else if (contentValue.length() > 16) {
-                cutvalue = contentValue.substring(0, 8) + "\n" + contentValue.substring(8, 16) + "\n" + contentValue.substring(16, contentValue.length());
-            } else if (contentValue.length() > 8) {
-                cutvalue = contentValue.substring(0, 8) + "\n" + contentValue.substring(8, contentValue.length());
-            } else {
+            if (contentValue.length() > 27) {
+                cutvalue = contentValue.substring(0, 9) + "\n" + contentValue.substring(8, 18) + "\n" + contentValue.substring(18, 27) + "..";
+            }
+            else if (contentValue.length() > 18) {
+                cutvalue = contentValue.substring(0, 9) + "\n" + contentValue.substring(9, 18) + "\n" + contentValue.substring(18, contentValue.length());
+            }
+            else if (contentValue.length() > 9) {
+                cutvalue = contentValue.substring(0, 9) + "\n" + contentValue.substring(9, contentValue.length());
+            }
+            else {
                 cutvalue = contentValue.substring(0, contentValue.length());
             }
 
-            // 두줄 처리일 경우
-            /*
-            if (contentValue.length() > 16) {
-                cutvalue = contentValue.substring(0, 8) + "\n" + contentValue.substring(8, 15)  + "..";
-            } else if (contentValue.length() > 8) {
-                cutvalue = contentValue.substring(0, 8) + "\n" + contentValue.substring(8,contentValue.length());
-            } else {
-                cutvalue = contentValue.substring(0, contentValue.length());
-            }
-            */
-        } else if (i == 2) {
+        }
+        else if (i == 2) {
 
             //두줄 처리
-            if (contentValue.length() > 16) {
-                cutvalue = contentValue.substring(0, 8) + "\n" + contentValue.substring(8, 15) + "..";
-            } else if (contentValue.length() > 8) {
-                cutvalue = contentValue.substring(0, 8) + "\n" + contentValue.substring(8, contentValue.length());
-            } else {
+            if (contentValue.length() > 18) {
+                cutvalue = contentValue.substring(0, 9) + "\n" + contentValue.substring(9, 18) + "..";
+            }
+            else if (contentValue.length() > 9) {
+                cutvalue = contentValue.substring(0, 9) + "\n" + contentValue.substring(9, contentValue.length());
+            }
+            else {
                 cutvalue = contentValue.substring(0, contentValue.length());
             }
 
             //한줄 처리일 경우
 
-            if (contentValue.length() > 8) {
-                cutvalue = contentValue.substring(0, 6) + "..";
-            } else {
+            if (contentValue.length() > 9) {
+                cutvalue = contentValue.substring(0, 7) + "..";
+            }
+            else {
                 cutvalue = contentValue.substring(0, contentValue.length());
             }
 

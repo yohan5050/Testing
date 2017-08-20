@@ -11,9 +11,12 @@ import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,16 +80,19 @@ public class PlayActivity extends AppCompatActivity {
             public void onClick(View v) {
                 playingPos = Main2Activity.mVoicePlayer.stopPlaying();
 
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PlayActivity.this);
+                //참조1 : http://mainia.tistory.com/2017
+                //참조2 : http://pluu.github.io/blog/rxjava/2017/02/04/android-alertdialog/
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PlayActivity.this, R.style.MyAlertDialogStyle);
 
                 // Title setting
-                alertDialogBuilder.setTitle("음성 파일 삭제");
+//                alertDialogBuilder.setTitle("음성 파일 삭제");
+                alertDialogBuilder.setTitle("삭제할까요?");
 
                 // AlertDialog setting
                 alertDialogBuilder
-                        .setMessage("삭제할까요?")
+                        .setMessage(" ")
                         .setCancelable(false)
-                        .setPositiveButton("네",
+                        .setPositiveButton("YES",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         //해당파일을 삭제한다.
@@ -96,7 +102,7 @@ public class PlayActivity extends AppCompatActivity {
                                         onStart();
                                     }
                                 })
-                        .setNegativeButton("아니요",
+                        .setNegativeButton("NO",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         //dialog를 취소하고 해당 파일부터 다시 재생한다
@@ -112,6 +118,40 @@ public class PlayActivity extends AppCompatActivity {
 
                 // show Dialog
                 alertDialog.show();
+
+                // 메시지 택스트의 크기를 변경한다.
+                TextView textView = (TextView) alertDialog.findViewById(android.R.id.message);
+                textView.setTextSize(1.0f);
+
+                //버튼의 배치 설정
+                //버튼 패널의 컨테이너를 가져온다.
+//                LinearLayout containerButtons = (LinearLayout) alertDialog.findViewById(R.id.buttonPanel);
+//                ScrollView containerButtons = (ScrollView) alertDialog.findViewById(R.id.buttonPanel);
+//                // Space View를 삭제한다.
+//                containerButtons.removeView(containerButtons.getChildAt(1));
+//                // 버튼 패널의 자식 View의 버튼의 Gravity를 CENTER로 설정
+//                containerButtons
+//                containerButtons.setGravity(Gravity.CENTER);
+//                //LinearLayout의 비율의 합계를 3으로 설정한다.
+//                containerButtons.setWeightSum(3.0f);
+                //각 버튼을 얻는다.
+                Button button2 = (Button) alertDialog.findViewById(android.R.id.button2);
+                Button button1 = (Button) alertDialog.findViewById(android.R.id.button1);
+//                button2.setGravity(Gravity.CENTER);
+//                button1.setGravity(Gravity.CENTER);
+                //각 버튼의 비율을 지정한다.
+                ((LinearLayout.LayoutParams)button2.getLayoutParams()).weight = 100.0f;
+                ((LinearLayout.LayoutParams)button1.getLayoutParams()).weight = 100.0f;
+                //각 버튼의 폭을 0으로 한다
+                ((LinearLayout.LayoutParams)button2.getLayoutParams()).width = 0;
+                ((LinearLayout.LayoutParams)button1.getLayoutParams()).width = 0;
+
+                //버튼의 크기 변경 / 이렇게 변경하지 않고, styles.xml과 dimens.xml에서 했음
+//                Button btn = (Button) alertDialog.findViewById(android.R.id.button1);
+//                btn.setTextSize(30.0f);
+//
+//                Button btn2 = (Button) alertDialog.findViewById(android.R.id.button2);
+//                btn2.setTextSize(30.0f);
             }
         });
 
@@ -119,16 +159,19 @@ public class PlayActivity extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 if (((String) msg.obj).equals("stop")) {
                     //list를 보고있는 중에 메인화면으로 돌아가기 위해서 PlayListActivity도 함께 종료
-                    PlayListActivity.PLactivity.finish();
+                    if(PlayListActivity.PLactivity != null) //list를 한 번도 실행하지 않은 경우
+                        PlayListActivity.PLactivity.finish();
                     finish();
                 } else if (Main2Activity.mVoicePlayer.isPlaying()) {
                     String alarmTime = (String) msg.obj;
                     String[] words = alarmTime.split(":");
 
                     if (words[0].equals("일반 메모")) {
-                        textView.setText(playCutValue(words[1].replaceAll(" ", "")));
+//                        textView.setText(playCutValue(words[1].replaceAll(" ", "")));
+                        textView.setText(words[1].replaceAll(" ", ""));
                     } else {
-                        textView.setText(playCutValue(words[5].replaceAll(" ", "")));
+//                        textView.setText(playCutValue(words[5].replaceAll(" ", "")));
+                        textView.setText(words[5].replaceAll(" ", ""));
                     }
                 }
             }
@@ -190,7 +233,7 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     //재생중일 경우 화면에 표시해주는 것을 설정해준다.
-    public String playCutValue(String contentValue) {
+    public String playCutValue(String contentValue) { //기기에 따라 화면의 한 줄에 들어갈 수 있는 글자 수가 다를 수 있고, 화면도 크기 때문에 사용 안 할 예정.
         String cutvalue = "";
         if (contentValue.length() > 27) {
             cutvalue = contentValue.substring(0, 9) + "\n" + contentValue.substring(8, 18) + "\n" + contentValue.substring(18, 27) + "..";
