@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class Main2Activity extends AppCompatActivity {
     Button countList;
@@ -22,6 +23,9 @@ public class Main2Activity extends AppCompatActivity {
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1; //추가
     private static final String FRAGMENT_MESSAGE_DIALOG = "message_dialog";
 
+    long bpTime = 0;
+    Toast bpToast;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +37,7 @@ public class Main2Activity extends AppCompatActivity {
 //        record = (Button) findViewById(R.id.record);
 //        play = (Button) findViewById(R.id.play);
         countList = (Button) findViewById(R.id.countlist);
+        bpToast = Toast.makeText(this, "뒤로가기를 한번 더 누르면 앱이 종료됩니다.", Toast.LENGTH_SHORT);
     }
 
     @Override
@@ -57,8 +62,32 @@ public class Main2Activity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+        //참고 : http://best421.tistory.com/71
+        //이렇게 해도 cancel이 안되는 이유는 onBackPressed()에 들어올 때마다 toast가 새로 생성되기 때문에
+        //결국 cancel하는 toast는 다른 값이 된다. -> 전역변수로 설정하자.
+//        Toast toast = Toast.makeText(this, "뒤로가기를 한번 더 누르면 앱이 종료됩니다.", Toast.LENGTH_SHORT);
+        if(bpTime == 0) {
+            System.out.println("토스트1 : "+ bpToast);
+            bpToast.show();
+            bpTime = System.currentTimeMillis();
+        }
+        else {
+            long sec = System.currentTimeMillis() - bpTime;
+
+            if(sec > 2000) {
+                System.out.println("토스트2 : " + bpToast);
+                bpToast.show();
+                bpTime = System.currentTimeMillis();
+            }
+            else {
+                bpToast.setText("                           종료합니다.                           ");
+                //앱 종료하면서 toast도 없애주기
+                bpToast.cancel();
+                System.out.println("토스트1 : "+ bpToast + " , 토스트2 : " + bpToast);
+                super.onBackPressed();
+                finish();
+            }
+        }
     }
 
     public void onButtonRecordClicked(View v) {
