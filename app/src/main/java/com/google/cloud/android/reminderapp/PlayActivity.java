@@ -33,7 +33,8 @@ public class PlayActivity extends AppCompatActivity {
     int SampleRate = 16000;
     int BufferSize = 1024;
     int playingPos = -3; //onPause에서 +1하면 -2가 되도록
-    boolean listBtnClicked = false;
+    boolean listBtnClicked = false, delBtnClicked = false;
+    AlertDialog alertDialog;
 
     public static Handler vhandler; // 재생중 화면 처리 핸들러
 
@@ -78,6 +79,7 @@ public class PlayActivity extends AppCompatActivity {
 
         delBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                delBtnClicked = true;
                 playingPos = Main2Activity.mVoicePlayer.stopPlaying();
 
                 //참조1 : http://mainia.tistory.com/2017
@@ -95,6 +97,7 @@ public class PlayActivity extends AppCompatActivity {
                         .setPositiveButton("YES",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
+                                        delBtnClicked = false;
                                         //해당파일을 삭제한다.
                                         delFunction();
                                         //다시 재생 시작
@@ -105,6 +108,7 @@ public class PlayActivity extends AppCompatActivity {
                         .setNegativeButton("NO",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
+                                        delBtnClicked = false;
                                         //dialog를 취소하고 해당 파일부터 다시 재생한다
                                         dialog.cancel();
                                         //다시 재생 시작
@@ -114,7 +118,7 @@ public class PlayActivity extends AppCompatActivity {
                                 });
 
                 // Dialog 생성
-                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog = alertDialogBuilder.create();
 
                 // show Dialog
                 alertDialog.show();
@@ -182,6 +186,20 @@ public class PlayActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        if(Main2Activity.mVoicePlayer.mIsPlaying) { // 재생 중이라면 재생을 멈추고
+            Main2Activity.mVoicePlayer.stopPlaying();
+        }
+
+        try { //재생이 완전히 종료될 때까지 좀 기다린다.
+            Thread.sleep(500);
+        } catch(InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if(delBtnClicked) { //삭제여부 다이얼로그  창이 띄워져있을 때는 재생을 하면 안된다.
+            return;
+        }
+
         Intent intent = getIntent();
         //list에서 음성 파일을 선택한 경우 해당 위치를 전달 받는다.
         if(playCount == -2) playCount = intent.getIntExtra("playcount", -1);
@@ -213,6 +231,13 @@ public class PlayActivity extends AppCompatActivity {
             playCount = -2;
             listBtnClicked = false;
         }
+        else { //listBtn을 클릭하지 않은 경우의 화면 전환에서는 재생을 멈춰준다.
+            //mIsPlaying을 체크하지 않으면, 다이얼로그를 띄웠다가 삭제한 후에 playCount값이 변경되는 문제가 생긴다.
+            //arrayoutofbound exception 생겼었음.
+            if(Main2Activity.mVoicePlayer.mIsPlaying) {
+                playCount = Main2Activity.mVoicePlayer.stopPlaying() + 1;
+            }
+        }
     }
 
     @Override
@@ -223,8 +248,12 @@ public class PlayActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
-        Main2Activity.mVoicePlayer.stopPlaying();
+        if(Main2Activity.mVoicePlayer.mIsPlaying) {
+            Main2Activity.mVoicePlayer.stopPlaying();
+        }
+        if(delBtnClicked) { //삭제 여부 확인 다이얼로그가 띄워져 있다면 dialog도 종료시킨다.
+            alertDialog.cancel();
+        }
         finish();
     }
 
@@ -277,5 +306,6 @@ public class PlayActivity extends AppCompatActivity {
 
         //삭제했으면, 다음 파일부터 재생을 해야 한다. playingPos -= 1
         playingPos--;
+        System.out.println("삭제를 했으면 여기서 playingPos--해주는데? : " + playingPos);
     }
 }

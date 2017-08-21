@@ -22,15 +22,17 @@ public class PlayListActivity extends AppCompatActivity {
 
     public static Activity PLactivity; //PlayActivity에서 사용됨
     DataBase db;
+    int SampleRate = 16000;
+    int BufferSize = 1024;
 
     //listing
     ListView listView;
     PlaylistAdapter adapter;
 
     int tempPos = -1, tempPos2 = -1;
-
     boolean nowStarted = false;
-
+    boolean isAfterOnPause = false; //onPause 상태였다가 onStart하는 것인지 아닌지 체크하기 위함.
+    int playingPos = -1;
     public static Handler phandler; // 재생중인 리스트 처리 핸들러
 
     @Override
@@ -78,6 +80,8 @@ public class PlayListActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //PlayActivity위의 activity 모두 삭제
                 System.out.println("stopPoint in PlayListActivity : " + (playCount - position));
                 startActivity(intent);
+
+                finish();
             }
         });
     }
@@ -89,11 +93,34 @@ public class PlayListActivity extends AppCompatActivity {
         makeList2();
         listView.setAdapter(adapter);
         nowStarted = true;
+
+        //onPause상태에 있었다가 onStart된다면 -> 홈버튼을 눌러서 onPause가 되었다가 다시 실행시킨 경우.
+        //backButton이나, 리스트의 파일을 선택하는 경우는 finish()되므로, 이 경우는 홈버튼을 눌렀다가 다시 실행한 경우이다.
+        if(isAfterOnPause) {
+            System.out.println("여기에 들어옵니까? onstart");
+            Main2Activity.mVoicePlayer.startPlaying(SampleRate, BufferSize, playingPos + 1);
+            isAfterOnPause = false;
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //onPause상태에 들어왔다는 것을 체크
+        isAfterOnPause = true;
+        playingPos = Main2Activity.mVoicePlayer.stopPlaying();
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+
+        //PlayActivity 호출 -> back button을 눌렀을 때는 intent에 -1을 보내서 처음부터 재생이 되도록 한다.
+        Intent intent = new Intent(getApplicationContext(), PlayActivity.class);
+        intent.putExtra("playcount", -1);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //PlayActivity위의 activity 모두 삭제
+        startActivity(intent);
+
         finish();
     }
 
