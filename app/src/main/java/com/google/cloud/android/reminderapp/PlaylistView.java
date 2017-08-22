@@ -2,6 +2,7 @@ package com.google.cloud.android.reminderapp;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.method.ScrollingMovementMethod;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ImageView;

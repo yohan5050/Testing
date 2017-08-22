@@ -5,13 +5,14 @@
     android:orientation="vertical">
 
         <TextView
+            android:background="#ffffff"
             android:id="@+id/textView"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:padding="2dp"
+            android:layout_height="55dp"
+            android:layout_margin="5dp"
             android:text="New Text"
-            android:textColor="#a431df"
-            android:textSize="40dp"
+            android:textColor="#18392b"
+            android:textSize="30dp"
             android:textStyle="bold" />
 
 </LinearLayout>

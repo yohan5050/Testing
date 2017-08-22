@@ -3,15 +3,21 @@ package com.google.cloud.android.reminderapp;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.CalendarContract;
+import android.support.annotation.ColorRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.cloud.android.reminderapp.R;
@@ -27,6 +33,7 @@ public class PlayListActivity extends AppCompatActivity {
 
     //listing
     ListView listView;
+    TextView textView;
     PlaylistAdapter adapter;
 
     int tempPos = -1, tempPos2 = -1;
@@ -42,6 +49,8 @@ public class PlayListActivity extends AppCompatActivity {
 
         PLactivity = this; //재생이 모두 끝나면 list화면도 같이 종료하는 데에 사용됨.
         listView = (ListView) findViewById(R.id.listView);
+        textView = (TextView) findViewById(R.id.text);
+        textView.setMovementMethod(new ScrollingMovementMethod());
         db = Main2Activity.getDBInstance();
 
         phandler = new Handler() {
@@ -55,10 +64,16 @@ public class PlayListActivity extends AppCompatActivity {
                             listView.setSelection(tempPos2-4); //하이라이트 된 부분이 가운데로 오는 위치(-4)로 이동해주기(처음에만...! 찾기 편하도록!)
                         nowStarted = false;
                     }
-                    //같은 position이 여러번 들어오면 한 번만 색깔을 바꾸도록 하기 위함.
+
+                    //같은 position이 여러번 들어오면 한번만 색깔을 바꾸도록(textView에는 한번만 출력) 하기 위함.
                     if (tempPos != position) {
                         tempPos = position;
-                    } else {
+
+                        String[] contentNameArr = db.getAllContent();
+                        int cnt = contentNameArr.length;
+                        textView.setText(contentNameArr[cnt -1 - position]);
+                    }
+                    else {
                         return;
                     }
 
@@ -82,6 +97,13 @@ public class PlayListActivity extends AppCompatActivity {
                 startActivity(intent);
 
                 finish();
+//                //목록에서 재생화면으로 넘어갈 때 하이라이트 잔상이 남길래... test... 나중에 생각하자.
+//                try {
+//                    System.out.println("피니시를 해도 여기로 올 수 있을까?");
+//                    Thread.sleep(500);
+//                } catch(InterruptedException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
     }
@@ -179,7 +201,7 @@ public class PlayListActivity extends AppCompatActivity {
             view.setName(item.getName());
 
             if (position == tempPos2) {
-                view.setBackgroundColor(Color.GREEN);
+                view.setBackgroundColor(Color.MAGENTA);
             } else {
                 view.textView.setBackgroundColor(Color.WHITE);
             }
