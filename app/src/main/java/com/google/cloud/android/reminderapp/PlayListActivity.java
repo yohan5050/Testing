@@ -213,7 +213,7 @@ public class PlayListActivity extends AppCompatActivity {
     // make list2에서 사용 (컨텐츠 명으로 나타내기 위해서)
     public String contentTime(String contentName) {
         contentName = contentName.replaceAll(" ", "");
-        if (contentName.length() > 8) return contentName.substring(0, 8) + ".. ";
+        if (contentName.length() > 9) return contentName.substring(0, 9) + ".. ";
         else return contentName;
     }
 }

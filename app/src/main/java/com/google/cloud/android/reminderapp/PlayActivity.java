@@ -304,6 +304,8 @@ public class PlayActivity extends AppCompatActivity {
             }
         }
 
+        Toast.makeText(this, "삭제 완료", Toast.LENGTH_SHORT).show();
+
         //삭제했으면, 다음 파일부터 재생을 해야 한다. playingPos -= 1
         playingPos--;
         System.out.println("삭제를 했으면 여기서 playingPos--해주는데? : " + playingPos);
