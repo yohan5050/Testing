@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,10 +23,13 @@ import android.widget.Toast;
 
 import com.google.cloud.android.reminderapp.R;
 
+import static com.google.cloud.android.reminderapp.R.id.center;
+import static com.google.cloud.android.reminderapp.R.id.center_horizontal;
+
 public class PlayActivity extends AppCompatActivity {
 
     DataBase db;
-    Button button;
+    ImageButton button;
     ImageButton listBtn, infoBtn, delBtn;
     int playCount = -2;
     TextView textView;
@@ -44,7 +48,7 @@ public class PlayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_play);
 
         db = Main2Activity.getDBInstance();
-        button = (Button) findViewById(R.id.button);
+        button = (ImageButton) findViewById(R.id.button);
         listBtn = (ImageButton) findViewById(R.id.listImage);
         infoBtn = (ImageButton) findViewById(R.id.informationImage);
         delBtn = (ImageButton) findViewById(R.id.deleteImage);
@@ -88,13 +92,13 @@ public class PlayActivity extends AppCompatActivity {
 
                 // Title setting
 //                alertDialogBuilder.setTitle("음성 파일 삭제");
-                alertDialogBuilder.setTitle("삭제할까요?");
+//                alertDialogBuilder.setTitle("삭제할까요?");
 
                 // AlertDialog setting
                 alertDialogBuilder
-                        .setMessage(" ")
+                        .setMessage("삭제할까요?")
                         .setCancelable(false)
-                        .setPositiveButton("YES",
+                        .setPositiveButton("삭제",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         delBtnClicked = false;
@@ -105,7 +109,7 @@ public class PlayActivity extends AppCompatActivity {
                                         onStart();
                                     }
                                 })
-                        .setNegativeButton("NO",
+                        .setNegativeButton("취소",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         delBtnClicked = false;
@@ -120,29 +124,21 @@ public class PlayActivity extends AppCompatActivity {
                 // Dialog 생성
                 alertDialog = alertDialogBuilder.create();
 
+                //Dialog 위치 이동시키기
+//                alertDialog.getWindow().setGravity(Gravity.BOTTOM);
+
                 // show Dialog
                 alertDialog.show();
 
                 // 메시지 택스트의 크기를 변경한다.
                 TextView textView = (TextView) alertDialog.findViewById(android.R.id.message);
-                textView.setTextSize(1.0f);
+                textView.setTextSize(40.0f);
+                // 메시지를 가운데 정렬한다.
+                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
-                //버튼의 배치 설정
-                //버튼 패널의 컨테이너를 가져온다.
-//                LinearLayout containerButtons = (LinearLayout) alertDialog.findViewById(R.id.buttonPanel);
-//                ScrollView containerButtons = (ScrollView) alertDialog.findViewById(R.id.buttonPanel);
-//                // Space View를 삭제한다.
-//                containerButtons.removeView(containerButtons.getChildAt(1));
-//                // 버튼 패널의 자식 View의 버튼의 Gravity를 CENTER로 설정
-//                containerButtons
-//                containerButtons.setGravity(Gravity.CENTER);
-//                //LinearLayout의 비율의 합계를 3으로 설정한다.
-//                containerButtons.setWeightSum(3.0f);
                 //각 버튼을 얻는다.
                 Button button2 = (Button) alertDialog.findViewById(android.R.id.button2);
                 Button button1 = (Button) alertDialog.findViewById(android.R.id.button1);
-//                button2.setGravity(Gravity.CENTER);
-//                button1.setGravity(Gravity.CENTER);
                 //각 버튼의 비율을 지정한다.
                 ((LinearLayout.LayoutParams)button2.getLayoutParams()).weight = 100.0f;
                 ((LinearLayout.LayoutParams)button1.getLayoutParams()).weight = 100.0f;
