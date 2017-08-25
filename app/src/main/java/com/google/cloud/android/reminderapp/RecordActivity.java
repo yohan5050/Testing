@@ -9,7 +9,7 @@ import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.io.FileInputStream;
@@ -21,7 +21,7 @@ public class RecordActivity extends AppCompatActivity {
     DataBase db;
     public static CountDownTimer timer; //AlarmSoundService에서 사용
     TextView mText;
-    Button stopBtn;
+    ImageButton stopBtn;
     int value;
     String fileName;
 
@@ -37,7 +37,7 @@ public class RecordActivity extends AppCompatActivity {
 
         RActivity = this;
         db = Main2Activity.getDBInstance();
-        stopBtn = (Button) findViewById(R.id.button);
+        stopBtn = (ImageButton) findViewById(R.id.button);
         mText = (TextView) findViewById(R.id.text);
 
         timeAnalysis = new TimeAnalysis();

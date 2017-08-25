@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.cloud.android.reminderapp.R;
@@ -13,7 +13,7 @@ public class PlayInfoActivity extends AppCompatActivity {
 
     DataBase db;
     TextView mText1, mText2;
-    Button button;
+    ImageButton button;
 
 
     @Override
@@ -24,7 +24,7 @@ public class PlayInfoActivity extends AppCompatActivity {
         db = Main2Activity.getDBInstance();
         mText1 = (TextView) findViewById(R.id.text);
         mText2 = (TextView) findViewById(R.id.text2);
-        button = (Button) findViewById(R.id.backImage);
+        button = (ImageButton) findViewById(R.id.backImage);
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

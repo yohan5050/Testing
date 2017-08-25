@@ -57,7 +57,6 @@
         <activity android:name=".PlayInfoActivity" />
         <activity android:name=".PlayListActivity" />
         <activity android:name=".AlarmActivity" />
-        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

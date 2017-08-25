@@ -31,12 +31,12 @@
         android:text="알림 없음"
         android:textSize="30dp" />
 
-    <Button
+    <ImageButton
         android:id="@+id/backImage"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:background="#00000000"
-        android:drawableStart="@drawable/back"
+        android:src="@drawable/back_btn"
         android:gravity="center"
         android:scaleType="fitXY"
         android:layout_below="@+id/text2"

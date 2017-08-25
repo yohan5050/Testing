@@ -49,7 +49,7 @@ public class VoiceRecorder {
     {
         context =c;
 //        mCallback = callback;
-      db = MainActivity.getDBInstance();
+        db = Main2Activity.getDBInstance();
     }
 
     /**

@@ -4,16 +4,10 @@ package com.google.cloud.android.reminderapp;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+
 import android.os.AsyncTask;
 import android.os.IBinder;
-import android.support.annotation.IntDef;
-import android.view.View;
 import android.widget.Toast;
-
-import static com.google.cloud.android.reminderapp.MainActivity.play;
-import static com.google.cloud.android.reminderapp.MainActivity.playingPos;
-import static com.google.cloud.android.reminderapp.MainActivity.value;
 
 public class AlarmSoundService extends Service {
     Context context;
@@ -106,8 +100,6 @@ public class AlarmSoundService extends Service {
             }
 
             protected void onPostExecute(String result) {
-                    System.out.println("여기는 안들어올걸? " + playingPos);
-//                    MainActivity.device.callOnClick();
             }
 
             protected void onCancelled() {

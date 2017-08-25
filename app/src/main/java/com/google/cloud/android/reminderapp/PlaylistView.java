@@ -32,7 +32,7 @@ public class PlaylistView extends LinearLayout {
         textView = (TextView) findViewById(R.id.textView);
     }
 
-    public void setName(String name) {
-        textView.setText(name);
+    public void setName(String content) {
+        textView.setText(content);
     }
 }

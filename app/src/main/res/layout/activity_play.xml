@@ -12,7 +12,7 @@
         android:layout_height="90dp"
         android:background="#00000000"
         android:scaleType="fitXY"
-        android:src="@drawable/list2"
+        android:src="@drawable/list_btn"
         android:layout_marginTop="18dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
@@ -34,14 +34,13 @@
         android:layout_height="90dp"
         android:background="#00000000"
         android:scaleType="fitXY"
-        android:src="@drawable/delete2"
+        android:src="@drawable/del_btn"
         android:layout_alignTop="@+id/informationImage"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="22dp" />
 
     <TextView
         android:id="@+id/text"
-
         android:padding="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,8 +53,8 @@
     <ImageButton
         android:id="@+id/button"
         android:gravity="center"
+        android:background="#00000000"
         android:src="@drawable/home"
-        android:background="@drawable/btn_bg_ex"
         android:scaleType="fitXY"
         android:layout_width="90dp"
         android:layout_height="90dp"

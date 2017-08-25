@@ -201,7 +201,7 @@ public class PlayListActivity extends AppCompatActivity {
             view.setName(item.getName());
 
             if (position == tempPos2) {
-                view.setBackgroundColor(Color.MAGENTA);
+                view.setBackgroundColor(Color.rgb(92, 224, 189)); // #5CE0BD
             } else {
                 view.textView.setBackgroundColor(Color.WHITE);
             }

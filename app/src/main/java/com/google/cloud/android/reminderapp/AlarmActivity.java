@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,7 +16,7 @@ public class AlarmActivity extends AppCompatActivity {
 
     public static Handler ahandler; // 알람 화면 처리 핸들러(알람이 끝나면 알람 화면 종료하도록)
     TextView textView;
-    Button button;
+    ImageButton button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +24,7 @@ public class AlarmActivity extends AppCompatActivity {
         setContentView(R.layout.activity_alarm);
 
         textView = (TextView) findViewById(R.id.text);
-        button = (Button) findViewById(R.id.button);
+        button = (ImageButton) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "알람을 종료합니다.", Toast.LENGTH_LONG).show();
@@ -64,5 +64,30 @@ public class AlarmActivity extends AppCompatActivity {
         String alarmText = intent.getStringExtra("alarmtext");
         System.out.println("알람텍스트 in AlarmActivity : " + alarmText);
         textView.setText(alarmText);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        //알람 화면이 사라질 경우(예를 들어 홈버튼, 최근 사용 앱 확인 버튼을 누르는 경우) 알람을 종료한다
+//        button.callOnClick(); // 화면이 꺼져있으면 AlarmActivity가 2번 호출되는 듯한 현상이 일어난다. 즉, onStop이 한번 더 호출되어
+        //시작도 전에 종료가 된다. 그래서 onUserLeaveHint()를 사용하기로 했다.
+    }
+
+    @Override
+    protected void onUserLeaveHint() { //홈버튼, 멀티버튼을 누르거나 이 액티비티에서 다른 액티비티로 넘어갈 때 onPause직전에 호출된다.
+        //다른 액티비티로 넘어갈 때 호출되지 않는 방법은 해당 인텐트에 FLAG_ACTIVITY_NO_USER_ACTION를 추가하면 되는듯.
+        //하지만 AlarmActivity에서 다른 액티비를 호출하는 일은 없고, 단지 홈버튼을 누르거나 최근 사용 앱 확인버튼(멀티버튼)을 누를 경우
+        //종료하는 것이 목적이므로 그냥 써도 될 것 같다.
+        super.onUserLeaveHint();
+
+        button.callOnClick();
+    }
+
+    @Override
+    public void onBackPressed() { //back button을 누르면 알람이 종료되도록 한다.
+        super.onBackPressed();
+
+        button.callOnClick();
     }
 }

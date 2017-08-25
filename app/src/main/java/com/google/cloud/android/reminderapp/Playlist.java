@@ -5,20 +5,17 @@ package com.google.cloud.android.reminderapp;
  */
 
 public class Playlist {
-    String name;
-    String mobile;
-    int age;
-//    int resId;
+    String content;
 
-    public Playlist(String name) {
-        this.name = name;
+    public Playlist(String content) {
+        this.content = content;
     }
 
     public String getName() {
-        return name;
+        return content;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String content) {
+        this.content = content;
     }
 }

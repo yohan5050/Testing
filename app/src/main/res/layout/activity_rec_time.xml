@@ -27,11 +27,11 @@
         android:textSize = "30dp"
         android:layout_centerVertical="true" />
 
-    <Button
+    <ImageButton
         android:id="@+id/button"
         android:gravity="center"
         android:background="#00000000"
-        android:drawableStart="@drawable/success"
+        android:src="@drawable/rec_success_btn"
         android:scaleType="fitXY"
         android:layout_width="93dp"
         android:layout_height="93dp"
