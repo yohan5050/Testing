@@ -15,6 +15,9 @@ import android.widget.TextView;
 
 public class PlaylistView extends LinearLayout {
     TextView textView;
+    TextView textView2;
+    ImageView imageView;
+
     public PlaylistView(Context context) {
         super(context);
         init(context);
@@ -30,9 +33,17 @@ public class PlaylistView extends LinearLayout {
         inflater.inflate(R.layout.play_list, this, true);
 
         textView = (TextView) findViewById(R.id.textView);
+        textView2 = (TextView) findViewById(R.id.textView2);
+        imageView = (ImageView) findViewById(R.id.imageView);
     }
 
-    public void setName(String content) {
+    public void setContent(String content) {
         textView.setText(content);
+    }
+    public void setAlarmTime(String alarmTime) {
+        textView2.setText(alarmTime);
+    }
+    public void setImage(int resId) {
+        imageView.setImageResource(resId);
     }
 }

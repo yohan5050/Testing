@@ -29,7 +29,7 @@ import static com.google.cloud.android.reminderapp.R.id.center_horizontal;
 public class PlayActivity extends AppCompatActivity {
 
     DataBase db;
-    ImageButton button;
+    ImageButton button, backwardsBtn, forwardBtn;
     ImageButton listBtn, infoBtn, delBtn;
     int playCount = -2;
     TextView textView;
@@ -39,6 +39,7 @@ public class PlayActivity extends AppCompatActivity {
     int playingPos = -3; //onPause에서 +1하면 -2가 되도록
     boolean listBtnClicked = false, delBtnClicked = false;
     AlertDialog alertDialog;
+    int resCode = -1;
 
     public static Handler vhandler; // 재생중 화면 처리 핸들러
 
@@ -54,11 +55,102 @@ public class PlayActivity extends AppCompatActivity {
         delBtn = (ImageButton) findViewById(R.id.deleteImage);
         textView = (TextView) findViewById(R.id.text);
 
+        backwardsBtn = (ImageButton) findViewById(R.id.backwards_btn);
+        forwardBtn = (ImageButton) findViewById(R.id.forward_btn);
+
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Main2Activity.mVoicePlayer.stopPlaying();
-                //메인 화면으로 돌아간다
-                finish();
+                if(Main2Activity.mVoicePlayer.mIsPlaying) {
+                    //재생을 중지한다.
+                    playingPos = Main2Activity.mVoicePlayer.stopPlaying();
+                    button.setImageResource(R.drawable.play_btn2);
+                }
+                else {
+                    Main2Activity.mVoicePlayer.startPlaying(SampleRate, BufferSize, playingPos + 1);
+                    button.setImageResource(R.drawable.stop_btn2);
+                }
+//                //메인 화면으로 돌아간다
+//                finish();
+            }
+        });
+
+        backwardsBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if(Main2Activity.mVoicePlayer.mIsPlaying) { //재생 중인 경우
+                    //현재 재생 중인 파일 재생 중지 후
+                    playingPos = Main2Activity.mVoicePlayer.stopPlaying();
+
+                    if(playingPos == db.getAllPlayListNum() - 1) { //맨 앞인 경우
+                        button.setImageResource(R.drawable.play_btn2);
+                        Toast.makeText(getApplicationContext(), "이전 재생 파일이 없습니다", Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        try {
+                            Thread.sleep(500);
+                        } catch(InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                        //직전 파일 재생
+                        Main2Activity.mVoicePlayer.startPlaying(SampleRate, BufferSize, (playingPos + 1) + 1);
+
+                        //TextView 변경
+                        String returnedValue[] = db.getAllContent();
+                        textView.setText(returnedValue[playingPos + 1].replaceAll(" ", ""));
+                    }
+                }
+                else { //재생 중이지 않은 경우
+                    if(playingPos == db.getAllPlayListNum() - 1) { //맨 앞인 경우
+                        Toast.makeText(getApplicationContext(), "이전 재생 파일이 없습니다", Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        System.out.println("여기에 안들어오노? backwardsbtn");
+                        //TextView 변경
+                        String returnedValue[] = db.getAllContent();
+                        textView.setText(returnedValue[playingPos + 1].replaceAll(" ", ""));
+                        playingPos++; //***
+                    }
+                }
+            }
+        });
+
+        forwardBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if(Main2Activity.mVoicePlayer.mIsPlaying) { //재생 중인 경우
+                    //현재 재생 중인 파일 재생 중지 후
+                    playingPos = Main2Activity.mVoicePlayer.stopPlaying();
+
+                    if(playingPos == 0) { //맨 뒤인 경우
+                        button.setImageResource(R.drawable.play_btn2);
+                        Toast.makeText(getApplicationContext(), "다음 재생 파일이 없습니다", Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        try {
+                            Thread.sleep(500);
+                        } catch(InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                        //다음 파일 재생
+                        Main2Activity.mVoicePlayer.startPlaying(SampleRate, BufferSize, (playingPos - 1) + 1);
+
+                        //TextView 변경
+                        String returnedValue[] = db.getAllContent();
+                        textView.setText(returnedValue[playingPos - 1].replaceAll(" ", ""));
+                    }
+                }
+                else { //재생 중이지 않은 경우
+                    if(playingPos == 0) { //맨 뒤인 경우
+                        Toast.makeText(getApplicationContext(), "다음 재생 파일이 없습니다", Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        System.out.println("여기에 안들어오노? forwardbtn");
+                        //TextView 변경
+                        String returnedValue[] = db.getAllContent();
+                        textView.setText(returnedValue[playingPos - 1].replaceAll(" ", ""));
+                        playingPos--;  //***
+                    }
+                }
             }
         });
 
@@ -67,7 +159,8 @@ public class PlayActivity extends AppCompatActivity {
                 listBtnClicked = true;
                 //PlayListActivity 호출
                 Intent intent = new Intent(getApplicationContext(), PlayListActivity.class);
-                startActivity(intent);
+                intent.putExtra("playingpos", playingPos);
+                startActivityForResult(intent, 3);
             }
         });
 
@@ -84,7 +177,10 @@ public class PlayActivity extends AppCompatActivity {
         delBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 delBtnClicked = true;
-                playingPos = Main2Activity.mVoicePlayer.stopPlaying();
+                if(Main2Activity.mVoicePlayer.mIsPlaying)
+                    playingPos = Main2Activity.mVoicePlayer.stopPlaying();
+
+                button.setImageResource(R.drawable.play_btn2);
 
                 //참조1 : http://mainia.tistory.com/2017
                 //참조2 : http://pluu.github.io/blog/rxjava/2017/02/04/android-alertdialog/
@@ -104,9 +200,10 @@ public class PlayActivity extends AppCompatActivity {
                                         delBtnClicked = false;
                                         //해당파일을 삭제한다.
                                         delFunction();
-                                        //다시 재생 시작
-                                        onPause();
-                                        onStart();
+//                                        //다시 재생 시작
+//                                        onPause();
+
+//                                        onResume();
                                     }
                                 })
                         .setNegativeButton("취소",
@@ -115,9 +212,10 @@ public class PlayActivity extends AppCompatActivity {
                                         delBtnClicked = false;
                                         //dialog를 취소하고 해당 파일부터 다시 재생한다
                                         dialog.cancel();
-                                        //다시 재생 시작
-                                        onPause();
-                                        onStart();
+//                                        //다시 재생 시작
+//                                        onPause();
+
+//                                        onResume();
                                     }
                                 });
 
@@ -181,39 +279,85 @@ public class PlayActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+    }
 
-        if(Main2Activity.mVoicePlayer.mIsPlaying) { // 재생 중이라면 재생을 멈추고
-            Main2Activity.mVoicePlayer.stopPlaying();
+    //onActivityResult는 항상 onResume()전에 호출된다!
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        resCode = resultCode;
+        playingPos = data.getIntExtra("key", db.getAllPlayListNum()); //list에서 재생 중이었거나, 정지했던 위치
+
+        //list에서 back button으로 play화면으로 돌아올 때, 재생 중인지 아닌지에 따라 재생/중지 버튼 표시
+        if(Main2Activity.mVoicePlayer.mIsPlaying) {
+            System.out.println("재생중이냐? " + Main2Activity.mVoicePlayer.mIsPlaying);
+            button.setImageResource(R.drawable.stop_btn2);
         }
-
-        try { //재생이 완전히 종료될 때까지 좀 기다린다.
-            Thread.sleep(500);
-        } catch(InterruptedException e) {
-            e.printStackTrace();
+        else {
+            button.setImageResource(R.drawable.play_btn2);
         }
+    }
 
-        if(delBtnClicked) { //삭제여부 다이얼로그  창이 띄워져있을 때는 재생을 하면 안된다.
-            return;
-        }
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-        Intent intent = getIntent();
-        //list에서 음성 파일을 선택한 경우 해당 위치를 전달 받는다.
-        if(playCount == -2) playCount = intent.getIntExtra("playcount", -1);
-        //시작하는 지점 정보(int)가 없으면 db에서 모든파일의 개수 얻어와서 가장 최근 녹음파일부터 재생 시작
-        if(playCount == -1) playCount = db.getAllPlayListNum();
+        //        if(Main2Activity.mVoicePlayer.mIsPlaying) { // 재생 중이라면 재생을 멈추고
+//            Main2Activity.mVoicePlayer.stopPlaying();
+//        }
+//
+//        try { //재생이 완전히 종료될 때까지 좀 기다린다.
+//            Thread.sleep(500);
+//        } catch(InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
-        //가장 최근 녹음 파일부터 재생 시작
-        //플레이리스트 업데이트
+//        if(delBtnClicked) { //삭제여부 다이얼로그  창이 띄워져있을 때는 재생을 하면 안된다.
+//            return;
+//        }
+
+        //삭제여부 다이얼로그  창이 띄워져있을 때는 재생을 하면 안된다.
+        //list 화면에서 back button을 눌러 play화면으로 왔다면 그냥 그대로 놔둔다.
+        if(resCode != -100 && !delBtnClicked) {
+            Intent intent = getIntent();
+            //list에서 음성 파일을 선택한 경우 해당 위치를 전달 받는다.
+            if (playCount == -2) playCount = intent.getIntExtra("playcount", -1);
+
+            if (Main2Activity.mVoicePlayer.mIsPlaying) { // 재생 중이라면 재생을 멈추고
+                Main2Activity.mVoicePlayer.stopPlaying();
+            }
+
+            try { //재생이 완전히 종료될 때까지 좀 기다린다.
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            //시작하는 지점 정보(int)가 없으면 db에서 모든파일의 개수 얻어와서 가장 최근 녹음파일부터 재생 시작
+            if (playCount == -1) playCount = db.getAllPlayListNum();
+
+            //가장 최근 녹음 파일부터 재생 시작
+            //플레이리스트 업데이트
 //        makeList2();
-        if(db.getAllPlayListNum() == 0) { //if (playCount == 0) { //이렇게 할 경우 맨 마지막(맨 아래) 음성 파일을 삭제 후 이쪽으로 들어온다.
-            Toast.makeText(getApplicationContext(), "재생할 목록이 비어있습니다.", Toast.LENGTH_SHORT).show();
-            textView.setText("재생할 파일이 없습니다.");
-            finish();
-            return;
+            if (db.getAllPlayListNum() == 0) { //if (playCount == 0) { //이렇게 할 경우 맨 마지막(맨 아래) 음성 파일을 삭제 후 이쪽으로 들어온다.
+                Toast.makeText(getApplicationContext(), "재생할 목록이 비어있습니다.", Toast.LENGTH_SHORT).show();
+                textView.setText("재생할 파일이 없습니다.");
+                finish();
+                return;
+            }
+            System.out.println("삭제 취소하면 여기로 1");
+            if (!Main2Activity.mVoicePlayer.isPlaying()) {
+                Main2Activity.mVoicePlayer.startPlaying(SampleRate, BufferSize, playCount);
+                System.out.println("삭제 취소하면 여기로 2 와서 재생돼야 하지 않음?");
+                playCount = -2;
+            }
+
+            resCode = -1; //초기화
         }
-        if (!Main2Activity.mVoicePlayer.isPlaying()) {
-            Main2Activity.mVoicePlayer.startPlaying(SampleRate, BufferSize, playCount);
-            playCount = -2;
+        else {
+            System.out.println("여기가 아닌감?" + Main2Activity.mVoicePlayer.mIsPlaying);
+            onStart();
         }
     }
 
@@ -234,11 +378,6 @@ public class PlayActivity extends AppCompatActivity {
                 playCount = Main2Activity.mVoicePlayer.stopPlaying() + 1;
             }
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     @Override
@@ -304,6 +443,13 @@ public class PlayActivity extends AppCompatActivity {
 
         //삭제했으면, 다음 파일부터 재생을 해야 한다. playingPos -= 1
         playingPos--;
-        System.out.println("삭제를 했으면 여기서 playingPos--해주는데? : " + playingPos);
+        //textView을 다음파일의 내용으로 세팅한다.
+        String returnedValue[] = db.getAllContent();
+        if(playingPos < 0) {
+            finish();
+        }
+        else {
+            textView.setText(returnedValue[playingPos].replaceAll(" ", ""));
+        }
     }
 }

@@ -1,8 +1,10 @@
 package com.google.cloud.android.reminderapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +27,11 @@ public class AlarmActivity extends AppCompatActivity {
 
         textView = (TextView) findViewById(R.id.text);
         button = (ImageButton) findViewById(R.id.button);
+
+        //진동 - 참조 : http://bitsoul.tistory.com/129
+        final Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(new long[] {500, 1000}, 0); //진동 패턴: 대기, 진동,.. / 0: 무한 반복, -1: 반복 없음.
+
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "알람을 종료합니다.", Toast.LENGTH_LONG).show();
@@ -34,6 +41,7 @@ public class AlarmActivity extends AppCompatActivity {
                 if(AlarmSoundService.mVoicePlayerAlarm != null) //프로그램이 종료된 상태에서 알람이 울리는 경우에 알람 처리
                     AlarmSoundService.mVoicePlayerAlarm.stopPlaying();
 
+                vibrator.cancel(); //진동 취소
                 finish();
             }
         });

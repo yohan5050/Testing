@@ -73,7 +73,7 @@ public class RecTimeActivity extends AppCompatActivity {
         //한번 더 저장된다. 이를 막기 위해서... fileName이 같은 파일이 2개이상 존재하면 안되므로 fileName으로 비교를 하면 되겠다.
         //db가 비어있는 경우 db.getLastFileName()을 호출하면 에러가 발생하므로 db.getAllPlayListNum()이 0보다 큰 경우에만 확인한다.
         if(db.getAllPlayListNum() == 0) { // db가 비어있을 때는 항상 저장해줘야 한다.
-            db.insert(fileName, "일반 메모", returnedValue);
+            db.insert(fileName, alarmTime, returnedValue);
             System.out.println("db에 일반메모 저장");
         }
         if(db.getAllPlayListNum() > 0 && !fileName.equals(db.getLastFileName())) { //마지막에 저장된 fileName과 다를 경우만 db에 insert

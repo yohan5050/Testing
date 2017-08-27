@@ -25,18 +25,27 @@ tools:context=".Main2Activity">
                 <!--android:textSize="30dp" />-->
         <!--</LinearLayout>-->
     <!--</ScrollView>-->
+    <ImageButton
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="5dp"
+        android:id="@+id/imageButton"
+        android:src="@drawable/stop_btn2"
+        android:background="#00000000"
+        android:scaleType="fitXY"/>
 
     <TextView
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="140dp"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
+        android:layout_marginLeft="95dp"
         android:padding="10dp"
-        android:gravity="center"
-        android:text=" 녹음 시간  16:00 8월 11일 "
+        android:text=" "
         android:textSize="30dp"
         android:scrollbars="vertical" />
+
 
     <ListView
         android:id="@+id/listView"
