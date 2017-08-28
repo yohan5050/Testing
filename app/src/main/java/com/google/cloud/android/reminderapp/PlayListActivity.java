@@ -61,13 +61,13 @@ public class PlayListActivity extends AppCompatActivity {
         textView.setMovementMethod(new ScrollingMovementMethod());
         db = Main2Activity.getDBInstance();
 
-        //재생 중인지 아닌지에 따라 재생/중지 버튼 표시
-        if(Main2Activity.mVoicePlayer.mIsPlaying) {
-            imageButton.setImageResource(R.drawable.stop_btn2);
-        }
-        else {
-            imageButton.setImageResource(R.drawable.play_btn2);
-        }
+//        //재생 중인지 아닌지에 따라 재생/중지 버튼 표시 -> onStart()에서 해주는 걸로...
+//        if(Main2Activity.mVoicePlayer.mIsPlaying) {
+//            imageButton.setImageResource(R.drawable.stop_btn2);
+//        }
+//        else {
+//            imageButton.setImageResource(R.drawable.play_btn2);
+//        }
 
         phandler = new Handler() {
             public void handleMessage(Message msg) {
@@ -87,7 +87,7 @@ public class PlayListActivity extends AppCompatActivity {
 
                         String[] contentNameArr = db.getAllContent();
                         int cnt = contentNameArr.length;
-                        textView.setText(contentNameArr[cnt -1 - position]);
+                        textView.setText(contentNameArr[cnt -1 - position].replaceAll(" ", ""));
                     }
                     else {
                         return;
@@ -105,6 +105,7 @@ public class PlayListActivity extends AppCompatActivity {
                     imageButton.setImageResource(R.drawable.play_btn2);
                 }
                 else {
+                    System.out.println("왜 종료가 되는기야?" + playingPos);
                     Main2Activity.mVoicePlayer.startPlaying(SampleRate, BufferSize, playingPos + 1);
                     imageButton.setImageResource(R.drawable.stop_btn2);
                 }
@@ -140,6 +141,14 @@ public class PlayListActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        //재생 중인지 아닌지에 따라 재생/중지 버튼 표시
+        if(Main2Activity.mVoicePlayer.mIsPlaying) {
+            imageButton.setImageResource(R.drawable.stop_btn2);
+        }
+        else {
+            imageButton.setImageResource(R.drawable.play_btn2);
+        }
+
         if(!isAfterOnPause && !Main2Activity.mVoicePlayer.mIsPlaying) { //재생 중지 상태의 playActivity에서 넘어왔을 경우
             String[] contentNameArr = db.getAllContent();
             int playCount = db.getAllPlayListNum();
@@ -148,7 +157,7 @@ public class PlayListActivity extends AppCompatActivity {
             //목록에 highlight
             tempPos2 = playCount - playingPos - 1;
             //textView에 내용 출력
-            textView.setText(contentNameArr[playingPos]);
+            textView.setText(contentNameArr[playingPos].replaceAll(" ", ""));
         }
 
         makeList2();
@@ -170,11 +179,13 @@ public class PlayListActivity extends AppCompatActivity {
         super.onPause();
         System.out.println("백버튼 누르면 여기로 오나"); //finish()를 해도 이쪽으로 오는듯
         if(!isBackPressed) { //back button을 누른 경우는 제외. - back button을 누른 경우는 계속 진행되도록 할 것임
+            playingPos = Main2Activity.mVoicePlayer.stopPlaying();
+
             //onPause상태에 들어왔다는 것을 체크
             isAfterOnPause = true;
             if(Main2Activity.mVoicePlayer.mIsPlaying) {
                 wasPlaying = true; //재생 중에 onPause가 됐다면 다시 복귀할 때도 재생할 수 있도록 체크해놓는다.
-                playingPos = Main2Activity.mVoicePlayer.stopPlaying();
+//                playingPos = Main2Activity.mVoicePlayer.stopPlaying();
             }
             else {
                 wasPlaying = false;

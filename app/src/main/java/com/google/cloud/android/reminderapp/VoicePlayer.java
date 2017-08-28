@@ -23,6 +23,9 @@ public class VoicePlayer {
 
     Context context;
     boolean mIsPlaying  = false;
+    //많은 액티비티에서 mIsPlaying을 사용하기 때문에 가끔 동시에 접근하는 경우 에러 발생하는 것 같음
+    //알람 재생은 mIsPlaying2를 사용한다.
+    boolean mIsPlaying2 = false;
     DataBase db;
 
     AudioTrack audioTrack;
@@ -164,12 +167,12 @@ public class VoicePlayer {
      *
      */
     public void playWaveFileAlarm(int SampleRate,int mBufferSize, String filename) {
-        mIsPlaying = true;
+        mIsPlaying2 = true;
         int cnt = 0;
         while(true) {
             cnt++;
             if(cnt > 11) {
-                mIsPlaying = false;
+                mIsPlaying2 = false;
 //                return; // mIsPlaying이 false가 되어 아래쪽에서 while문을 break탈출한다. (결국 총 12번 재생)
             }
             int count = 0;
@@ -182,7 +185,7 @@ public class VoicePlayer {
                 audioTrack = new AudioTrack(AudioManager.STREAM_VOICE_CALL, SampleRate, CHANNEL, ENCODING, minBufferSize, AudioTrack.MODE_STREAM);
                 audioTrack.play();
 
-                while (((count = dis.read(data, 0, mBufferSize)) > -1)&&mIsPlaying) {
+                while (((count = dis.read(data, 0, mBufferSize)) > -1)&&mIsPlaying2) {
                     SharedPreferences preference = context.getSharedPreferences("volume", context.MODE_PRIVATE);
                     float volume = preference.getFloat("volume", 1f);
                     audioTrack.setVolume(volume);
@@ -193,7 +196,7 @@ public class VoicePlayer {
                 dis.close();
                 fis.close();
 
-                if(!mIsPlaying) {
+                if(!mIsPlaying2) {
                     //알람이 끝나면 AlarmActivity로 알람이 끝났음을 알린다.
                     Message message = AlarmActivity.ahandler.obtainMessage(1, "stop");
                     AlarmActivity.ahandler.sendMessage(message);
@@ -206,5 +209,9 @@ public class VoicePlayer {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void stopPlaying2() {
+        mIsPlaying2 = false;
     }
 }

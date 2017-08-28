@@ -67,6 +67,7 @@ public class PlayActivity extends AppCompatActivity {
                     button.setImageResource(R.drawable.play_btn2);
                 }
                 else {
+                    System.out.println("왜 재생이 안되니??" + playingPos);
                     Main2Activity.mVoicePlayer.startPlaying(SampleRate, BufferSize, playingPos + 1);
                     button.setImageResource(R.drawable.stop_btn2);
                 }
@@ -161,6 +162,15 @@ public class PlayActivity extends AppCompatActivity {
                 //PlayListActivity 호출
                 Intent intent = new Intent(getApplicationContext(), PlayListActivity.class);
                 intent.putExtra("playingpos", playingPos);
+                //알람 액티비티가 뜨는데 시간이 좀 걸리는데, 그 직전에 리스트 버튼을 클릭하면 onUserLeaveHint()에 들어가서
+                //알람이 자동으로 종료되는 것 같다 그래서 리스트 버튼을 클릭하고 잠시 멈춰있다가 리스트 액티비티를 띄워본다.
+                //다시 생각해보니 잘 이해는 안 되지만 이렇게 해줌으로써 문제가 해결된 듯하다.
+                //일단 이렇게 해보고, 알람 액티비티를 좀 빠르게 띄우거나 alarmsoundservice랑 합치는 방법도 고려해보자.
+                try {
+                    Thread.sleep(90);
+                } catch(InterruptedException e) {
+                    e.printStackTrace();
+                }
                 startActivityForResult(intent, 100);
             }
         });
@@ -281,6 +291,14 @@ public class PlayActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        //재생 중인지 아닌지에 따라 재생/중지 버튼 표시
+        if(Main2Activity.mVoicePlayer.mIsPlaying) {
+            button.setImageResource(R.drawable.stop_btn2);
+        }
+        else {
+            button.setImageResource(R.drawable.play_btn2);
+        }
     }
 
     //onActivityResult는 항상 onResume()전에 호출된다!
@@ -329,6 +347,10 @@ public class PlayActivity extends AppCompatActivity {
         //list에서 음성 파일을 선택한 경우 해당 위치를 전달 받는다.
         if (playCount == -2) playCount = intent.getIntExtra("playcount", -1);
 
+        System.out.println("테스팅 mVoicePlayer : " + Main2Activity.mVoicePlayer);
+        if(Main2Activity.mVoicePlayer == null) {
+            Main2Activity.mVoicePlayer = new VoicePlayer(this);
+        }
         if (Main2Activity.mVoicePlayer.mIsPlaying) { // 재생 중이라면 재생을 멈추고
             Main2Activity.mVoicePlayer.stopPlaying();
         }
@@ -378,10 +400,16 @@ public class PlayActivity extends AppCompatActivity {
             listBtnClicked = false;
         }
         else { //listBtn을 클릭하지 않은 경우의 화면 전환에서는 재생을 멈춰준다.
-            //mIsPlaying을 체크하지 않으면, 다이얼로그를 띄웠다가 삭제한 후에 playCount값이 변경되는 문제가 생긴다.
+            //mIsPlaying을 체크하지 않으면, 다이얼로그를 띄웠다가 삭제한 후에 playCount값(playingPos값)이 변경되는 문제가 생긴다.
             //arrayoutofbound exception 생겼었음.
-            if(Main2Activity.mVoicePlayer.mIsPlaying)
-                playCount = Main2Activity.mVoicePlayer.stopPlaying() + 1;
+//            if(Main2Activity.mVoicePlayer.mIsPlaying)
+//                playCount = Main2Activity.mVoicePlayer.stopPlaying() + 1;
+            if(!delBtnClicked) {
+                //알람 화면에서 전환되어 onPause에 들어올 경우, 재생 중이지 않더라도 stopPlaying 메소드를 통해 playingPos값을 얻어야 한다...
+                playingPos = Main2Activity.mVoicePlayer.stopPlaying();
+                playCount = playingPos + 1;
+            }
+
         }
     }
 

@@ -87,6 +87,12 @@ public class RecordActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() { //back button을 누르면 알람이 종료되도록 한다.
+        super.onBackPressed();
+        finish();
+    }
+
     /**
      * RecordActivity가 멈출 때, SpeechService를 종료한다.
      */
@@ -119,7 +125,8 @@ public class RecordActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             System.out.println("파일 이름을 보내남 : " + fileName);
-            mSpeechService.recognizeInputStream(fis);
+            if(mSpeechService != null)
+                mSpeechService.recognizeInputStream(fis);
         }
     }
 

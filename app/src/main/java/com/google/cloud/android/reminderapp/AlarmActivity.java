@@ -36,11 +36,11 @@ public class AlarmActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "알람을 종료합니다.", Toast.LENGTH_LONG).show();
                 if(Main2Activity.mVoicePlayer != null)
-                    Main2Activity.mVoicePlayer.stopPlaying();
+                    Main2Activity.mVoicePlayer.stopPlaying2(); //Main2Activity.mVoicePlayer.stopPlaying();
 
                 if(AlarmSoundService.mVoicePlayerAlarm != null) //프로그램이 종료된 상태에서 알람이 울리는 경우에 알람 처리
-                    AlarmSoundService.mVoicePlayerAlarm.stopPlaying();
-
+                    AlarmSoundService.mVoicePlayerAlarm.stopPlaying2(); //AlarmSoundService.mVoicePlayerAlarm.stopPlaying();
+                System.out.println("알람 액티비티 button setonclicklistener");
                 vibrator.cancel(); //진동 취소
                 finish();
             }
@@ -58,6 +58,8 @@ public class AlarmActivity extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 if(((String) msg.obj).equals("stop")) {
                     Toast.makeText(getApplicationContext(), "알람을 종료합니다.", Toast.LENGTH_LONG).show();
+                    System.out.println("알람 액티비티 ahandler");
+                    vibrator.cancel(); //진동 취소
                     finish();
                 }
             }
@@ -88,7 +90,7 @@ public class AlarmActivity extends AppCompatActivity {
         //하지만 AlarmActivity에서 다른 액티비를 호출하는 일은 없고, 단지 홈버튼을 누르거나 최근 사용 앱 확인버튼(멀티버튼)을 누를 경우
         //종료하는 것이 목적이므로 그냥 써도 될 것 같다.
         super.onUserLeaveHint();
-
+        System.out.println("알람 액티비티 onUserLeaveHin()");
         button.callOnClick();
     }
 
@@ -96,6 +98,7 @@ public class AlarmActivity extends AppCompatActivity {
     public void onBackPressed() { //back button을 누르면 알람이 종료되도록 한다.
         super.onBackPressed();
 
+        System.out.println("알람 액티비티 backPressed");
         button.callOnClick();
     }
 }
