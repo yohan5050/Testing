@@ -70,7 +70,6 @@ public class PlayInfoActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.putExtra("key", playingPos);
         setResult(-99, intent); //result code
-        System.out.println("인포인포!!");
 
         super.onBackPressed();
         finish(); //이전 화면으로 돌아간다

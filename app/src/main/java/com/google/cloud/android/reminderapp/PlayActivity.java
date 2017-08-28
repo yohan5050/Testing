@@ -292,13 +292,13 @@ public class PlayActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        //재생 중인지 아닌지에 따라 재생/중지 버튼 표시
-        if(Main2Activity.mVoicePlayer.mIsPlaying) {
-            button.setImageResource(R.drawable.stop_btn2);
-        }
-        else {
-            button.setImageResource(R.drawable.play_btn2);
-        }
+//        //재생 중인지 아닌지에 따라 재생/중지 버튼 표시 //-> onResume이 onStart뒤에 실행될 경우, onStart에서 재생 여부를 알 수 없다.
+//        if(Main2Activity.mVoicePlayer.mIsPlaying) {
+//            button.setImageResource(R.drawable.stop_btn2);
+//        }
+//        else {
+//            button.setImageResource(R.drawable.play_btn2);
+//        }
     }
 
     //onActivityResult는 항상 onResume()전에 호출된다!
@@ -334,6 +334,7 @@ public class PlayActivity extends AppCompatActivity {
             return;
         }
 
+        //info 화면에서 back button을 눌러 play화면으로 왔다면 그냥 그대로 놔둔다.
         if(resCode == -99) {
             resCode = -1; //초기화
             return;
@@ -378,6 +379,14 @@ public class PlayActivity extends AppCompatActivity {
             Main2Activity.mVoicePlayer.startPlaying(SampleRate, BufferSize, playCount);
             System.out.println("삭제 취소하면 여기로 2 와서 재생돼야 하지 않음?");
             playCount = -2;
+        }
+
+                //재생 중인지 아닌지에 따라 재생/중지 버튼 표시 //-> onResume이 onStart뒤에 실행될 경우, onStart에서 재생 여부를 알 수 없다.
+        if(Main2Activity.mVoicePlayer.mIsPlaying) {
+            button.setImageResource(R.drawable.stop_btn2);
+        }
+        else {
+            button.setImageResource(R.drawable.play_btn2);
         }
     }
 
