@@ -46,4 +46,8 @@ public class PlaylistView extends LinearLayout {
     public void setImage(int resId) {
         imageView.setImageResource(resId);
     }
+    public void setAlarmTimeColor(String strColor) {
+        //참조 : http://shstarkr.tistory.com/147
+        textView2.setTextColor(Color.parseColor(strColor));
+    }
 }

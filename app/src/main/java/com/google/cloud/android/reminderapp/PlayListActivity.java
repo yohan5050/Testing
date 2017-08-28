@@ -23,7 +23,10 @@ import android.widget.Toast;
 
 import com.google.cloud.android.reminderapp.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class PlayListActivity extends AppCompatActivity {
 
@@ -220,13 +223,42 @@ public class PlayListActivity extends AppCompatActivity {
             //각 녹음 파일의 일정 내용을 목록에 출력하는 코드.
             contentNameArr[i] = contentAnalysis.Analysis(contentNameArr[i]);
 
+            //현재 시간과 알람 시간을 비교해서 종료된 알람과 앞으로 예정된 알람을 색깔로 구분하자.
+            String strColor = new String();
+            strColor = "#18392b";
+            if(!alarmTimeArr[i].equals("일반 메모")) { //알람 시간이 존재한다면
+                System.out.println("알람 시간 포멧 : " +  alarmTimeArr[i]);
+                //참조 : https://okky.kr/article/183785
+                String words[] = alarmTimeArr[i].split(":");
+                String date = "20" + words[0] + "-";
+                date += (Integer.parseInt(words[1]) < 10 ? "0" + words[1] : words[1]) + "-";
+                date += (Integer.parseInt(words[2]) < 10 ? "0" + words[2] : words[2]) + " ";
+                date += (Integer.parseInt(words[3]) < 10 ? "0" + words[3] : words[3]) + ":";
+                date += (Integer.parseInt(words[4]) < 10 ? "0" + words[4] : words[4]) + ":";
+                date += "00";
+                System.out.println("알람 포맷 : " + date);
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                try {
+                    Date aDate = simpleDateFormat.parse(date);
+                    long aMillis = aDate.getTime(); //alarm time
+                    long cMillis = System.currentTimeMillis();//current time
+                    if(aMillis > cMillis) { //미래의 알람
+                        System.out.println("여기 미래의 알람");
+                        strColor = "#CD0000";
+                    }
+                } catch(ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+
             if (contentNameArr[i].equals("")) {
-                adapter.addItem(new Playlist((i + 1) + ". " + "내용 없음", alarmTimeArr[i], R.drawable.alarm));
-            } else {
+                adapter.addItem(new Playlist((i + 1) + ". " + "내용 없음", timeFormatFunc(alarmTimeArr[i]), R.drawable.alarm, strColor));
+            }
+            else {
                 if(alarmTimeArr[i].equals("일반 메모"))
-                    adapter.addItem(new Playlist((i + 1) + ". " + contentTime(contentNameArr[i]), "알람정보 없음", R.drawable.memo));
+                    adapter.addItem(new Playlist((i + 1) + ". " + contentTime(contentNameArr[i]), "알람정보 없음", R.drawable.memo, strColor));
                 else
-                    adapter.addItem(new Playlist((i + 1) + ". " + contentTime(contentNameArr[i]), timeFormatFunc(alarmTimeArr[i]), R.drawable.alarm));
+                    adapter.addItem(new Playlist((i + 1) + ". " + contentTime(contentNameArr[i]), timeFormatFunc(alarmTimeArr[i]), R.drawable.alarm, strColor));
             }
         }
     }
@@ -261,9 +293,11 @@ public class PlayListActivity extends AppCompatActivity {
             view.setContent(item.getContent());
             view.setAlarmTime(item.getAlarmTime());
             view.setImage(item.getResId());
+            view.setAlarmTimeColor(item.getStrColor());
 
             if (position == tempPos2) {
-                view.setBackgroundColor(Color.rgb(92, 224, 189)); // #5CE0BD
+                view.setBackgroundColor(Color.parseColor("#B4F0B4"));
+//                view.setBackgroundColor(Color.rgb(92, 224, 189)); // #5CE0BD
             } else {
                 view.textView.setBackgroundColor(Color.WHITE);
             }
