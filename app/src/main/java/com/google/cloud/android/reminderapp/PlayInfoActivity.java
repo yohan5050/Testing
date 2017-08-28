@@ -14,6 +14,7 @@ public class PlayInfoActivity extends AppCompatActivity {
     DataBase db;
     TextView mText1, mText2;
     ImageButton button;
+    int playingPos = -1;
 
 
     @Override
@@ -28,6 +29,10 @@ public class PlayInfoActivity extends AppCompatActivity {
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.putExtra("key", playingPos);
+                setResult(-99, intent); //result code
+                System.out.println("인포인포!!");
                 //이전 화면으로 돌아간다
                 finish();
             }
@@ -41,7 +46,7 @@ public class PlayInfoActivity extends AppCompatActivity {
         //재생 중지
 //        int playingPos = Main2Activity.mVoicePlayer.stopPlaying();
         Intent intent = getIntent();
-        int playingPos = intent.getIntExtra("playingpos", -1);
+        playingPos = intent.getIntExtra("playingpos", -1);
 
         String[] alarmTimeArr = db.getAllAlarmTime();
         String[] fileNameArr = db.getAllFileName();
@@ -62,8 +67,13 @@ public class PlayInfoActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra("key", playingPos);
+        setResult(-99, intent); //result code
+        System.out.println("인포인포!!");
+
         super.onBackPressed();
-        finish();
+        finish(); //이전 화면으로 돌아간다
     }
 
     //녹음시간으로 나타내는 메소드

@@ -42,6 +42,7 @@ public class PlayListActivity extends AppCompatActivity {
     boolean nowStarted = false;
     boolean isAfterOnPause = false; //onPause 상태였다가 onStart하는 것인지 아닌지 체크하기 위함.
     boolean isBackPressed = false;
+    boolean wasPlaying = false; //onPause전에 재생 중이었는지 아닌지 체크
     int playingPos = -1;
     public static Handler phandler; // 재생중인 리스트 처리 핸들러
 
@@ -154,8 +155,9 @@ public class PlayListActivity extends AppCompatActivity {
         //onPause상태에 있었다가 onStart된다면 -> 홈버튼을 눌러서 onPause가 되었다가 다시 실행시킨 경우.
         //backButton이나, 리스트의 파일을 선택하는 경우는 finish()되므로, 이 경우는 홈버튼을 눌렀다가 다시 실행한 경우이다.
         if(isAfterOnPause) {
-            System.out.println("여기에 들어옵니까? onstart");
-            Main2Activity.mVoicePlayer.startPlaying(SampleRate, BufferSize, playingPos + 1);
+            if(wasPlaying) { //onPause전에 재생 중이었다면
+                Main2Activity.mVoicePlayer.startPlaying(SampleRate, BufferSize, playingPos + 1);
+            }
             isAfterOnPause = false;
         }
     }
@@ -167,7 +169,13 @@ public class PlayListActivity extends AppCompatActivity {
         if(!isBackPressed) { //back button을 누른 경우는 제외. - back button을 누른 경우는 계속 진행되도록 할 것임
             //onPause상태에 들어왔다는 것을 체크
             isAfterOnPause = true;
-            playingPos = Main2Activity.mVoicePlayer.stopPlaying();
+            if(Main2Activity.mVoicePlayer.mIsPlaying) {
+                wasPlaying = true; //재생 중에 onPause가 됐다면 다시 복귀할 때도 재생할 수 있도록 체크해놓는다.
+                playingPos = Main2Activity.mVoicePlayer.stopPlaying();
+            }
+            else {
+                wasPlaying = false;
+            }
         }
 
         isBackPressed = false;
