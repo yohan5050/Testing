@@ -170,12 +170,13 @@ public class VoicePlayer {
      */
     public void playWaveFileAlarm(int SampleRate,int mBufferSize, String filename) {
         mIsPlaying2 = true;
-        int cnt = 0;
+
+        boolean isFinished = false;
+        long startTime = System.currentTimeMillis();
+
         while(true) {
-            cnt++;
-            if(cnt > 11) {
+            if(isFinished) {
                 mIsPlaying2 = false;
-//                return; // mIsPlaying이 false가 되어 아래쪽에서 while문을 break탈출한다. (결국 총 12번 재생)
             }
             int count = 0;
             byte[] data = new byte[mBufferSize];
@@ -189,6 +190,11 @@ public class VoicePlayer {
                 audioTrack.play();
 
                 while (((count = dis.read(data, 0, mBufferSize)) > -1)&&mIsPlaying2) {
+                    long endTime = System.currentTimeMillis();
+                    if((endTime - startTime) / 1000.0f >= 60) {
+                        isFinished = true;
+                        break;
+                    }
                     SharedPreferences preference = context.getSharedPreferences("volume", context.MODE_PRIVATE);
                     float volume = preference.getFloat("volume", 1f);
                     audioTrack.setVolume(volume);

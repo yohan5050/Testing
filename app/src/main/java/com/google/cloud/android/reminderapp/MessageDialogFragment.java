@@ -63,7 +63,7 @@ public class MessageDialogFragment extends AppCompatDialogFragment {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ((Listener) getActivity()).onMessageDialogDismissed();
+                        ((Listener) getActivity()).onMessageDialogDismissed(); //여기서 처음 설치시에만 가끔 에러 발생하는 듯.
                     }
                 })
                 .setOnDismissListener(new DialogInterface.OnDismissListener() {
