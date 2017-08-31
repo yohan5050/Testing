@@ -106,8 +106,10 @@ public class VoicePlayer {
                 FileInputStream fis = context.openFileInput(fileName[i]);
                 DataInputStream dis = new DataInputStream(fis);
                 int minBufferSize = AudioTrack.getMinBufferSize(SampleRate, CHANNEL, ENCODING);
-                audioTrack = new AudioTrack(AudioManager.STREAM_VOICE_CALL, SampleRate, CHANNEL, ENCODING, minBufferSize, AudioTrack.MODE_STREAM);
+//                audioTrack = new AudioTrack(AudioManager.STREAM_VOICE_CALL, SampleRate, CHANNEL, ENCODING, minBufferSize, AudioTrack.MODE_STREAM);
+                audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, SampleRate, CHANNEL, ENCODING, minBufferSize, AudioTrack.MODE_STREAM);
                 audioTrack.play();
+//                audioTrack.setVolume()
 
                 while (((count = dis.read(data, 0, mBufferSize)) > -1)&&mIsPlaying) {
                     if(PlayListActivity.phandler != null) {
@@ -182,7 +184,8 @@ public class VoicePlayer {
                 FileInputStream fis = context.openFileInput(filename);
                 DataInputStream dis = new DataInputStream(fis);
                 int minBufferSize = AudioTrack.getMinBufferSize(SampleRate, CHANNEL, ENCODING);
-                audioTrack = new AudioTrack(AudioManager.STREAM_VOICE_CALL, SampleRate, CHANNEL, ENCODING, minBufferSize, AudioTrack.MODE_STREAM);
+//                audioTrack = new AudioTrack(AudioManager.STREAM_VOICE_CALL, SampleRate, CHANNEL, ENCODING, minBufferSize, AudioTrack.MODE_STREAM);
+                audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, SampleRate, CHANNEL, ENCODING, minBufferSize, AudioTrack.MODE_STREAM);
                 audioTrack.play();
 
                 while (((count = dis.read(data, 0, mBufferSize)) > -1)&&mIsPlaying2) {

@@ -1,6 +1,7 @@
 package com.google.cloud.android.reminderapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.cloud.android.reminderapp.R;
+import com.tsengvn.typekit.TypekitContextWrapper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -301,10 +303,13 @@ public class PlayListActivity extends AppCompatActivity {
         public View getView(int position, View convertView, ViewGroup viewGroup) {
             PlaylistView view = new PlaylistView(getApplicationContext());
             Playlist item = items.get(position);
+
             view.setContent(item.getContent());
-            view.setAlarmTime(item.getAlarmTime());
-            view.setImage(item.getResId());
-            view.setAlarmTimeColor(item.getStrColor());
+            if(!(item.getAlarmTime()).equals("알람정보 없음")) { //알람시간이 있는 경우에만
+                view.setAlarmTime(item.getAlarmTime());
+                view.setImage(item.getResId());
+                view.setAlarmTimeColor(item.getStrColor());
+            }
 
             if (position == tempPos2) {
                 view.setBackgroundColor(Color.parseColor("#B4F0B4"));
@@ -336,5 +341,15 @@ public class PlayListActivity extends AppCompatActivity {
             words[4] = Integer.parseInt(words[4]) < 10 ? "0" + words[4] : words[4];
             return words[1] + "-" + words[2] + " " + words[3] + ":" + words[4];
         }
+    }
+
+    /**
+     * 액티비티의 글꼴을 바꾸기 위해 불러지는 함수이다.
+     * CustomStartApp과 연결되어 있다.
+     */
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
 }

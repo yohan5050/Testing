@@ -1,8 +1,10 @@
 package com.google.cloud.android.reminderapp;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +12,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.tsengvn.typekit.TypekitContextWrapper;
 
 public class Main2Activity extends AppCompatActivity {
     Button countList;
@@ -30,6 +34,10 @@ public class Main2Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+
+        //볼륨조절하기 볼륨 최대로 참조 : http://blog.naver.com/oh4zzang/40114444637
+        AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        audio.setStreamVolume(AudioManager.STREAM_MUSIC, (int)(audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ), AudioManager.FLAG_PLAY_SOUND);
 
         db = new DataBase(Main2Activity.this);
         mVoiceRecorder = new VoiceRecorder(this, mVoiceCallback);
@@ -148,4 +156,14 @@ public class Main2Activity extends AppCompatActivity {
     private final VoiceRecorder.Callback mVoiceCallback = new VoiceRecorder.Callback() {
 
     };
+
+    /**
+     * 액티비티의 글꼴을 바꾸기 위해 불러지는 함수이다.
+     * CustomStartApp과 연결되어 있다.
+     */
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
+    }
 }

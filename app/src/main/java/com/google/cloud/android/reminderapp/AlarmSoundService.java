@@ -9,6 +9,8 @@ import android.os.AsyncTask;
 import android.os.IBinder;
 import android.widget.Toast;
 
+import com.tsengvn.typekit.TypekitContextWrapper;
+
 public class AlarmSoundService extends Service {
     Context context;
     public static VoicePlayer mVoicePlayerAlarm;
@@ -123,5 +125,15 @@ public class AlarmSoundService extends Service {
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    /**
+     * 액티비티의 글꼴을 바꾸기 위해 불러지는 함수이다.
+     * CustomStartApp과 연결되어 있다.
+     */
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
 }

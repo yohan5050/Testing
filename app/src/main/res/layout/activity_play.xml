@@ -24,7 +24,7 @@
         android:layout_height="90dp"
         android:background="#00000000"
         android:scaleType="fitXY"
-        android:src="@drawable/information"
+        android:src="@drawable/info"
         android:layout_alignTop="@+id/listImage"
         android:layout_alignStart="@+id/button" />
 
@@ -39,16 +39,28 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="22dp" />
 
+
     <TextView
         android:id="@+id/text"
-        android:padding="30dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_horizontal"
-        android:text="재생 중"
-        android:textSize = "40dp"
-        android:layout_marginTop="130dp"/>
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/button"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/informationImage"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/btn_bg_ex"
+        android:gravity="center"
+        android:shadowColor="#FF464646"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="2.0"
+        android:text="내용 없음"
+        android:textSize="40dp"
+        android:textStyle="bold" />
 
     <ImageButton
         android:id="@+id/button"
@@ -56,33 +68,35 @@
         android:background="#00000000"
         android:src="@drawable/stop_btn2"
         android:scaleType="fitXY"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
+        android:layout_width="93dp"
+        android:layout_height="93dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="99dp" />
+        android:layout_marginBottom="18dp" />
 
     <ImageButton
         android:id="@+id/backwards_btn"
-        android:layout_width="80dp"
-        android:layout_height="70dp"
+        android:layout_width="93dp"
+        android:layout_height="93dp"
         android:scaleType="fitXY"
         android:background="#00000000"
         android:src="@drawable/backwards_btn"
-        android:layout_alignRight="@+id/button"
-        android:layout_alignBottom="@+id/button"
-        android:layout_marginRight="100dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="18dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="18dp"
+       />
 
     <ImageButton
         android:id="@+id/forward_btn"
-        android:layout_width="80dp"
-        android:layout_height="70dp"
+        android:layout_width="93dp"
+        android:layout_height="93dp"
         android:scaleType="fitXY"
         android:background="#00000000"
         android:src="@drawable/forward_btn"
-        android:layout_alignLeft="@+id/button"
-        android:layout_alignBottom="@+id/button"
-        android:layout_marginLeft="100dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="22dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="18dp"
+        />
 </RelativeLayout>

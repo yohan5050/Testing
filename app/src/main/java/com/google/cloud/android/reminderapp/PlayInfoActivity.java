@@ -1,5 +1,6 @@
 package com.google.cloud.android.reminderapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.cloud.android.reminderapp.R;
+import com.tsengvn.typekit.TypekitContextWrapper;
 
 public class PlayInfoActivity extends AppCompatActivity {
 
@@ -80,5 +82,15 @@ public class PlayInfoActivity extends AppCompatActivity {
         String retStr = fileName.substring(3, fileName.length() - 7);
         retStr = retStr.substring(6) + "(" + Integer.parseInt(retStr.substring(0, 2)) + "월" + Integer.parseInt(retStr.substring(3, 5)) + "일)";
         return retStr;
+    }
+
+    /**
+     * 액티비티의 글꼴을 바꾸기 위해 불러지는 함수이다.
+     * CustomStartApp과 연결되어 있다.
+     */
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
 }

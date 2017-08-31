@@ -15,6 +15,7 @@
             android:layout_height="55dp"
             android:layout_margin="5dp"
             android:text="New Text"
+            android:gravity="center_vertical"
             android:textColor="#18392b"
             android:textSize="30dp"
             android:textStyle="bold" />
@@ -28,7 +29,7 @@
             android:layout_marginRight="4dp"
             android:textSize="17dp"
             android:textColor="#4d0000"
-            android:text="12-31 22:23"/>
+            android:text=""/>
 
         <ImageView
             android:id="@+id/imageView"

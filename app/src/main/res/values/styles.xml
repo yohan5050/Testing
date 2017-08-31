@@ -24,22 +24,4 @@
         <item name="colorAccent">@color/accent</item>
     </style>
 
-    <style name="MyAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorAccent">@color/primary</item>
-        <item name="android:textSize">@dimen/dialog_text_size</item>
-        <item name="android:windowMinWidthMajor">@dimen/dialog_min_width_major</item>
-        <item name="android:windowMinWidthMinor">@dimen/dialog_min_width_minor</item>
-        <item name="buttonBarNegativeButtonStyle">@style/buttonStyle.Negative</item>
-        <item name="buttonBarPositiveButtonStyle">@style/buttonStyle.Positive</item>
-    </style>
-
-    <style name="buttonStyle" parent="Widget.AppCompat.Button">
-    </style>
-    <style name="buttonStyle.Positive">
-        <item name="android:textColor">@android:color/holo_red_dark</item>
-    </style>
-    <style name="buttonStyle.Negative">
-        <item name="android:textColor">@android:color/holo_green_dark</item>
-    </style>
-
 </resources>

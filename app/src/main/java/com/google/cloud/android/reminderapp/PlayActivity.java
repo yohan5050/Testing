@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.cloud.android.reminderapp.R;
+import com.tsengvn.typekit.TypekitContextWrapper;
 
 import static com.google.cloud.android.reminderapp.R.id.center;
 import static com.google.cloud.android.reminderapp.R.id.center_horizontal;
@@ -198,17 +199,15 @@ public class PlayActivity extends AppCompatActivity {
 
                 //참조1 : http://mainia.tistory.com/2017
                 //참조2 : http://pluu.github.io/blog/rxjava/2017/02/04/android-alertdialog/
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PlayActivity.this, R.style.MyAlertDialogStyle);
-
-                // Title setting
-//                alertDialogBuilder.setTitle("음성 파일 삭제");
-//                alertDialogBuilder.setTitle("삭제할까요?");
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PlayActivity.this);
 
                 // AlertDialog setting
                 alertDialogBuilder
-                        .setMessage("삭제할까요?")
+                        .setTitle("삭제하기")
+                        .setMessage("현재 재생중인 파일을 삭제하시겠습니까?")
+                        .setIcon(R.drawable.del_btn)
                         .setCancelable(false)
-                        .setPositiveButton("삭제",
+                        .setPositiveButton("예",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         delBtnClicked = false;
@@ -219,7 +218,7 @@ public class PlayActivity extends AppCompatActivity {
 //                                        onResume();
                                     }
                                 })
-                        .setNegativeButton("취소",
+                        .setNegativeButton("아니요",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         delBtnClicked = false;
@@ -234,34 +233,13 @@ public class PlayActivity extends AppCompatActivity {
                 // Dialog 생성
                 alertDialog = alertDialogBuilder.create();
 
-                //Dialog 위치 이동시키기
-//                alertDialog.getWindow().setGravity(Gravity.BOTTOM);
-
                 // show Dialog
                 alertDialog.show();
 
-                // 메시지 택스트의 크기를 변경한다.
+                // 메시지 택스트의 크기 와 가운데 정렬한다.
                 TextView textView = (TextView) alertDialog.findViewById(android.R.id.message);
-                textView.setTextSize(40.0f);
-                // 메시지를 가운데 정렬한다.
+                textView.setTextSize(20.0f);
                 textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-
-                //각 버튼을 얻는다.
-                Button button2 = (Button) alertDialog.findViewById(android.R.id.button2);
-                Button button1 = (Button) alertDialog.findViewById(android.R.id.button1);
-                //각 버튼의 비율을 지정한다.
-                ((LinearLayout.LayoutParams)button2.getLayoutParams()).weight = 100.0f;
-                ((LinearLayout.LayoutParams)button1.getLayoutParams()).weight = 100.0f;
-                //각 버튼의 폭을 0으로 한다
-                ((LinearLayout.LayoutParams)button2.getLayoutParams()).width = 0;
-                ((LinearLayout.LayoutParams)button1.getLayoutParams()).width = 0;
-
-                //버튼의 크기 변경 / 이렇게 변경하지 않고, styles.xml과 dimens.xml에서 했음
-//                Button btn = (Button) alertDialog.findViewById(android.R.id.button1);
-//                btn.setTextSize(30.0f);
-//
-//                Button btn2 = (Button) alertDialog.findViewById(android.R.id.button2);
-//                btn2.setTextSize(30.0f);
             }
         });
 
@@ -493,5 +471,15 @@ public class PlayActivity extends AppCompatActivity {
         else {
             textView.setText(returnedValue[playingPos].replaceAll(" ", ""));
         }
+    }
+
+    /**
+     * 액티비티의 글꼴을 바꾸기 위해 불러지는 함수이다.
+     * CustomStartApp과 연결되어 있다.
+     */
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
 }

@@ -6,6 +6,7 @@ import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 
+import android.media.audiofx.NoiseSuppressor;
 import android.support.annotation.NonNull;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -157,6 +158,26 @@ public class VoiceRecorder {
             fos = context.openFileOutput(fileName,context.MODE_PRIVATE);
             while (mIsRecording) {
                 int size = mRecorder.read(sData, 0, mBufferSize); //7월 18일 commit에서 빠져서 녹음이 안됐음. 다시 추가.
+//                //**********************볼륨 증폭 코드**************************//
+//                //참조 : http://steveyoon77.tistory.com/303
+////                short level = 148; //0 ~ 148 (79가 증폭이 없는 수준, *1한 수준임)
+////                float multiplier = (float)Math.tan(level / 100.0);
+//                for(int ctr = 0; ctr < size; ctr++) {
+////                    int pcmval = (int) (sData[ctr] * multiplier);
+//                    int pcmval = sData[ctr] * 10; //이거로 해보자
+//                    if(pcmval < 32767 && pcmval > -32768) {
+//                        sData[ctr] = (short)(0.5f + pcmval);
+//                    }
+//                    else if(pcmval > 32767) {
+//                        sData[ctr] = 32767;
+//                    }
+//                    else if(pcmval < -32768) {
+//                        sData[ctr] = -32768;
+//                    }
+//                }
+//                //*******************************************************************//
+//                NoiseSuppressor.create(mRecorder.getAudioSessionId());
+
                 byte bData[] = short2byte(sData);
                 fos.write(bData, 0, mBufferSize * mBytesPerElement);
             }

@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.tsengvn.typekit.TypekitContextWrapper;
+
 /**
  * Created by 이상원 on 2017-08-06.
  */
@@ -23,4 +25,9 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         context.startService(mServiceintent);
     }
+
+    /**
+     * 액티비티의 글꼴을 바꾸기 위해 불러지는 함수이다.
+     * CustomStartApp과 연결되어 있다.
+     */
 }

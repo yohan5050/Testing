@@ -35,6 +35,7 @@ public class PlaylistView extends LinearLayout {
         textView = (TextView) findViewById(R.id.textView);
         textView2 = (TextView) findViewById(R.id.textView2);
         imageView = (ImageView) findViewById(R.id.imageView);
+
     }
 
     public void setContent(String content) {
