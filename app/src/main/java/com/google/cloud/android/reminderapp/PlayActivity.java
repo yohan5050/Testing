@@ -1,5 +1,6 @@
 package com.google.cloud.android.reminderapp;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -28,12 +29,12 @@ import static com.google.cloud.android.reminderapp.R.id.center;
 import static com.google.cloud.android.reminderapp.R.id.center_horizontal;
 
 public class PlayActivity extends AppCompatActivity {
-
+    public static Activity Pactivity; //PlayListActivity에서 홈버튼을 누를 때 사용될 것임
     DataBase db;
     ImageButton button, backwardsBtn, forwardBtn;
-    ImageButton listBtn, infoBtn, delBtn;
+    ImageButton listBtn, homeBtn, delBtn;
     int playCount = -2;
-    TextView textView;
+    TextView textView, rtText, atText;
 
     int SampleRate = 16000;
     int BufferSize = 1024;
@@ -50,12 +51,15 @@ public class PlayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
+        Pactivity = this;
         db = Main2Activity.getDBInstance();
         button = (ImageButton) findViewById(R.id.button);
         listBtn = (ImageButton) findViewById(R.id.listImage);
-        infoBtn = (ImageButton) findViewById(R.id.informationImage);
+        homeBtn = (ImageButton) findViewById(R.id.homeBtn);
         delBtn = (ImageButton) findViewById(R.id.deleteImage);
         textView = (TextView) findViewById(R.id.text);
+        rtText = (TextView) findViewById(R.id.recordTime);
+        atText = (TextView) findViewById(R.id.alarmTime);
 
         backwardsBtn = (ImageButton) findViewById(R.id.backwards_btn);
         forwardBtn = (ImageButton) findViewById(R.id.forward_btn);
@@ -104,6 +108,9 @@ public class PlayActivity extends AppCompatActivity {
                         //한 파일을 재생하고 중지하기 때문에, playingPos가 자동으로 변경되지 않음. 여기서 변경
                         playingPos++;
                         button.setImageResource(R.drawable.stop_btn2); //버튼도 변경해줘야 함.
+
+                        //재생 화면에 녹음 시간, 알람 시간 출력
+                        showTime(playingPos);
                     }
                 }
                 else { //재생 중이지 않은 경우
@@ -116,6 +123,9 @@ public class PlayActivity extends AppCompatActivity {
                         String returnedValue[] = db.getAllContent();
                         textView.setText(returnedValue[playingPos + 1].replaceAll(" ", ""));
                         playingPos++; //***
+
+                        //재생 화면에 녹음 시간, 알람 시간 출력
+                        showTime(playingPos);
                     }
                 }
             }
@@ -150,6 +160,9 @@ public class PlayActivity extends AppCompatActivity {
 
                         //버튼 변경이 vhandler에 비해 좀 늦어져서, vhandler에 버튼변경을 배치하였음.
 //                        button.setImageResource(R.drawable.stop_btn2); //버튼도 변경해줘야 함.
+
+                        //재생 화면에 녹음 시간, 알람 시간 출력
+                        showTime(playingPos);
                     }
                 }
                 else { //재생 중이지 않은 경우
@@ -162,6 +175,9 @@ public class PlayActivity extends AppCompatActivity {
                         String returnedValue[] = db.getAllContent();
                         textView.setText(returnedValue[playingPos - 1].replaceAll(" ", ""));
                         playingPos--;  //***
+
+                        //재생 화면에 녹음 시간, 알람 시간 출력
+                        showTime(playingPos);
                     }
                 }
             }
@@ -172,6 +188,7 @@ public class PlayActivity extends AppCompatActivity {
                 listBtnClicked = true;
                 //PlayListActivity 호출
                 Intent intent = new Intent(getApplicationContext(), PlayListActivity.class);
+                System.out.println("list 호출!! 왔어 " + playingPos);
                 intent.putExtra("playingpos", playingPos);
                 //알람 액티비티가 뜨는데 시간이 좀 걸리는데, 그 직전에 리스트 버튼을 클릭하면 onUserLeaveHint()에 들어가서
                 //알람이 자동으로 종료되는 것 같다 그래서 리스트 버튼을 클릭하고 잠시 멈춰있다가 리스트 액티비티를 띄워본다.
@@ -186,17 +203,22 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        infoBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if(Main2Activity.mVoicePlayer.mIsPlaying) {
-                    playingPos = Main2Activity.mVoicePlayer.stopPlaying();
-                    button.setImageResource(R.drawable.play_btn2);
-                }
-                //PlayInfoActivity 호출
-                Intent intent = new Intent(getApplicationContext(), PlayInfoActivity.class);
-                intent.putExtra("playingpos", playingPos);
-                startActivityForResult(intent, 99);
-            }
+//        infoBtn.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                if(Main2Activity.mVoicePlayer.mIsPlaying) {
+//                    playingPos = Main2Activity.mVoicePlayer.stopPlaying();
+//                    button.setImageResource(R.drawable.play_btn2);
+//                }
+//                //PlayInfoActivity 호출
+//                Intent intent = new Intent(getApplicationContext(), PlayInfoActivity.class);
+//                intent.putExtra("playingpos", playingPos);
+//                startActivityForResult(intent, 99);
+//            }
+//        });
+        homeBtn.setOnClickListener(new View.OnClickListener() {
+           public void onClick(View v) {
+               onBackPressed();
+           }
         });
 
         delBtn.setOnClickListener(new View.OnClickListener() {
@@ -322,6 +344,7 @@ public class PlayActivity extends AppCompatActivity {
 
         //list 화면에서 back button을 눌러 play화면으로 왔다면 그냥 그대로 놔둔다.
         if(resCode == -100) {
+            System.out.println("list에서 백버튼 눌러서 왔어 " + playingPos);
             resCode = -1; //초기화
             return;
         }
@@ -379,7 +402,10 @@ public class PlayActivity extends AppCompatActivity {
             playCount = -2;
         }
 
-                //재생 중인지 아닌지에 따라 재생/중지 버튼 표시 //-> onResume이 onStart뒤에 실행될 경우, onStart에서 재생 여부를 알 수 없다.
+        //녹음시간, 알람시간 표시
+        showTime(playingPos);
+
+        //재생 중인지 아닌지에 따라 재생/중지 버튼 표시 //-> onResume이 onStart뒤에 실행될 경우, onStart에서 재생 여부를 알 수 없다.
         if(Main2Activity.mVoicePlayer.mIsPlaying) {
             button.setImageResource(R.drawable.stop_btn2);
         }
@@ -492,10 +518,39 @@ public class PlayActivity extends AppCompatActivity {
         else if(playingPos < 0) { //마지막 파일이면 첫번째 파일을 보여준다.
             playingPos = cnt - 1;
             textView.setText(returnedValue[playingPos].replaceAll(" ", ""));
+            showTime(playingPos);
         }
         else {
             textView.setText(returnedValue[playingPos].replaceAll(" ", ""));
+            showTime(playingPos);
         }
+    }
+
+    public void showTime(int playingPos) {
+        //녹음시간, 알람시간 표시
+        String[] alarmTimeArr = db.getAllAlarmTime();
+        String[] fileNameArr = db.getAllFileName();
+
+        if (alarmTimeArr[playingPos].equals("일반 메모")) {
+            rtText.setText("녹음시간" + " "
+                    + recordTime(fileNameArr[playingPos]));
+            atText.setText("");
+        } else {
+            String[] words = alarmTimeArr[playingPos].split(":");
+            if (Integer.parseInt(words[3]) < 10) words[3] = '0' + words[3];
+            if (Integer.parseInt(words[4]) < 10) words[4] = '0' + words[4];
+            String timeRegistered = words[3] + ":" + words[4] + "(" + words[1] + "월" + words[2] + "일" + ")";
+
+            rtText.setText("녹음시간" + " " + recordTime(fileNameArr[playingPos]) );
+            atText.setText("알람시간" + " " + timeRegistered);
+        }
+
+    }
+    //녹음시간으로 나타내는 메소드
+    public String recordTime(String fileName) {
+        String retStr = fileName.substring(3, fileName.length() - 7);
+        retStr = retStr.substring(6) + "(" + Integer.parseInt(retStr.substring(0, 2)) + "월" + Integer.parseInt(retStr.substring(3, 5)) + "일)";
+        return retStr;
     }
 
     /**

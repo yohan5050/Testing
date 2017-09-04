@@ -6,55 +6,66 @@ android:layout_height="match_parent"
 android:orientation="vertical"
 tools:context=".Main2Activity">
 
-    <ImageView
-        android:id="@+id/titleborder"
-        android:layout_width="match_parent"
-        android:layout_height="130dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/btn_bg_ex"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:gravity="center_vertical"/>
+    <!--<ImageView-->
+        <!--android:id="@+id/titleborder"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="130dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:background="@drawable/btn_bg_ex"-->
+        <!--android:layout_marginBottom="10dp"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:layout_marginRight="10dp"-->
+        <!--android:gravity="center_vertical"/>-->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="6dp"
-        android:orientation="horizontal">
-    <ImageButton
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_alignLeft="@+id/titleborder"
-        android:layout_gravity="center_vertical"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/imageButton"
-        android:src="@drawable/stop_btn2"
-        android:background="#00000000"
-        android:scaleType="fitXY"/>
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="6dp"-->
+        <!--android:orientation="horizontal">-->
+    <!--<ImageButton-->
+        <!--android:layout_width="80dp"-->
+        <!--android:layout_height="80dp"-->
+        <!--android:layout_alignLeft="@+id/titleborder"-->
+        <!--android:layout_gravity="center_vertical"-->
+        <!--android:layout_marginTop="5dp"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:id="@+id/imageButton"-->
+        <!--android:src="@drawable/stop_btn2"-->
+        <!--android:background="#00000000"-->
+        <!--android:scaleType="fitXY"/>-->
 
-    <TextView
-        android:id="@+id/text"
-        android:layout_alignTop="@+id/titleborder"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"
-        android:padding="10dp"
-        android:text=""
-        android:gravity="center_vertical"
-        android:textSize="30dp"
-        android:scrollbars="vertical" />
+        <ImageButton
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="15dp"
+            android:id="@+id/homeBtn"
+            android:src="@drawable/home"
+            android:background="#00000000"
+            android:scaleType="fitXY"/>
 
-    </LinearLayout>
+    <!--<TextView-->
+        <!--android:id="@+id/text"-->
+        <!--android:layout_alignTop="@+id/titleborder"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="120dp"-->
+        <!--android:layout_marginTop="5dp"-->
+        <!--android:layout_marginLeft="5dp"-->
+        <!--android:padding="10dp"-->
+        <!--android:text=""-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:textSize="30dp"-->
+        <!--android:scrollbars="vertical" />-->
+
+    <!--</LinearLayout>-->
 
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/btn_bg_ex"
-        android:layout_marginTop="145dp"
+        android:layout_below="@+id/homeBtn"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"

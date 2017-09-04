@@ -39,9 +39,10 @@ public class PlayListActivity extends AppCompatActivity {
 
     //listing
     ListView listView;
-    TextView textView;
+//    TextView textView;
     PlaylistAdapter adapter;
-    ImageButton imageButton;
+//    ImageButton imageButton;
+    ImageButton homeBtn;
 
     int tempPos = -1, tempPos2 = -1;
     boolean nowStarted = false;
@@ -57,10 +58,11 @@ public class PlayListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_play_list);
 
         PLactivity = this; //재생이 모두 끝나면 list화면도 같이 종료하는 데에 사용됨.
-        imageButton = (ImageButton) findViewById(R.id.imageButton);
+//        imageButton = (ImageButton) findViewById(R.id.imageButton);
+        homeBtn = (ImageButton) findViewById(R.id.homeBtn);
         listView = (ListView) findViewById(R.id.listView);
-        textView = (TextView) findViewById(R.id.text);
-        textView.setMovementMethod(new ScrollingMovementMethod());
+//        textView = (TextView) findViewById(R.id.text);
+//        textView.setMovementMethod(new ScrollingMovementMethod());
         db = Main2Activity.getDBInstance();
 
 //        //재생 중인지 아닌지에 따라 재생/중지 버튼 표시 -> onStart()에서 해주는 걸로...
@@ -89,7 +91,7 @@ public class PlayListActivity extends AppCompatActivity {
 
                         String[] contentNameArr = db.getAllContent();
                         int cnt = contentNameArr.length;
-                        textView.setText(contentNameArr[cnt -1 - position].replaceAll(" ", ""));
+//                        textView.setText(contentNameArr[cnt -1 - position].replaceAll(" ", ""));
                     }
                     else {
                         return;
@@ -98,22 +100,30 @@ public class PlayListActivity extends AppCompatActivity {
                     adapter.notifyDataSetChanged(); //adapter 내용 변경 - 리스트뷰 갱신 ***
                 }
                 else { //한 파일의 재생이 끝났다면
-                    imageButton.setImageResource(R.drawable.play_btn2);
+//                    imageButton.setImageResource(R.drawable.play_btn2);
                 }
             }
         };
 
-        imageButton.setOnClickListener(new View.OnClickListener() {
+//        imageButton.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                if(Main2Activity.mVoicePlayer.mIsPlaying) { //재생 중
+//                    playingPos = Main2Activity.mVoicePlayer.stopPlaying();
+//                    imageButton.setImageResource(R.drawable.play_btn2);
+//                }
+//                else {
+//                    System.out.println("왜 종료가 되는기야?" + playingPos);
+//                    Main2Activity.mVoicePlayer.startPlaying(SampleRate, BufferSize, playingPos + 1);
+//                    imageButton.setImageResource(R.drawable.stop_btn2);
+//                }
+//            }
+//        });
+        homeBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if(Main2Activity.mVoicePlayer.mIsPlaying) { //재생 중
-                    playingPos = Main2Activity.mVoicePlayer.stopPlaying();
-                    imageButton.setImageResource(R.drawable.play_btn2);
+                if(PlayActivity.Pactivity != null) {
+                    PlayActivity.Pactivity.finish();
                 }
-                else {
-                    System.out.println("왜 종료가 되는기야?" + playingPos);
-                    Main2Activity.mVoicePlayer.startPlaying(SampleRate, BufferSize, playingPos + 1);
-                    imageButton.setImageResource(R.drawable.stop_btn2);
-                }
+                finish();
             }
         });
 
@@ -147,22 +157,27 @@ public class PlayListActivity extends AppCompatActivity {
         super.onStart();
 
         //재생 중인지 아닌지에 따라 재생/중지 버튼 표시
-        if(Main2Activity.mVoicePlayer.mIsPlaying) {
-            imageButton.setImageResource(R.drawable.stop_btn2);
-        }
-        else {
-            imageButton.setImageResource(R.drawable.play_btn2);
-        }
+//        if(Main2Activity.mVoicePlayer.mIsPlaying) {
+//            imageButton.setImageResource(R.drawable.stop_btn2);
+//        }
+//        else {
+//            imageButton.setImageResource(R.drawable.play_btn2);
+//        }
 
         if(!isAfterOnPause && !Main2Activity.mVoicePlayer.mIsPlaying) { //재생 중지 상태의 playActivity에서 넘어왔을 경우
             String[] contentNameArr = db.getAllContent();
             int playCount = db.getAllPlayListNum();
             Intent intent = getIntent();
-            playingPos = intent.getIntExtra("playingpos", 0);
+            playingPos = intent.getIntExtra("playingpos", playCount - 1); //시작화면에서 재생버튼 클릭해서 리스트로 넘어올 때, 맨 위의 것을 하이라이트.
             //목록에 highlight
             tempPos2 = playCount - playingPos - 1;
             //textView에 내용 출력
-            textView.setText(contentNameArr[playingPos].replaceAll(" ", ""));
+//            textView.setText(contentNameArr[playingPos].replaceAll(" ", ""));
+        }
+        else { //추가했음... 재생 화면에서 재생 중에 리스트로 넘어올 경우, playingPos가 초기화가 안 되길래 여기서 초기화 함.
+            System.out.println("list tempPos2 왔어 : "+ tempPos2);
+            Intent intent = getIntent();
+            playingPos = intent.getIntExtra("playingpos", 0);
         }
 
         makeList2();
@@ -260,7 +275,7 @@ public class PlayListActivity extends AppCompatActivity {
                     long cMillis = System.currentTimeMillis();//current time
                     if(aMillis > cMillis) { //미래의 알람
                         System.out.println("여기 미래의 알람");
-                        strColor = "#CD0000";
+                        strColor = "#FF0000";
                     }
                 } catch(ParseException e) {
                     e.printStackTrace();
@@ -272,9 +287,9 @@ public class PlayListActivity extends AppCompatActivity {
             }
             else {
                 if(alarmTimeArr[i].equals("일반 메모"))
-                    adapter.addItem(new Playlist((i + 1) + ". " + contentTime(contentNameArr[i]), "알람정보 없음", R.drawable.memo, strColor));
+                    adapter.addItem(new Playlist((i + 1) + ". " + contentTime(contentNameArr[i], 12), "알람정보 없음", R.drawable.memo, strColor));
                 else
-                    adapter.addItem(new Playlist((i + 1) + ". " + contentTime(contentNameArr[i]), timeFormatFunc(alarmTimeArr[i]), R.drawable.alarm, strColor));
+                    adapter.addItem(new Playlist((i + 1) + ". " + contentTime(contentNameArr[i], 7), timeFormatFunc(alarmTimeArr[i]), R.drawable.alarm, strColor));
             }
         }
     }
@@ -326,9 +341,9 @@ public class PlayListActivity extends AppCompatActivity {
     }
 
     // make list2에서 사용 (컨텐츠 명으로 나타내기 위해서)
-    public String contentTime(String contentName) {
+    public String contentTime(String contentName, int len) {
         contentName = contentName.replaceAll(" ", "");
-        if (contentName.length() > 9) return contentName.substring(0, 9) + ".. ";
+        if (contentName.length() > len) return contentName.substring(0, len) + ".. ";
         else return contentName;
     }
 
@@ -342,7 +357,8 @@ public class PlayListActivity extends AppCompatActivity {
             words[2] = Integer.parseInt(words[2]) < 10 ? "0" + words[2] : words[2];
             words[3] = Integer.parseInt(words[3]) < 10 ? "0" + words[3] : words[3];
             words[4] = Integer.parseInt(words[4]) < 10 ? "0" + words[4] : words[4];
-            return words[1] + "-" + words[2] + " " + words[3] + ":" + words[4];
+//            return words[1] + "-" + words[2] + " " + words[3] + ":" + words[4];
+            return words[3] + ":" + words[4] + "(" + words[2] + "일)";
         }
     }
 

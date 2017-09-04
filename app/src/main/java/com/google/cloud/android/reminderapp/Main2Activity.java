@@ -5,15 +5,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.tsengvn.typekit.TypekitContextWrapper;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class Main2Activity extends AppCompatActivity {
     Button countList;
@@ -101,13 +113,31 @@ public class Main2Activity extends AppCompatActivity {
     }
 
     public void onButtonRecordClicked(View v) {
-        Intent intent = new Intent(getApplicationContext(), RecordActivity.class);
-        startActivity(intent);
+        //네트워크 연결 상태 체크 ** 중요 ** - 출처 : http://developer88.tistory.com/104
+        //네트워크 연결 시에만 녹음 및 stt가능
+        NetworkInfo mNetworkState = getNetworkInfo();
+        //근데 이 경우, 무료 와이파이 존이 연결이 된 것으로 표시만 되고, 실제로 연결이 되지 않은 경우를 판별하지 못함.
+        if(mNetworkState != null && mNetworkState.isConnected()) {
+            Intent intent = new Intent(getApplicationContext(), RecordActivity.class);
+            startActivity(intent);
+        }
+        else {
+            System.out.println("네트워크 연결 상태 확인 좀 해라");
+            Toast.makeText(this, "네트워크 연결 상태를 확인해주세요.", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void onButtonPlayClicked(View v) {
-        Intent intent = new Intent(getApplicationContext(), PlayActivity.class);
+//        Intent intent = new Intent(getApplicationContext(), PlayActivity.class);
+//        startActivity(intent);
+        Intent intent = new Intent(getApplicationContext(), PlayListActivity.class);
         startActivity(intent);
+    }
+
+    private NetworkInfo getNetworkInfo() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo;
     }
 
     /**

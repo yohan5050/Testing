@@ -310,6 +310,10 @@ public class SpeechService extends Service {
         try {
             //TODO 음성을 녹음한 후, 음성파일을 STT서버로 보낼 때 불안정한 네트워크 연결 상태에 대한 처리 필요
             //내장 메모리에 저장되는 음성파일이 있다면 삭제해야 한다... 일단 나중에 생각해 보자.
+            if(mApi == null) {
+                Toast.makeText(this, "인터넷이 사용 가능한지 확인해 주세요.", Toast.LENGTH_LONG);
+                return;
+            }
             mApi.recognize(
                     RecognizeRequest.newBuilder()
                             .setConfig(RecognitionConfig.newBuilder()
