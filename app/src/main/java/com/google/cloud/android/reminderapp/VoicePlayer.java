@@ -60,6 +60,27 @@ public class VoicePlayer {
         mPlayingThread.start();
     }
 
+    /**
+     * 이 메소드는 새로운 thread를 생성하여 playWaveFileAlarm 메소드를 실행한다.
+     * 알람에 해당하는 음성 파일을 재생하기 위해 호출된다.
+     *
+     * @param SampleRate     녹음 시 사용된 sample rate(Hertz)
+     * @param mBufferSize    재생 시 음성 파일에서 한 번에 읽어오는 음성 데이터의 최대 크기
+     * @param fn      재생하려는 음성파일명
+     */
+    public void startPlaying2(final int SampleRate, final int mBufferSize, final String fn) {
+        // int minBufferSize = AudioTrack.getMinBufferSize(SampleRate, CHANNEL, ENCODING);
+        mIsPlaying = true;
+        mPlayingThread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                playWaveFileAlarm(SampleRate, mBufferSize, fn);
+            }
+        }, "AudioRecorder Thread");
+        mPlayingThread.start();
+    }
+
     //TODO 변수 playing을 mIsplaying으로 바꾸기
     /**
      * 이 메소드는 변수 playing을 false로 설정하여 재생을 중지한다.
@@ -186,16 +207,16 @@ public class VoicePlayer {
      * @exeption IOException
      *
      */
-    public void playWaveFileAlarm(int SampleRate,int mBufferSize, String filename) {
+    public void playWaveFileAlarm(int SampleRate,int mBufferSize, String filename) { //해당 알람내용을 한 번만 재생하도록 한다.
         mIsPlaying2 = true;
 
-        boolean isFinished = false;
-        long startTime = System.currentTimeMillis();
+//        boolean isFinished = false;
+//        long startTime = System.currentTimeMillis();
 
-        while(true) {
-            if(isFinished) {
-                mIsPlaying2 = false;
-            }
+//        while(true) {
+//            if(isFinished) {
+//                mIsPlaying2 = false;
+//            }
             int count = 0;
             byte[] data = new byte[mBufferSize];
 
@@ -208,11 +229,11 @@ public class VoicePlayer {
                 audioTrack.play();
 
                 while (((count = dis.read(data, 0, mBufferSize)) > -1)&&mIsPlaying2) {
-                    long endTime = System.currentTimeMillis();
-                    if((endTime - startTime) / 1000.0f >= 60) {
-                        isFinished = true;
-                        break;
-                    }
+//                    long endTime = System.currentTimeMillis();
+//                    if((endTime - startTime) / 1000.0f >= 60) {
+//                        isFinished = true;
+//                        break;
+//                    }
                     SharedPreferences preference = context.getSharedPreferences("volume", context.MODE_PRIVATE);
                     float volume = preference.getFloat("volume", 1f);
                     audioTrack.setVolume(volume);
@@ -224,18 +245,28 @@ public class VoicePlayer {
                 fis.close();
 
                 if(!mIsPlaying2) {
-                    //알람이 끝나면 AlarmActivity로 알람이 끝났음을 알린다.
-                    Message message = AlarmActivity.ahandler.obtainMessage(1, "stop");
-                    AlarmActivity.ahandler.sendMessage(message);
-                    break;
+                    return;
                 }
+
+//                if(!mIsPlaying2) {
+//                    //알람이 끝나면 AlarmActivity로 알람이 끝났음을 알린다.
+//                    Message message = AlarmActivity.ahandler.obtainMessage(1, "stop");
+//                    AlarmActivity.ahandler.sendMessage(message);
+//                    break;
+//                }
+
+                // 버튼을 play_btn2로 변경할 수 있도록 재생이 끝나면 알려준다.
+                System.out.println("ahandler 여기서 콜하나");
+                mIsPlaying2 = false;
+                Message message = AlarmActivity.ahandler.obtainMessage(1, "stop");
+                AlarmActivity.ahandler.sendMessage(message);
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
+//        }
     }
 
     public void stopPlaying2() {

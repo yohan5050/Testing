@@ -113,7 +113,7 @@ public class RecTimeActivity extends AppCompatActivity {
         mm = Integer.parseInt(words[4]);
         mCalendar.set(yy, MM - 1, dd, hh, mm, 0);
 
-        Intent mAlarmIntent = new Intent("com.google.cloud.android.reminderapp.ALARM_START"); //AlarmSoundService
+        Intent mAlarmIntent = new Intent("com.google.cloud.android.reminderapp.ALARM_START"); //->AlarmReceiver -> AlarmSoundService
         mAlarmIntent.putExtra("filename", fileName);
         mAlarmIntent.putExtra("alarmtext", alarmText);
         System.out.println("알람텍스트 in RecTimeActivity : " + alarmText);

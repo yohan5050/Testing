@@ -27,9 +27,11 @@ public class AlarmSoundService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         String alarmText = intent.getStringExtra("alarmtext");
+        String fileName = intent.getStringExtra("filename");
         System.out.println("알람텍스트 in AlarmSoundService : " + alarmText);
         Intent alarmScreenIntent = new Intent(getApplicationContext(), AlarmActivity.class);
         alarmScreenIntent.putExtra("alarmtext", alarmText);
+        alarmScreenIntent.putExtra("filename", fileName);
         alarmScreenIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         context.startActivity(alarmScreenIntent);
@@ -46,10 +48,10 @@ public class AlarmSoundService extends Service {
 
         //녹음 중이라면 녹음 종료
         if(Main2Activity.mVoiceRecorder != null && Main2Activity.mVoiceRecorder.mIsRecording) {
-            String fileName = Main2Activity.mVoiceRecorder.stopRecording();
+            String fileName2 = Main2Activity.mVoiceRecorder.stopRecording();
 
             //DB에는 fileName이 저장되지 않았지만, 음성 파일 자체는 내부 저장소에 저장되어 있으므로 삭제한다.
-            context.deleteFile(fileName);
+            context.deleteFile(fileName2);
 
             RecordActivity.timer.cancel(); //** 잊기 쉬움. 주의!
             RecordActivity.RActivity.finish();
@@ -84,14 +86,14 @@ public class AlarmSoundService extends Service {
             }
 
             protected String doInBackground(String ... values) {
-                if(Main2Activity.mVoicePlayer != null) {
-                    Main2Activity.mVoicePlayer.playWaveFileAlarm(16000, 1024, values[0]);
-                }
-                else { //프로그램이 종료됐을 때도 알람이 울리도록 하기 위함
-                    //내부저장소에 접근할 때, 꼭 Main의 context를 사용하지 않아도 접근이 가능하구나
-                    mVoicePlayerAlarm = new VoicePlayer(getApplicationContext());
-                    mVoicePlayerAlarm.playWaveFileAlarm(16000, 1024, values[0]);
-                }
+//                if(Main2Activity.mVoicePlayer != null) {
+//                    Main2Activity.mVoicePlayer.playWaveFileAlarm(16000, 1024, values[0]);
+//                }
+//                else { //프로그램이 종료됐을 때도 알람이 울리도록 하기 위함
+//                    //내부저장소에 접근할 때, 꼭 Main의 context를 사용하지 않아도 접근이 가능하구나
+//                    mVoicePlayerAlarm = new VoicePlayer(getApplicationContext());
+//                    mVoicePlayerAlarm.playWaveFileAlarm(16000, 1024, values[0]);
+//                }
 //                publishProgress(values[0]);
                 return values[0];
             }
