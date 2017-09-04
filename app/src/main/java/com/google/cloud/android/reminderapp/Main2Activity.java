@@ -35,9 +35,11 @@ public class Main2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
-        //볼륨조절하기 볼륨 최대로 참조 : http://blog.naver.com/oh4zzang/40114444637
-        AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        audio.setStreamVolume(AudioManager.STREAM_MUSIC, (int)(audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ), AudioManager.FLAG_PLAY_SOUND);
+//        //볼륨조절하기 볼륨 최대로 참조 : http://blog.naver.com/oh4zzang/40114444637
+        //이것을 이용하면 처음 시작할 때마다 볼륨을 최대로 초기화해 주는 것 같음.
+        //사용자가 볼륨을 조절할 수 있도록 이것은 주석처리.
+//        AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+//        audio.setStreamVolume(AudioManager.STREAM_MUSIC, (int)(audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ), AudioManager.FLAG_PLAY_SOUND);
 
         db = new DataBase(Main2Activity.this);
         mVoiceRecorder = new VoiceRecorder(this, mVoiceCallback);

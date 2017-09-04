@@ -97,6 +97,9 @@ public class PlayListActivity extends AppCompatActivity {
 
                     adapter.notifyDataSetChanged(); //adapter 내용 변경 - 리스트뷰 갱신 ***
                 }
+                else { //한 파일의 재생이 끝났다면
+                    imageButton.setImageResource(R.drawable.play_btn2);
+                }
             }
         };
 

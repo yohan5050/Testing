@@ -100,6 +100,10 @@ public class PlayActivity extends AppCompatActivity {
                         //TextView 변경
                         String returnedValue[] = db.getAllContent();
                         textView.setText(returnedValue[playingPos + 1].replaceAll(" ", ""));
+
+                        //한 파일을 재생하고 중지하기 때문에, playingPos가 자동으로 변경되지 않음. 여기서 변경
+                        playingPos++;
+                        button.setImageResource(R.drawable.stop_btn2); //버튼도 변경해줘야 함.
                     }
                 }
                 else { //재생 중이지 않은 경우
@@ -140,6 +144,12 @@ public class PlayActivity extends AppCompatActivity {
                         //TextView 변경
                         String returnedValue[] = db.getAllContent();
                         textView.setText(returnedValue[playingPos - 1].replaceAll(" ", ""));
+
+                        //한 파일을 재생하고 중지하기 때문에, playingPos가 자동으로 변경되지 않음. 여기서 변경
+                        playingPos--;
+
+                        //버튼 변경이 vhandler에 비해 좀 늦어져서, vhandler에 버튼변경을 배치하였음.
+//                        button.setImageResource(R.drawable.stop_btn2); //버튼도 변경해줘야 함.
                     }
                 }
                 else { //재생 중이지 않은 경우
@@ -247,17 +257,21 @@ public class PlayActivity extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 if (((String) msg.obj).equals("stop")) {
                     //list를 보고있는 중에 메인화면으로 돌아가기 위해서 PlayListActivity도 함께 종료
-                    if(PlayListActivity.PLactivity != null) //list를 한 번도 실행하지 않은 경우
-                        PlayListActivity.PLactivity.finish();
-                    finish();
-                } else if (Main2Activity.mVoicePlayer.isPlaying()) {
+//                    if(PlayListActivity.PLactivity != null) //list를 한 번도 실행하지 않은 경우
+//                        PlayListActivity.PLactivity.finish();
+//                    finish();
+                    button.setImageResource(R.drawable.play_btn2);
+                }
+                else if (Main2Activity.mVoicePlayer.isPlaying()) {
+                    button.setImageResource(R.drawable.stop_btn2);
                     String alarmTime = (String) msg.obj;
                     String[] words = alarmTime.split(":");
 
                     if (words[0].equals("일반 메모")) {
 //                        textView.setText(playCutValue(words[1].replaceAll(" ", "")));
                         textView.setText(words[1].replaceAll(" ", ""));
-                    } else {
+                    }
+                    else {
 //                        textView.setText(playCutValue(words[5].replaceAll(" ", "")));
                         textView.setText(words[5].replaceAll(" ", ""));
                     }
@@ -324,7 +338,10 @@ public class PlayActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         //list에서 음성 파일을 선택한 경우 해당 위치를 전달 받는다.
-        if (playCount == -2) playCount = intent.getIntExtra("playcount", -1);
+        if (playCount == -2) {
+            playCount = intent.getIntExtra("playcount", -1);
+            playingPos = playCount - 1;
+        }
 
         System.out.println("테스팅 mVoicePlayer : " + Main2Activity.mVoicePlayer);
         if(Main2Activity.mVoicePlayer == null) {
@@ -341,7 +358,10 @@ public class PlayActivity extends AppCompatActivity {
         }
 
         //시작하는 지점 정보(int)가 없으면 db에서 모든파일의 개수 얻어와서 가장 최근 녹음파일부터 재생 시작
-        if (playCount == -1) playCount = db.getAllPlayListNum();
+        if (playCount == -1) {
+            playCount = db.getAllPlayListNum();
+            playingPos = playCount - 1;
+        }
 
         //가장 최근 녹음 파일부터 재생 시작
         //플레이리스트 업데이트
@@ -465,8 +485,13 @@ public class PlayActivity extends AppCompatActivity {
         playingPos--;
         //textView을 다음파일의 내용으로 세팅한다.
         String returnedValue[] = db.getAllContent();
-        if(playingPos < 0) {
+        int cnt = db.getAllPlayListNum();
+        if(cnt == 0) { //파일이 없으면 끝낸다.
             finish();
+        }
+        else if(playingPos < 0) { //마지막 파일이면 첫번째 파일을 보여준다.
+            playingPos = cnt - 1;
+            textView.setText(returnedValue[playingPos].replaceAll(" ", ""));
         }
         else {
             textView.setText(returnedValue[playingPos].replaceAll(" ", ""));

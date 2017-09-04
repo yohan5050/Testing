@@ -89,7 +89,7 @@ public class VoicePlayer {
         String returnedValue[] = db.getAllContent(); //contentValue -> returnedValue로 수정. (시간표현, 내용이 모두 포함된 원본이므로)
         int cnt = fileName.length; //목록에서 선택 시 playCount값이 변하기 때문에... 이렇게 따로 cnt에 저장해놓자.
 
-        for(i=playCount-1;i>=0;i--){
+        for(i = playCount-1; i >= 0; i--){
             int count = 0;
             byte[] data = new byte[mBufferSize];
 
@@ -128,6 +128,24 @@ public class VoicePlayer {
                 audioTrack.release();
                 dis.close();
                 fis.close();
+
+                if(mIsPlaying == false) { //재생 중간에 종료한 경우 -> 아래쪽 핸들러를 피함으로써 버튼 변경이 부드럽게 되도록 한다.
+                    return;
+                }
+
+                /* 연속 재생 방식에서 하나 재생하고 멈추는 방식으로 바꿀 것인데, 연속 재생하는 방식을
+                * 나중에 다시 사용할 수 있으니, mIsPlaying = false; 이렇게 추가해보자. */
+                mIsPlaying = false;
+
+                //한 파일의 재생이 끝나면, 중지 버튼이 재생 버튼으로 변경되도록 handler를 이용해 끝났음을 알려준다.
+                //재생 화면에게 재생이 끝났음을 알려줌
+                Message message2 = PlayActivity.vhandler.obtainMessage(1, "stop");
+                PlayActivity.vhandler.sendMessage(message2);
+                //재생 목록 화면에게 재생이 끝났음을 알려줌
+                if(PlayListActivity.phandler != null) { //PlayListActivity를 호출하지 않았다면 phandler가 생성되지 않았을 수 있으므로
+                    Message message3 = PlayListActivity.phandler.obtainMessage(1, cnt - 1 - i);
+                    PlayListActivity.phandler.sendMessage(message3);
+                }
 
                 if(!mIsPlaying) break;
 

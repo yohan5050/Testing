@@ -24,9 +24,10 @@
         android:layout_height="90dp"
         android:background="#00000000"
         android:scaleType="fitXY"
-        android:src="@drawable/info"
+        android:src="@drawable/time_info"
+        android:layout_centerHorizontal="true"
         android:layout_alignTop="@+id/listImage"
-        android:layout_alignStart="@+id/button" />
+        />
 
     <ImageButton
         android:id="@+id/deleteImage"
@@ -39,25 +40,35 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="22dp" />
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="300dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/informationImage"
+        android:layout_above="@+id/home_btn"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/btn_bg_ex"
+        />
 
     <TextView
         android:id="@+id/text"
         android:layout_width="300dp"
         android:layout_height="match_parent"
-        android:layout_above="@+id/button"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/informationImage"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="0dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/btn_bg_ex"
+        android:layout_above="@+id/button"
         android:gravity="center"
-        android:shadowColor="#FF464646"
-        android:shadowDx="2"
-        android:shadowDy="2"
-        android:shadowRadius="2.0"
         android:text="내용 없음"
         android:textSize="40dp"
         android:textStyle="bold" />
@@ -68,35 +79,47 @@
         android:background="#00000000"
         android:src="@drawable/stop_btn2"
         android:scaleType="fitXY"
-        android:layout_width="93dp"
-        android:layout_height="93dp"
-        android:layout_alignParentBottom="true"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignBottom="@+id/imageView"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="18dp" />
+        android:layout_margin="10dp"
+        />
 
     <ImageButton
         android:id="@+id/backwards_btn"
-        android:layout_width="93dp"
-        android:layout_height="93dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:scaleType="fitXY"
         android:background="#00000000"
         android:src="@drawable/backwards_btn"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="18dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="18dp"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_alignLeft="@+id/imageView"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="10dp"
        />
 
     <ImageButton
         android:id="@+id/forward_btn"
-        android:layout_width="93dp"
-        android:layout_height="93dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:scaleType="fitXY"
         android:background="#00000000"
         android:src="@drawable/forward_btn"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="22dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="18dp"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_alignRight="@+id/imageView"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="10dp"
         />
+
+    <ImageButton
+        android:id="@+id/home_btn"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="fitXY"
+        android:background="#00000000"
+        android:src="@drawable/home"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"/>
 </RelativeLayout>
