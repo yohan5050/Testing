@@ -18,25 +18,42 @@
 
     <TextView
         android:id="@+id/text"
-        android:padding="30dp"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_below="@+id/recordImage"
+        android:layout_above="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
         android:gravity="center"
-        android:text="녹음 중 7초 후 종료"
-        android:textSize = "40dp"
-        android:layout_centerVertical="true" />
+        android:text="녹음을 시작하시려면\n아래 버튼을 누르세요"
+        android:textSize = "40dp" />
 
-    <ImageButton
-        android:id="@+id/button"
-        android:gravity="center"
-        android:background="#00000000"
-        android:src="@drawable/stop_btn"
-        android:scaleType="fitXY"
-        android:layout_width="93dp"
-        android:layout_height="93dp"
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="99dp" />
+        android:layout_marginBottom="99dp">
 
+        <ImageButton
+            android:id="@+id/rec_start_btn"
+            android:layout_width="93dp"
+            android:layout_height="93dp"
+            android:background="#00000000"
+            android:gravity="center"
+            android:scaleType="fitXY"
+            android:src="@drawable/rec_start_btn" />
+
+        <ImageButton
+            android:id="@+id/stop_btn"
+            android:layout_width="93dp"
+            android:layout_height="93dp"
+            android:background="#00000000"
+            android:gravity="center"
+            android:scaleType="fitXY"
+            android:src="@drawable/stop_btn"
+            android:visibility="gone" />
+
+    </LinearLayout>
 </RelativeLayout>

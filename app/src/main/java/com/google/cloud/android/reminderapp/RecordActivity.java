@@ -24,9 +24,10 @@ public class RecordActivity extends AppCompatActivity {
     DataBase db;
     public static CountDownTimer timer; //AlarmSoundService에서 사용
     TextView mText;
-    ImageButton stopBtn;
+    ImageButton stopBtn, recStartBtn;
     int value;
     String fileName;
+    boolean isRecStartButtonClicked = false;
 
     private SpeechService mSpeechService;
 
@@ -40,11 +41,14 @@ public class RecordActivity extends AppCompatActivity {
 
         RActivity = this;
         db = Main2Activity.getDBInstance();
-        stopBtn = (ImageButton) findViewById(R.id.button);
+        stopBtn = (ImageButton) findViewById(R.id.stop_btn);
+        recStartBtn = (ImageButton) findViewById(R.id.rec_start_btn);
         mText = (TextView) findViewById(R.id.text);
 
         timeAnalysis = new TimeAnalysis();
         contentAnalysis = new ContentAnalysis();
+
+        isRecStartButtonClicked = false;
 
         //timer - 시간 제한 7초.
         value = 0;
@@ -59,10 +63,21 @@ public class RecordActivity extends AppCompatActivity {
             public void onFinish() {
                 value = 0;
                 mText.setText("녹음 종료");
-                stopVoiceRecorder();
+                if(Main2Activity.mVoiceRecorder.mIsRecording) {
+                    stopVoiceRecorder();
+                }
                 timer.cancel();
             }
         };
+
+        recStartBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                isRecStartButtonClicked = true;
+                recStartBtn.setVisibility(View.GONE);
+                stopBtn.setVisibility(View.VISIBLE);
+                onStart();
+            }
+        });
 
         stopBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -77,6 +92,9 @@ public class RecordActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        //녹음 시작 버튼을 누르지 않았으면 시작하지 않는다.
+        //녹음 시작 버튼을 눌러야 녹음을 시작한다.
+        if(!isRecStartButtonClicked) return;
 
         // Prepare Cloud Speech API
         bindService(new Intent(this, SpeechService.class), mServiceConnection, BIND_AUTO_CREATE);
@@ -101,13 +119,31 @@ public class RecordActivity extends AppCompatActivity {
      */
     @Override
     protected void onStop() {
-        // Stop Cloud Speech API
-        mSpeechService.removeListener(mSpeechServiceListener);
-        unbindService(mServiceConnection);
-        mSpeechService = null;
-
         super.onStop();
+
+        // Stop Cloud Speech API
+        if(mSpeechService != null) {
+            mSpeechService.removeListener(mSpeechServiceListener);
+            unbindService(mServiceConnection);
+            mSpeechService = null;
+        }
+
+        if(Main2Activity.mVoiceRecorder.mIsRecording) {
+            Main2Activity.mVoiceRecorder.stopRecording();
+        }
+        finish();
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+//        if(Main2Activity.mVoiceRecorder.mIsRecording) {
+//            Main2Activity.mVoiceRecorder.stopRecording();
+//        }
+//        finish();
+    }
+
 
     private void startVoiceRecorder() {
 //        if (mVoiceRecorder != null) {
