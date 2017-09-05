@@ -36,7 +36,7 @@ public class PlayActivity extends AppCompatActivity {
     ImageButton button, backwardsBtn, forwardBtn;
     ImageButton listBtn, homeBtn, delBtn;
     int playCount = -2;
-    TextView textView, rtText, atText;
+    TextView textView, rtText1, rtText2, atText1, atText2;
     ImageView atImage;
 
     int SampleRate = 16000;
@@ -61,8 +61,10 @@ public class PlayActivity extends AppCompatActivity {
         homeBtn = (ImageButton) findViewById(R.id.homeBtn);
         delBtn = (ImageButton) findViewById(R.id.deleteImage);
         textView = (TextView) findViewById(R.id.text);
-        rtText = (TextView) findViewById(R.id.recordTime);
-        atText = (TextView) findViewById(R.id.alarmTime);
+        rtText1 = (TextView) findViewById(R.id.recordTime1);
+        rtText2 = (TextView) findViewById(R.id.recordTime2);
+        atText1 = (TextView) findViewById(R.id.alarmTime1);
+        atText2 = (TextView) findViewById(R.id.alarmTime2);
         atImage = (ImageView) findViewById(R.id.alarm_image);
 
         backwardsBtn = (ImageButton) findViewById(R.id.backwards_btn);
@@ -540,17 +542,29 @@ public class PlayActivity extends AppCompatActivity {
         String[] fileNameArr = db.getAllFileName();
 
         if (alarmTimeArr[playingPos].equals("일반 메모")) {
-            rtText.setText(recordTime(fileNameArr[playingPos]));
-            atText.setText("");
+//            rtText.setText("녹음시간: " + recordTime(fileNameArr[playingPos]));
+            String recTime = recordTime(fileNameArr[playingPos]);
+            rtText1.setText("녹음시각 " + recTime.substring(0, 5));
+            rtText2.setText(recTime.substring(5, 7) + "/" + recTime.substring(8, 9) + ")");
+            atText1.setText("");
+            atText2.setText("");
             atImage.setVisibility(View.INVISIBLE);
         } else {
             String[] words = alarmTimeArr[playingPos].split(":");
             if (Integer.parseInt(words[3]) < 10) words[3] = '0' + words[3];
             if (Integer.parseInt(words[4]) < 10) words[4] = '0' + words[4];
-            String timeRegistered = words[3] + ":" + words[4] + "(" + words[1] + "월" + words[2] + "일" + ")";
+//            String timeRegistered = words[3] + ":" + words[4] + "(" + words[1] + "월" + words[2] + "일" + ")";
+            String hhmm = words[3] + ":" + words[4];
+            String MMdd =  "(" + words[1] + "/" + words[2] + ")";
 
-            rtText.setText(recordTime(fileNameArr[playingPos]) );
-            atText.setText(timeRegistered);
+//            rtText.setText("녹음시간: " + recordTime(fileNameArr[playingPos]) );
+            String recTime = recordTime(fileNameArr[playingPos]);
+            rtText1.setText("녹음시각 " + recTime.substring(0, 5));
+            rtText2.setText(recTime.substring(5, 7) + "/" + recTime.substring(8, 9) + ")");
+
+//            atText.setText(timeRegistered);
+            atText1.setText(hhmm);
+            atText2.setText(MMdd);
             atImage.setVisibility(View.VISIBLE);
             atImage.setImageResource(R.drawable.alarm);
         }

@@ -35,7 +35,6 @@ public class AlarmActivity extends AppCompatActivity {
 
         textView = (TextView) findViewById(R.id.text);
         rBtn = (ImageButton) findViewById(R.id.rBtn);
-        rBtn.setImageResource(R.drawable.reminder);
         backBtn = (ImageButton) findViewById(R.id.backBtn);
 
         mVoicePlayer = new VoicePlayer(getApplicationContext());
@@ -76,7 +75,7 @@ public class AlarmActivity extends AppCompatActivity {
 
                 if(mVoicePlayer.mIsPlaying2) {
                     mVoicePlayer.stopPlaying2();
-                    rBtn.setImageResource(R.drawable.play_btn2);
+                    rBtn.setImageResource(R.drawable.play_btn3);
                 }
                 else {
 //                    mVoicePlayer.playWaveFileAlarm(16000, 1024, fileName);//fileName을 받아와서 playWaveFileAlarm을 이용하면 될듯
@@ -84,9 +83,8 @@ public class AlarmActivity extends AppCompatActivity {
                     //리스트 화면에서 알람화면으로 전환되고 나서 OutOfMemory에러가 나서, stop_btn2이미지 크기를 줄였다...!!!
                     //이 부분은 bitmap관련해서 heap메모리와 관련있는 것 같은데, 나중에 따로 공부좀 해봐야 함.
                     //일단은 임시방편으로 이미지 크기를 줄여서 넘어감...
-                    rBtn.setImageResource(R.drawable.stop_btn2);
-                    System.out.println("여기 들어올거 아녀!!!" + mVoicePlayer.mIsPlaying2);
-                    textView.setText(alarmText);
+                    rBtn.setImageResource(R.drawable.stop_btn3);
+//                    textView.setText(alarmText);
                     vibrator.cancel(); //진동 취소
                 }
             }
@@ -127,7 +125,7 @@ public class AlarmActivity extends AppCompatActivity {
         ahandler = new Handler() {
           public void handleMessage(Message msg) {
               if(((String) msg.obj).equals("stop")) {
-                  rBtn.setImageResource(R.drawable.play_btn2);
+                  rBtn.setImageResource(R.drawable.play_btn3);
               }
           }
         };
@@ -145,6 +143,8 @@ public class AlarmActivity extends AppCompatActivity {
         Intent intent = getIntent();
         alarmText = intent.getStringExtra("alarmtext");
         fileName = intent.getStringExtra("filename");
+
+        textView.setText(alarmText);
 
         //진동 60초 타이머
         timer.cancel();

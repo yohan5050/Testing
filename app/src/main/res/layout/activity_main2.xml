@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:gravity="center"
-        android:text="Copyright 2017. 김원, 강상우, Memorade Team all rights reserved. "
+        android:text="Copyright 2017. Memorade Project Team. Gachon Univ.\nAll rights reserved."
         android:textSize="12dp" />
 
     <Button
