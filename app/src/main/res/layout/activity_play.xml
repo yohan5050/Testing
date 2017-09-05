@@ -117,65 +117,76 @@
         android:layout_marginBottom="10dp"
         />
 
-    <TextView
-        android:id="@+id/recordTime"
+    <LinearLayout
+        android:id="@+id/linear1"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="35dp"
         android:layout_alignTop="@+id/text"
-        android:layout_toRightOf="@+id/record_image"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="0dp"
-        android:text="01:51(9월5일)"
-        android:shadowColor="#FF464646"
-        android:shadowDx="2"
-        android:shadowDy="2"
-        android:shadowRadius="2.0"
-        android:textSize="25dp"
-        android:textStyle="bold" />
+        android:layout_centerHorizontal="true">
 
-    <TextView
-        android:id="@+id/alarmTime"
+        <ImageView
+            android:id="@+id/record_image"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginBottom="0dp"
+            android:src="@drawable/record"
+            android:scaleType="fitXY"/>
+
+        <TextView
+            android:id="@+id/recordTime"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_toRightOf="@+id/record_image"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="0dp"
+            android:text=""
+            android:shadowColor="#FF464646"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="2.0"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_toRightOf="@+id/alarm_image"
-        android:layout_below="@+id/recordTime"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="0dp"
-        android:text="01:53(9월6일)"
-        android:shadowColor="#FF464646"
-        android:shadowDx="2"
-        android:shadowDy="2"
-        android:shadowRadius="2.0"
-        android:textSize="25dp"
-        android:textStyle="bold" />
+        android:layout_height="35dp"
+        android:layout_below="@+id/linear1"
+        android:layout_centerHorizontal="true">
 
-    <ImageView
-        android:id="@+id/record_image"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignTop="@+id/text"
-        android:layout_alignLeft="@+id/text"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="0dp"
-        android:src="@drawable/record"
-        android:scaleType="fitXY"/>
+        <ImageView
+            android:id="@+id/alarm_image"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginBottom="0dp"
+            android:scaleType="fitXY"/>
 
-    <ImageView
-        android:id="@+id/alarm_image"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignLeft="@+id/text"
-        android:layout_below="@+id/record_image"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="0dp"
-        android:src="@drawable/alarm"
-        android:scaleType="fitXY"/>
+        <TextView
+            android:id="@+id/alarmTime"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_toRightOf="@+id/alarm_image"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="0dp"
+            android:text=""
+            android:shadowColor="#FF464646"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="2.0"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
 </RelativeLayout>

@@ -17,6 +17,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import com.tsengvn.typekit.TypekitContextWrapper;
 
 import static com.google.cloud.android.reminderapp.R.id.center;
 import static com.google.cloud.android.reminderapp.R.id.center_horizontal;
+import static com.google.cloud.android.reminderapp.R.id.default_activity_button;
 
 public class PlayActivity extends AppCompatActivity {
     public static Activity Pactivity; //PlayListActivity에서 홈버튼을 누를 때 사용될 것임
@@ -35,6 +37,7 @@ public class PlayActivity extends AppCompatActivity {
     ImageButton listBtn, homeBtn, delBtn;
     int playCount = -2;
     TextView textView, rtText, atText;
+    ImageView atImage;
 
     int SampleRate = 16000;
     int BufferSize = 1024;
@@ -60,6 +63,7 @@ public class PlayActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.text);
         rtText = (TextView) findViewById(R.id.recordTime);
         atText = (TextView) findViewById(R.id.alarmTime);
+        atImage = (ImageView) findViewById(R.id.alarm_image);
 
         backwardsBtn = (ImageButton) findViewById(R.id.backwards_btn);
         forwardBtn = (ImageButton) findViewById(R.id.forward_btn);
@@ -272,6 +276,10 @@ public class PlayActivity extends AppCompatActivity {
                 TextView textView = (TextView) alertDialog.findViewById(android.R.id.message);
                 textView.setTextSize(20.0f);
                 textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                Button cancelBtn = (Button) alertDialog.findViewById(android.R.id.button1);
+                Button okBtn = (Button) alertDialog.findViewById(android.R.id.button2);
+                cancelBtn.setTextSize(17.0f);
+                okBtn.setTextSize(17.0f);
             }
         });
 
@@ -532,17 +540,19 @@ public class PlayActivity extends AppCompatActivity {
         String[] fileNameArr = db.getAllFileName();
 
         if (alarmTimeArr[playingPos].equals("일반 메모")) {
-            rtText.setText("녹음시간" + " "
-                    + recordTime(fileNameArr[playingPos]));
+            rtText.setText(recordTime(fileNameArr[playingPos]));
             atText.setText("");
+            atImage.setVisibility(View.INVISIBLE);
         } else {
             String[] words = alarmTimeArr[playingPos].split(":");
             if (Integer.parseInt(words[3]) < 10) words[3] = '0' + words[3];
             if (Integer.parseInt(words[4]) < 10) words[4] = '0' + words[4];
             String timeRegistered = words[3] + ":" + words[4] + "(" + words[1] + "월" + words[2] + "일" + ")";
 
-            rtText.setText("녹음시간" + " " + recordTime(fileNameArr[playingPos]) );
-            atText.setText("알람시간" + " " + timeRegistered);
+            rtText.setText(recordTime(fileNameArr[playingPos]) );
+            atText.setText(timeRegistered);
+            atImage.setVisibility(View.VISIBLE);
+            atImage.setImageResource(R.drawable.alarm);
         }
 
     }
