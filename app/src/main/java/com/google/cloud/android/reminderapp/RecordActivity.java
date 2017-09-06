@@ -62,11 +62,12 @@ public class RecordActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 value = 0;
-                mText.setText("녹음 종료");
+//                mText.setText("녹음 종료");
                 if(Main2Activity.mVoiceRecorder.mIsRecording) {
                     stopVoiceRecorder();
                 }
                 timer.cancel();
+                mText.setText("녹음 분석 중...");
             }
         };
 
@@ -84,6 +85,7 @@ public class RecordActivity extends AppCompatActivity {
                 if (Main2Activity.mVoiceRecorder.isRecording()) {
                     stopVoiceRecorder();
                     timer.cancel();
+                    mText.setText("녹음 분석 중...");
                 }
             }
         });

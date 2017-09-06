@@ -1,7 +1,9 @@
 package com.google.cloud.android.reminderapp;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.text.method.ScrollingMovementMethod;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -36,6 +38,8 @@ public class PlaylistView extends LinearLayout {
         textView2 = (TextView) findViewById(R.id.textView2);
         imageView = (ImageView) findViewById(R.id.imageView);
 
+        //글씨체 설정
+        textView.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "font.ttf"));
     }
 
     public void setContent(String content) {

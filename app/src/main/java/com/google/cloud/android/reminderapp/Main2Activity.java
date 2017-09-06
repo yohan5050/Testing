@@ -130,8 +130,13 @@ public class Main2Activity extends AppCompatActivity {
     public void onButtonPlayClicked(View v) {
 //        Intent intent = new Intent(getApplicationContext(), PlayActivity.class);
 //        startActivity(intent);
-        Intent intent = new Intent(getApplicationContext(), PlayListActivity.class);
-        startActivity(intent);
+        if(db.getAllPlayListNum() > 0) {
+            Intent intent = new Intent(getApplicationContext(), PlayListActivity.class);
+            startActivity(intent);
+        }
+        else {
+            Toast.makeText(this, "재생할 목록이 비어있습니다.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private NetworkInfo getNetworkInfo() {
