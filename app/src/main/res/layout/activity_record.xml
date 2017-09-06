@@ -43,7 +43,7 @@
             android:background="#00000000"
             android:gravity="center"
             android:scaleType="fitXY"
-            android:src="@drawable/rec_start_btn" />
+            android:src="@drawable/rec_start_btn2" />
 
         <ImageButton
             android:id="@+id/stop_btn"
