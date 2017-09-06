@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.os.Message;
@@ -29,6 +30,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import static java.security.AccessController.getContext;
 
 public class PlayListActivity extends AppCompatActivity {
 
@@ -287,7 +290,7 @@ public class PlayListActivity extends AppCompatActivity {
             }
             else {
                 if(alarmTimeArr[i].equals("일반 메모"))
-                    adapter.addItem(new Playlist((i + 1) + ". " + contentTime(contentNameArr[i], 12), "알람정보 없음", R.drawable.memo, strColor));
+                    adapter.addItem(new Playlist((i + 1) + ". " + contentTime(contentNameArr[i], 11), "알람정보 없음", R.drawable.memo, strColor));
                 else
                     adapter.addItem(new Playlist((i + 1) + ". " + contentTime(contentNameArr[i], 7), timeFormatFunc(alarmTimeArr[i]), R.drawable.alarm, strColor));
             }

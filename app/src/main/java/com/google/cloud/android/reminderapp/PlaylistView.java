@@ -20,6 +20,8 @@ public class PlaylistView extends LinearLayout {
     TextView textView2;
     ImageView imageView;
 
+//    Typeface type = Typeface.createFromAsset(getContext().getAssets(), "font.ttf");
+
     public PlaylistView(Context context) {
         super(context);
         init(context);
@@ -39,7 +41,7 @@ public class PlaylistView extends LinearLayout {
         imageView = (ImageView) findViewById(R.id.imageView);
 
         //글씨체 설정
-        textView.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "font.ttf"));
+//        textView.setTypeface(type);
     }
 
     public void setContent(String content) {
