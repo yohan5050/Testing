@@ -50,7 +50,7 @@ public class AlarmActivity extends AppCompatActivity {
         final Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         //알람 벨소리
         //Uri ringtoneUri = RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(), R.raw.rec_start);
-        Uri ring_uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.rec_start);
+        Uri ring_uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.alarm);
 
         if(mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) { //진동
             vibrator.vibrate(new long[]{500, 1000}, 0); //진동 패턴: 대기, 진동,.. / 0: 무한 반복, -1: 반복 없음.
@@ -64,6 +64,8 @@ public class AlarmActivity extends AppCompatActivity {
             ringtone.play();
         }
 
+        //6초짜리 벨소리 때문에 6000 -> 이러면 6초 울리고 6초 쉬넹...
+        //그냥 1000으로 해야겠다.
         timer = new CountDownTimer(60000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
