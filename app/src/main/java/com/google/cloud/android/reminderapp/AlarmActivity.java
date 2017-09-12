@@ -4,6 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
@@ -27,6 +31,8 @@ public class AlarmActivity extends AppCompatActivity {
     VoicePlayer mVoicePlayer;
     String alarmText, fileName;
     CountDownTimer timer;
+    AudioManager mAudioManager;
+    Ringtone ringtone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,20 +44,42 @@ public class AlarmActivity extends AppCompatActivity {
         backBtn = (ImageButton) findViewById(R.id.backBtn);
 
         mVoicePlayer = new VoicePlayer(getApplicationContext());
+        mAudioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 
         //진동 - 참조 : http://bitsoul.tistory.com/129
         final Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        vibrator.vibrate(new long[] {500, 1000}, 0); //진동 패턴: 대기, 진동,.. / 0: 무한 반복, -1: 반복 없음.
+        //알람 벨소리
+        //Uri ringtoneUri = RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(), R.raw.rec_start);
+        Uri ring_uri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.rec_start);
+
+        if(mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) { //진동
+            vibrator.vibrate(new long[]{500, 1000}, 0); //진동 패턴: 대기, 진동,.. / 0: 무한 반복, -1: 반복 없음.
+        }
+        else if(mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT) { //무음
+            //가만히 있기
+        }
+        else if(mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) { //벨소리
+//            ringtone = RingtoneManager.getRingtone(getApplicationContext(), ringtoneUri);
+            ringtone = RingtoneManager.getRingtone(getApplicationContext(), ring_uri);
+            ringtone.play();
+        }
 
         timer = new CountDownTimer(60000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-
+                if(ringtone != null) {
+                    ringtone.play();
+                }
             }
 
             @Override
             public void onFinish() {
-                vibrator.cancel();
+                if(vibrator != null) {
+                    vibrator.cancel();
+                }
+                if(ringtone != null) {
+                    ringtone.stop();
+                }
                 timer.cancel();
             }
         };
@@ -86,6 +114,8 @@ public class AlarmActivity extends AppCompatActivity {
                     rBtn.setImageResource(R.drawable.stop_btn3);
 //                    textView.setText(alarmText);
                     vibrator.cancel(); //진동 취소
+                    ringtone.stop();
+                    timer.cancel();
                 }
             }
         });
@@ -94,6 +124,10 @@ public class AlarmActivity extends AppCompatActivity {
            public void onClick(View v) {
                if(vibrator != null) {
                    vibrator.cancel();
+                   timer.cancel();
+               }
+               if(ringtone != null) {
+                   ringtone.stop();
                    timer.cancel();
                }
                if(mVoicePlayer != null && mVoicePlayer.mIsPlaying2) {
