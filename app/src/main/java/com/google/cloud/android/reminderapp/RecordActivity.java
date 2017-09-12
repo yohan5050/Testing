@@ -88,7 +88,7 @@ public class RecordActivity extends AppCompatActivity {
                 if (Main2Activity.mVoiceRecorder.isRecording()) {
                     stopVoiceRecorder();
                     timer.cancel();
-                    mText.setText("녹음 분석 중...");
+                    mText.setText("등록 중...");
                     stopBtn.setVisibility(View.GONE);
                     homeBtn.setVisibility(View.VISIBLE);
                 }
