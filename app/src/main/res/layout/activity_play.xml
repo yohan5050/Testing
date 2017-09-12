@@ -105,7 +105,7 @@
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:scaleType="fitXY"
-            android:src="@drawable/stop_btn2" />
+            android:src="@drawable/stop_btn3" />
 
         <ImageButton
             android:id="@+id/forward_btn"

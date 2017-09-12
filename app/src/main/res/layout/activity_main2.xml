@@ -7,16 +7,28 @@
     tools:context=".Main2Activity">
 
 
+    <!--<TextView-->
+        <!--android:id="@+id/textView2"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_above="@+id/record"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_marginBottom="72dp"-->
+        <!--android:gravity="center"-->
+        <!--android:text="Memory Trigger"-->
+        <!--android:textSize="47dp" />-->
     <ImageView
         android:id="@+id/textView2"
         android:layout_width="420dp"
         android:layout_height="120dp"
         android:src="@drawable/logo"
         android:background="#00000000"
+        android:padding="10dp"
         android:gravity="center"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="35dp" />
+
 
     <ImageButton
         android:id="@+id/record"
@@ -38,7 +50,7 @@
         android:layout_marginRight="25dp"
         android:layout_alignParentRight="true"
         android:background="@drawable/btn_bg_ex"
-        android:src="@drawable/play"
+        android:src="@drawable/list_btn"
         android:padding="15dp"
         android:scaleType="fitXY"
         android:onClick="onButtonPlayClicked"/>
@@ -54,15 +66,15 @@
     <Button
         android:id="@+id/countlist"
         android:clickable="false"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/countlist"
-        android:layout_alignTop="@+id/play"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:background="@drawable/countlist2"
+
         android:layout_alignRight="@+id/play"
-        android:layout_marginTop="7dp"
-        android:layout_marginRight="7dp"
+        android:layout_marginTop="250dp"
+        android:layout_marginRight="6dp"
         android:text="0"
-        android:textColor="@android:color/white"
+
         android:textSize="30dp" />
 
 

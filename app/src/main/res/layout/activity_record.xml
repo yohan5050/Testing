@@ -56,13 +56,13 @@
             android:visibility="gone" />
 
         <ImageButton
-            android:id="@+id/back_btn"
+            android:id="@+id/home"
             android:layout_width="93dp"
             android:layout_height="93dp"
             android:background="#00000000"
             android:gravity="center"
             android:scaleType="fitXY"
-            android:src="@drawable/back_btn"
+            android:src="@drawable/home"
             android:visibility="gone" />
 
     </LinearLayout>

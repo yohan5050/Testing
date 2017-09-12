@@ -24,7 +24,7 @@ public class RecordActivity extends AppCompatActivity {
     DataBase db;
     public static CountDownTimer timer; //AlarmSoundService에서 사용
     TextView mText;
-    ImageButton stopBtn, recStartBtn, backBtn;
+    ImageButton stopBtn, recStartBtn, homeBtn;
     int value;
     String fileName;
     boolean isRecStartButtonClicked = false;
@@ -43,7 +43,7 @@ public class RecordActivity extends AppCompatActivity {
         db = Main2Activity.getDBInstance();
         stopBtn = (ImageButton) findViewById(R.id.stop_btn);
         recStartBtn = (ImageButton) findViewById(R.id.rec_start_btn);
-        backBtn = (ImageButton) findViewById(R.id.back_btn);
+        homeBtn = (ImageButton) findViewById(R.id.home);
         mText = (TextView) findViewById(R.id.text);
 
         timeAnalysis = new TimeAnalysis();
@@ -68,9 +68,9 @@ public class RecordActivity extends AppCompatActivity {
                     stopVoiceRecorder();
                 }
                 timer.cancel();
-                mText.setText("녹음 분석 중...");
+                mText.setText("등록 중...");
                 stopBtn.setVisibility(View.GONE);
-                backBtn.setVisibility(View.VISIBLE);
+                homeBtn.setVisibility(View.VISIBLE);
             }
         };
 
@@ -90,12 +90,12 @@ public class RecordActivity extends AppCompatActivity {
                     timer.cancel();
                     mText.setText("녹음 분석 중...");
                     stopBtn.setVisibility(View.GONE);
-                    backBtn.setVisibility(View.VISIBLE);
+                    homeBtn.setVisibility(View.VISIBLE);
                 }
             }
         });
 
-        backBtn.setOnClickListener(new View.OnClickListener() {
+        homeBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 onBackPressed();
             }
