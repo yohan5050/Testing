@@ -7,16 +7,16 @@
     tools:context=".Main2Activity">
 
 
-    <TextView
+    <ImageView
         android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/record"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="72dp"
+        android:layout_width="420dp"
+        android:layout_height="120dp"
+        android:src="@drawable/logo"
+        android:background="#00000000"
         android:gravity="center"
-        android:text="Memory Trigger"
-        android:textSize="47dp" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="35dp" />
 
     <ImageButton
         android:id="@+id/record"
