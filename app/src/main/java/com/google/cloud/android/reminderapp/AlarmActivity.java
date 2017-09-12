@@ -113,8 +113,12 @@ public class AlarmActivity extends AppCompatActivity {
                     //일단은 임시방편으로 이미지 크기를 줄여서 넘어감...
                     rBtn.setImageResource(R.drawable.stop_btn3);
 //                    textView.setText(alarmText);
-                    vibrator.cancel(); //진동 취소
-                    ringtone.stop();
+                    if(vibrator != null) {
+                        vibrator.cancel(); //진동 취소
+                    }
+                    if(ringtone != null) {
+                        ringtone.stop();
+                    }
                     timer.cancel();
                 }
             }
