@@ -545,7 +545,7 @@ public class PlayActivity extends AppCompatActivity {
 //            rtText.setText("녹음시간: " + recordTime(fileNameArr[playingPos]));
             String recTime = recordTime(fileNameArr[playingPos]);
             rtText1.setText("녹음시각 " + recTime.substring(0, 5));
-            rtText2.setText(recTime.substring(5, 7) + "/" + recTime.substring(8, 10) + ")");
+            rtText2.setText(recTime.substring(5, 8) + "/" + recTime.substring(9, 11) + ")");
             atText1.setText("");
             atText2.setText("");
             atImage.setVisibility(View.INVISIBLE);
@@ -560,7 +560,7 @@ public class PlayActivity extends AppCompatActivity {
 //            rtText.setText("녹음시간: " + recordTime(fileNameArr[playingPos]) );
             String recTime = recordTime(fileNameArr[playingPos]);
             rtText1.setText("녹음시각 " + recTime.substring(0, 5));
-            rtText2.setText(recTime.substring(5, 7) + "/" + recTime.substring(8, 10) + ")");
+            rtText2.setText(recTime.substring(5, 8) + "/" + recTime.substring(9, 11) + ")");
 
 //            atText.setText(timeRegistered);
             atText1.setText(hhmm);
@@ -575,7 +575,7 @@ public class PlayActivity extends AppCompatActivity {
         System.out.println("현재시간 테스트1 : " + fileName);
         System.out.println("현재시간 테스트2 : " + fileName.substring(3, fileName.length() - 7));
         String retStr = fileName.substring(3, fileName.length() - 7);
-        retStr = retStr.substring(6) + "(" + Integer.parseInt(retStr.substring(0, 2)) + "월" + Integer.parseInt(retStr.substring(3, 5)) + "일)";
+        retStr = retStr.substring(6) + "(" + retStr.substring(0, 2) + "월" + retStr.substring(3, 5) + "일)";
         System.out.println("현재시간 테스트3 : " + retStr);
         return retStr;
     }
