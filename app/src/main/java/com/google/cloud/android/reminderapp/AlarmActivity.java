@@ -16,7 +16,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,11 +31,13 @@ public class AlarmActivity extends AppCompatActivity {
     public static Handler ahandler; // 알람 화면 처리 핸들러(알람이 끝나면 알람 화면 종료하도록)
     TextView textView;
     ImageButton rBtn, backBtn;
+    ImageView alarmimage;
     VoicePlayer mVoicePlayer;
     String alarmText, fileName;
     CountDownTimer timer;
     AudioManager mAudioManager;
     Ringtone ringtone;
+    Animation anim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,11 @@ public class AlarmActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.text);
         rBtn = (ImageButton) findViewById(R.id.rBtn);
         backBtn = (ImageButton) findViewById(R.id.backBtn);
+        alarmimage = (ImageView)findViewById(R.id.alarmImage);
+
+        //알람이 울릴시 흔들리는 시계가 효과
+        anim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.shake);
+        alarmimage.startAnimation(anim);
 
         mVoicePlayer = new VoicePlayer(getApplicationContext());
         mAudioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
@@ -82,6 +92,7 @@ public class AlarmActivity extends AppCompatActivity {
                 if(ringtone != null) {
                     ringtone.stop();
                 }
+                alarmimage.clearAnimation();
                 timer.cancel();
             }
         };
@@ -121,33 +132,35 @@ public class AlarmActivity extends AppCompatActivity {
                     if(ringtone != null) {
                         ringtone.stop();
                     }
+                    alarmimage.clearAnimation();
                     timer.cancel();
                 }
             }
         });
 
         backBtn.setOnClickListener(new View.OnClickListener() {
-           public void onClick(View v) {
-               if(vibrator != null) {
-                   vibrator.cancel();
-                   timer.cancel();
-               }
-               if(ringtone != null) {
-                   ringtone.stop();
-                   timer.cancel();
-               }
-               if(mVoicePlayer != null && mVoicePlayer.mIsPlaying2) {
-                   mVoicePlayer.stopPlaying2();
-               }
-               finish();
-           }
+            public void onClick(View v) {
+                if(vibrator != null) {
+                    vibrator.cancel();
+                    timer.cancel();
+                }
+                if(ringtone != null) {
+                    ringtone.stop();
+                    timer.cancel();
+                }
+                if(mVoicePlayer != null && mVoicePlayer.mIsPlaying2) {
+                    mVoicePlayer.stopPlaying2();
+                }
+                alarmimage.clearAnimation();
+                finish();
+            }
         });
 
         //화면이 OFF 되어있는 상태에서도 알람 화면이 나오도록 하는 코드. // 참고 : http://cofs.tistory.com/173
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-        | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
-        | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-        | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+                | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
 
 
         //VoicePlayer의 playWaveFileAlarm에서 알람이 1분 울리고 끝나면 stop message가 전달되고, AlarmActivity를 종료한다.
@@ -163,11 +176,11 @@ public class AlarmActivity extends AppCompatActivity {
 //        };
 
         ahandler = new Handler() {
-          public void handleMessage(Message msg) {
-              if(((String) msg.obj).equals("stop")) {
-                  rBtn.setImageResource(R.drawable.play_btn3);
-              }
-          }
+            public void handleMessage(Message msg) {
+                if(((String) msg.obj).equals("stop")) {
+                    rBtn.setImageResource(R.drawable.play_btn3);
+                }
+            }
         };
     }
 

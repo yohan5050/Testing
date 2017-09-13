@@ -222,9 +222,9 @@ public class PlayActivity extends AppCompatActivity {
 //            }
 //        });
         homeBtn.setOnClickListener(new View.OnClickListener() {
-           public void onClick(View v) {
-               onBackPressed();
-           }
+            public void onClick(View v) {
+                onBackPressed();
+            }
         });
 
         delBtn.setOnClickListener(new View.OnClickListener() {

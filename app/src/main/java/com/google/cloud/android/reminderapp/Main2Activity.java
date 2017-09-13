@@ -102,10 +102,7 @@ public class Main2Activity extends AppCompatActivity {
                 bpTime = System.currentTimeMillis();
             }
             else {
-                bpToast.setText("                           종료합니다.                           ");
-                //앱 종료하면서 toast도 없애주기
                 bpToast.cancel();
-                System.out.println("토스트1 : "+ bpToast + " , 토스트2 : " + bpToast);
                 super.onBackPressed();
                 finish();
             }

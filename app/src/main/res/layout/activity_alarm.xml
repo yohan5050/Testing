@@ -27,8 +27,13 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:gravity="center"
+        android:shadowColor="#FF464646"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="2.0"
         android:text=""
-        android:textSize = "30dp"
+        android:textSize = "40dp"
+        android:textStyle="bold"
         android:layout_centerVertical="true" />
 
     <LinearLayout
@@ -68,6 +73,10 @@
         android:gravity="center_horizontal"
         android:text="녹음내용을 들으시려면\n재생버튼을 눌러주세요"
         android:textSize="20dp"
+        android:shadowColor="#FF464646"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="2.0"
         android:layout_marginBottom="20dp"/>
 
 </RelativeLayout>

@@ -23,10 +23,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
-        android:layout_margin="10dp"
         android:gravity="center"
+        android:shadowColor="#FF464646"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="2.0"
         android:text="녹음을 시작하시려면\n아래 버튼을 누르세요"
-        android:textSize = "40dp" />
+        android:textSize = "40dp"
+        android:textStyle="bold"/>
 
     <LinearLayout
         android:id="@+id/linear"

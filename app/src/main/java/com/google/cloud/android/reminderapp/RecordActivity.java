@@ -10,7 +10,10 @@ import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tsengvn.typekit.TypekitContextWrapper;
@@ -25,6 +28,7 @@ public class RecordActivity extends AppCompatActivity {
     public static CountDownTimer timer; //AlarmSoundService에서 사용
     TextView mText;
     ImageButton stopBtn, recStartBtn, homeBtn;
+    ImageView recordImage;
     int value;
     String fileName;
     boolean isRecStartButtonClicked = false;
@@ -33,6 +37,8 @@ public class RecordActivity extends AppCompatActivity {
 
     TimeAnalysis timeAnalysis;
     ContentAnalysis contentAnalysis;
+
+    Animation anim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,17 +51,22 @@ public class RecordActivity extends AppCompatActivity {
         recStartBtn = (ImageButton) findViewById(R.id.rec_start_btn);
         homeBtn = (ImageButton) findViewById(R.id.home);
         mText = (TextView) findViewById(R.id.text);
+        recordImage = (ImageView) findViewById(R.id.recordImage);
 
         timeAnalysis = new TimeAnalysis();
         contentAnalysis = new ContentAnalysis();
 
         isRecStartButtonClicked = false;
 
+        //녹음 중일시
+        anim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.scale);
+
         //timer - 시간 제한 7초.
         value = 0;
         timer = new CountDownTimer(7000, 880) {
             @Override
             public void onTick(long millisUntilFinished) {
+                recordImage.startAnimation(anim);
                 mText.setText("녹음 중\n" + (7 - value) + "초 후 종료");
                 value++;
             }
@@ -67,6 +78,7 @@ public class RecordActivity extends AppCompatActivity {
                 if(Main2Activity.mVoiceRecorder.mIsRecording) {
                     stopVoiceRecorder();
                 }
+                recordImage.clearAnimation();
                 timer.cancel();
                 mText.setText("등록 중...");
                 stopBtn.setVisibility(View.GONE);
@@ -87,6 +99,7 @@ public class RecordActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (Main2Activity.mVoiceRecorder.isRecording()) {
                     stopVoiceRecorder();
+                    recordImage.clearAnimation();
                     timer.cancel();
                     mText.setText("등록 중...");
                     stopBtn.setVisibility(View.GONE);
@@ -124,6 +137,7 @@ public class RecordActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() { //back button을 누르면 알람이 종료되도록 한다.
         super.onBackPressed();
+        recordImage.clearAnimation();
         finish();
     }
 
