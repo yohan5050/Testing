@@ -27,7 +27,7 @@
         android:name=".CustomStartApp"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_scheme"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_gachon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Speech"
