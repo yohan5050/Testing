@@ -45,21 +45,30 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".Main2Activity">
+        <activity android:name=".Main2Activity"
+            android:screenOrientation ="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RecordActivity" />
-        <activity android:name=".RecFailActivity" />
-        <activity android:name=".RecNoTimeActivity" />
-        <activity android:name=".RecTimeActivity" />
-        <activity android:name=".PlayActivity" />
-        <activity android:name=".PlayInfoActivity" />
-        <activity android:name=".PlayListActivity" />
-        <activity android:name=".AlarmActivity" />
+        <activity android:name=".RecordActivity"
+            android:screenOrientation ="portrait"/>
+        <activity android:name=".RecFailActivity"
+            android:screenOrientation ="portrait"/>
+        <activity android:name=".RecNoTimeActivity"
+            android:screenOrientation ="portrait"/>
+        <activity android:name=".RecTimeActivity"
+            android:screenOrientation ="portrait"/>
+        <activity android:name=".PlayActivity"
+            android:screenOrientation ="portrait"/>
+        <activity android:name=".PlayInfoActivity"
+            android:screenOrientation ="portrait"/>
+        <activity android:name=".PlayListActivity"
+            android:screenOrientation ="portrait"/>
+        <activity android:name=".AlarmActivity"
+            android:screenOrientation ="portrait"/>
     </application>
 
 </manifest>
