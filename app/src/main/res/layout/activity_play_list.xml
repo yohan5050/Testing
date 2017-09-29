@@ -65,6 +65,7 @@ tools:context=".Main2Activity">
         android:layout_height="wrap_content"
         android:layout_below="@+id/homeBtn"
         android:layout_marginTop="5dp"
+        android:choiceMode="multipleChoice"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

@@ -187,13 +187,13 @@ public class TimeAnalysis {
         searchTarget = searchTarget.replaceAll("오일", "5일");
         searchTarget = searchTarget.replaceAll("넷이", "4시");
 
-        searchTarget = searchTarget.replaceAll("하루", "1");
-        searchTarget = searchTarget.replaceAll("이틀", "2");
-        searchTarget = searchTarget.replaceAll("사흘", "3");
-        searchTarget = searchTarget.replaceAll("나흘", "4");
-        searchTarget = searchTarget.replaceAll("닷새", "5");
-        searchTarget = searchTarget.replaceAll("엿새", "6");
-        searchTarget = searchTarget.replaceAll("이레", "7");
+//        searchTarget = searchTarget.replaceAll("하루", "1일");
+//        searchTarget = searchTarget.replaceAll("이틀", "2일");
+//        searchTarget = searchTarget.replaceAll("사흘", "3일");
+//        searchTarget = searchTarget.replaceAll("나흘", "4일");
+//        searchTarget = searchTarget.replaceAll("닷새", "5일");
+//        searchTarget = searchTarget.replaceAll("엿새", "6일");
+//        searchTarget = searchTarget.replaceAll("이레", "7일");
 
         searchTarget = searchTarget.replaceAll("반시간", "30분");
         searchTarget = searchTarget.replaceAll("자정", "오전0시");
@@ -209,7 +209,6 @@ public class TimeAnalysis {
         searchTarget = searchTarget.replaceAll("이다가", "있다가");
         searchTarget = searchTarget.replaceAll("이따", "있다가");
         searchTarget = searchTarget.replaceAll("있따", "있다가");
-
 
         searchTarget = searchTarget.replaceAll("일주", "1주");
         searchTarget = searchTarget.replaceAll("이주", "2주");
@@ -344,6 +343,10 @@ public class TimeAnalysis {
                 calMinute = 0;
             }
         }
+
+        //하루 이틀 사흘 나흘 닷새 엿새 이레의 표현이 있을 경우
+        regex = "[하루|이틀|사흘|나흘|닷새|닷세|엿새|엿세|이레|열흘|보름]+(후|뒤|있다가)";
+        extract103(searchTarget,regex);
 
         //오늘이라고 말할 경우
         regex = "(오늘)+";
@@ -968,6 +971,40 @@ public class TimeAnalysis {
             addTime(Integer.parseInt(temp[0].replaceAll(" ", "")), 0, 0);
         }
         return isExtracted;
+    }
+
+    public int extract103(String searchTarget, String regex) { //하루/이틀 뒤..
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(searchTarget);
+        int maxi = 0;
+        isNextDay = true;
+        String temp[] = new String[2];
+        while (matcher.find()) {
+            System.out.println("extract103");
+            String match = matcher.group(0);
+            String result = match;
+            //result 값을 바꿔주기
+            result = result.replaceAll("하루", "1일");
+            result = result.replaceAll("이틀", "2일");
+            result = result.replaceAll("사흘", "3일");
+            result = result.replaceAll("나흘", "4일");
+            result = result.replaceAll("닷새|닷세", "5일");
+            result = result.replaceAll("엿새|엿세", "6일");
+            result = result.replaceAll("이레|이래", "7일");
+            result = result.replaceAll("열흘", "10일");
+            result = result.replaceAll("보름", "15일");
+            temp = result.split("일");
+
+            int plusDay = Integer.parseInt(temp[0].replaceAll(" ", ""));
+            calDay = calDay + plusDay;
+            int day_num = days[curMonth];
+            calMonth += calDay == day_num ? 0 : calDay / day_num;
+            calDay = calDay % day_num == 0 ? day_num : calDay % day_num;
+            calYear += calMonth / 12;
+            calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
+
+        }
+        return 1;
     }
 
     /**
