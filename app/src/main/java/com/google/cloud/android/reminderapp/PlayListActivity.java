@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.media.Image;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.CalendarContract;
@@ -13,10 +14,12 @@ import android.support.annotation.ColorRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -42,10 +45,15 @@ public class PlayListActivity extends AppCompatActivity {
 
     //listing
     ListView listView;
-//    TextView textView;
+    //    TextView textView;
     PlaylistAdapter adapter;
-//    ImageButton imageButton;
+    //    ImageButton imageButton;
     ImageButton homeBtn;
+
+    //삭제하는 버튼들
+    ImageButton deleteBtn;
+    Button deletefinalBtn;
+    Button allSeleteBtn;
 
     int tempPos = -1, tempPos2 = -1;
     boolean nowStarted = false;
@@ -55,6 +63,13 @@ public class PlayListActivity extends AppCompatActivity {
     int playingPos = -1;
     public static Handler phandler; // 재생중인 리스트 처리 핸들러
 
+    //삭제하기 상태들
+    boolean deleteState = false;
+    boolean deleteFinalState = false;
+    boolean allSeleteState = false;
+
+    PlaylistView viewArr[] = new PlaylistView[100]; //list의 각 아이템들의 view값을 담고 있다.
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +78,9 @@ public class PlayListActivity extends AppCompatActivity {
         PLactivity = this; //재생이 모두 끝나면 list화면도 같이 종료하는 데에 사용됨.
 //        imageButton = (ImageButton) findViewById(R.id.imageButton);
         homeBtn = (ImageButton) findViewById(R.id.homeBtn);
+        deleteBtn = (ImageButton) findViewById(R.id.deleteBtn);
+        deletefinalBtn = (Button) findViewById(R.id.deletefinalBtn);
+        allSeleteBtn = (Button) findViewById(R.id.allSeleteBtn);
         listView = (ListView) findViewById(R.id.listView);
 //        textView = (TextView) findViewById(R.id.text);
 //        textView.setMovementMethod(new ScrollingMovementMethod());
@@ -82,9 +100,9 @@ public class PlayListActivity extends AppCompatActivity {
                 if (Main2Activity.mVoicePlayer.isPlaying()) {
                     int position = (int) msg.obj;
                     tempPos2 = position;
-                    if(nowStarted) { //list버튼을 눌러 처음 list화면이 뜰 때,
-                        if(tempPos2 > 4)
-                            listView.setSelection(tempPos2-4); //하이라이트 된 부분이 가운데로 오는 위치(-4)로 이동해주기(처음에만...! 찾기 편하도록!)
+                    if (nowStarted) { //list버튼을 눌러 처음 list화면이 뜰 때,
+                        if (tempPos2 > 4)
+                            listView.setSelection(tempPos2 - 4); //하이라이트 된 부분이 가운데로 오는 위치(-4)로 이동해주기(처음에만...! 찾기 편하도록!)
                         nowStarted = false;
                     }
 
@@ -95,14 +113,12 @@ public class PlayListActivity extends AppCompatActivity {
                         String[] contentNameArr = db.getAllContent();
                         int cnt = contentNameArr.length;
 //                        textView.setText(contentNameArr[cnt -1 - position].replaceAll(" ", ""));
-                    }
-                    else {
+                    } else {
                         return;
                     }
 
                     adapter.notifyDataSetChanged(); //adapter 내용 변경 - 리스트뷰 갱신 ***
-                }
-                else { //한 파일의 재생이 끝났다면
+                } else { //한 파일의 재생이 끝났다면
 //                    imageButton.setImageResource(R.drawable.play_btn2);
                 }
             }
@@ -123,10 +139,62 @@ public class PlayListActivity extends AppCompatActivity {
 //        });
         homeBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if(PlayActivity.Pactivity != null) {
+                if (PlayActivity.Pactivity != null) {
                     PlayActivity.Pactivity.finish();
                 }
                 finish();
+            }
+        });
+
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                //휴지통 버튼을 누를시, 전체 삭제와, 삭제하기 버튼이 등장
+                // 처음엔 숨긴다.
+                if (deletefinalBtn.getVisibility() == View.VISIBLE) {
+                    deletefinalBtn.setVisibility(View.GONE);
+                    allSeleteBtn.setVisibility(View.GONE);
+
+                } else {
+                    deletefinalBtn.setVisibility(View.VISIBLE);
+                    allSeleteBtn.setVisibility(View.VISIBLE);
+                }
+
+                //휴지통 버튼이 눌렸는지 상태를 체크
+                deleteState = !deleteState;
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        //마지막 삭제 작업
+        deletefinalBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                for (int i = 0; i < db.getAllPlayListNum(); i++) {
+                    Log.d("여기도냐", viewArr[i].getTitle() + " " + viewArr[i].getIsChecked());
+                }
+            }
+        });
+
+        //전체 선택 작업
+        allSeleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //전체 선택을 누를 경우 전체 선택 취소기능 구현
+                //전체 선택 취소 누를 경우 전체선택 기능 구현
+                allSeleteState = !allSeleteState;
+
+                if (allSeleteState) {
+                    allSeleteBtn.setText("전체 선택 취소하기");
+                    for (int i = 0; i < db.getAllPlayListNum(); i++) {
+                        viewArr[i].checkbox.setChecked(true);
+                    }
+                } else {
+                    allSeleteBtn.setText("전체 선택하기");
+                    for (int i = 0; i < db.getAllPlayListNum(); i++) {
+                        viewArr[i].checkbox.setChecked(false);
+                    }
+                }
             }
         });
 
@@ -167,7 +235,7 @@ public class PlayListActivity extends AppCompatActivity {
 //            imageButton.setImageResource(R.drawable.play_btn2);
 //        }
 
-        if(!isAfterOnPause && !Main2Activity.mVoicePlayer.mIsPlaying) { //재생 중지 상태의 playActivity에서 넘어왔을 경우
+        if (!isAfterOnPause && !Main2Activity.mVoicePlayer.mIsPlaying) { //재생 중지 상태의 playActivity에서 넘어왔을 경우
             String[] contentNameArr = db.getAllContent();
             int playCount = db.getAllPlayListNum();
             Intent intent = getIntent();
@@ -176,9 +244,8 @@ public class PlayListActivity extends AppCompatActivity {
             tempPos2 = playCount - playingPos - 1;
             //textView에 내용 출력
 //            textView.setText(contentNameArr[playingPos].replaceAll(" ", ""));
-        }
-        else { //추가했음... 재생 화면에서 재생 중에 리스트로 넘어올 경우, playingPos가 초기화가 안 되길래 여기서 초기화 함.
-            System.out.println("list tempPos2 왔어 : "+ tempPos2);
+        } else { //추가했음... 재생 화면에서 재생 중에 리스트로 넘어올 경우, playingPos가 초기화가 안 되길래 여기서 초기화 함.
+            System.out.println("list tempPos2 왔어 : " + tempPos2);
             Intent intent = getIntent();
             playingPos = intent.getIntExtra("playingpos", 0);
         }
@@ -189,8 +256,8 @@ public class PlayListActivity extends AppCompatActivity {
 
         //onPause상태에 있었다가 onStart된다면 -> 홈버튼을 눌러서 onPause가 되었다가 다시 실행시킨 경우.
         //backButton이나, 리스트의 파일을 선택하는 경우는 finish()되므로, 이 경우는 홈버튼을 눌렀다가 다시 실행한 경우이다.
-        if(isAfterOnPause) {
-            if(wasPlaying) { //onPause전에 재생 중이었다면
+        if (isAfterOnPause) {
+            if (wasPlaying) { //onPause전에 재생 중이었다면
                 Main2Activity.mVoicePlayer.startPlaying(SampleRate, BufferSize, playingPos + 1);
             }
             isAfterOnPause = false;
@@ -201,16 +268,15 @@ public class PlayListActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         System.out.println("백버튼 누르면 여기로 오나"); //finish()를 해도 이쪽으로 오는듯
-        if(!isBackPressed) { //back button을 누른 경우는 제외. - back button을 누른 경우는 계속 진행되도록 할 것임
+        if (!isBackPressed) { //back button을 누른 경우는 제외. - back button을 누른 경우는 계속 진행되도록 할 것임
             playingPos = Main2Activity.mVoicePlayer.stopPlaying();
 
             //onPause상태에 들어왔다는 것을 체크
             isAfterOnPause = true;
-            if(Main2Activity.mVoicePlayer.mIsPlaying) {
+            if (Main2Activity.mVoicePlayer.mIsPlaying) {
                 wasPlaying = true; //재생 중에 onPause가 됐다면 다시 복귀할 때도 재생할 수 있도록 체크해놓는다.
 //                playingPos = Main2Activity.mVoicePlayer.stopPlaying();
-            }
-            else {
+            } else {
                 wasPlaying = false;
             }
         }
@@ -260,8 +326,8 @@ public class PlayListActivity extends AppCompatActivity {
             //현재 시간과 알람 시간을 비교해서 종료된 알람과 앞으로 예정된 알람을 색깔로 구분하자.
             String strColor = new String();
             strColor = "#18392b";
-            if(!alarmTimeArr[i].equals("일반 메모")) { //알람 시간이 존재한다면
-                System.out.println("알람 시간 포멧 : " +  alarmTimeArr[i]);
+            if (!alarmTimeArr[i].equals("일반 메모")) { //알람 시간이 존재한다면
+                System.out.println("알람 시간 포멧 : " + alarmTimeArr[i]);
                 //참조 : https://okky.kr/article/183785
                 String words[] = alarmTimeArr[i].split(":");
                 String date = "20" + words[0] + "-";
@@ -276,20 +342,19 @@ public class PlayListActivity extends AppCompatActivity {
                     Date aDate = simpleDateFormat.parse(date);
                     long aMillis = aDate.getTime(); //alarm time
                     long cMillis = System.currentTimeMillis();//current time
-                    if(aMillis > cMillis) { //미래의 알람
+                    if (aMillis > cMillis) { //미래의 알람
                         System.out.println("여기 미래의 알람");
                         strColor = "#FF0000";
                     }
-                } catch(ParseException e) {
+                } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
 
             if (contentNameArr[i].equals("")) {
                 adapter.addItem(new Playlist((i + 1) + ". " + "내용 없음", timeFormatFunc(alarmTimeArr[i]), R.drawable.alarm, strColor));
-            }
-            else {
-                if(alarmTimeArr[i].equals("일반 메모"))
+            } else {
+                if (alarmTimeArr[i].equals("일반 메모"))
                     adapter.addItem(new Playlist((i + 1) + ". " + contentTime(contentNameArr[i], 11), "알람정보 없음", R.drawable.memo, strColor));
                 else
                     adapter.addItem(new Playlist((i + 1) + ". " + contentTime(contentNameArr[i], 7), timeFormatFunc(alarmTimeArr[i]), R.drawable.alarm, strColor));
@@ -326,7 +391,7 @@ public class PlayListActivity extends AppCompatActivity {
             Playlist item = items.get(position);
 
             view.setContent(item.getContent());
-            if(!(item.getAlarmTime()).equals("알람정보 없음")) { //알람시간이 있는 경우에만
+            if (!(item.getAlarmTime()).equals("알람정보 없음")) { //알람시간이 있는 경우에만
                 view.setAlarmTime(item.getAlarmTime());
                 view.setImage(item.getResId());
                 view.setAlarmTimeColor(item.getStrColor());
@@ -338,6 +403,20 @@ public class PlayListActivity extends AppCompatActivity {
             } else {
                 view.textView.setBackgroundColor(Color.WHITE);
             }
+
+            //휴지통 버튼을 누를시 true값이 되고, 체크 박스가 등장
+            if (deleteState == true) {
+                Log.d("Tag", "deleteState" + deleteState + position);
+                view.setVisible();
+
+                //휴지통 버튼을 다시 누르면 체크 박스 사라짐
+            } else if (deleteState == false) {
+                deleteFinalState = false;
+                view.setGone();
+            }
+
+            //모든 리스트들의 view를 arr로 저장한다.
+            viewArr[position] = view;
 
             return view;
         }
@@ -353,7 +432,7 @@ public class PlayListActivity extends AppCompatActivity {
     public String timeFormatFunc(String rawTime) {
         String words[] = rawTime.split(":");
 
-        if(words[0].equals("일반 메모"))
+        if (words[0].equals("일반 메모"))
             return rawTime;
         else {
             words[1] = Integer.parseInt(words[1]) < 10 ? "0" + words[1] : words[1];
