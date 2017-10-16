@@ -11,6 +11,7 @@ public class Playlist {
     String alarmTime;
     int resId;
     String strColor;
+    boolean isCheckedState = false;
 
     public Playlist(String content, String alarmTime, int resId, String strColor) {
         this.content = content;
@@ -50,4 +51,9 @@ public class Playlist {
     public void setStrColor(String strColor) {
         this.strColor = strColor;
     }
+
+    public void setCheckedState() {this.isCheckedState = true;}
+
+    public void setUnCheckedState() {this.isCheckedState = false;}
+
 }

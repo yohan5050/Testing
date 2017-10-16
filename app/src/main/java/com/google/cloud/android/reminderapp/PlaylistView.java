@@ -57,8 +57,23 @@ public class PlaylistView extends LinearLayout {
         checkbox.setVisibility(View.GONE);
     }
 
+    public void setChecked()
+    {
+        checkState = true;
+    }
+
+    public void setUnChecked()
+    {
+        checkState = false;
+    }
+
     public boolean getIsChecked() {
         return checkbox.isChecked();
+    }
+
+    public boolean getChecked()
+    {
+        return checkState;
     }
 
     public String getTitle()

@@ -80,7 +80,7 @@ public class PlayListActivity extends AppCompatActivity {
     ArrayList<Integer> deleteList;
 
     //리스트 뷰의 속성들을 저장
-    PlaylistView viewArr[]; //list의 각 아이템들의 view값을 담고 있다.
+    PlaylistView viewArr[] = viewArr = new PlaylistView[100]; //list의 각 아이템들의 view값을 담고 있다.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,14 +205,14 @@ public class PlayListActivity extends AppCompatActivity {
                     if (viewArr[i].getIsChecked() == true) {
                         deleteList.add(count - i - 1);
                     }
-                    //Log.d("여기도냐", viewArr[i].getTitle() + " " + viewArr[i].getIsChecked());
+                    Log.d("여기도냐", viewArr[i].getTitle() + " " + viewArr[i].getIsChecked());
                 }
 
                 //최종 삭제 버튼을 클릭했다는 걸 표시
                 delBtnClicked = true;
 
                 //현재 재생중이었다면 중지
-                if(Main2Activity.mVoicePlayer.mIsPlaying)
+                if (Main2Activity.mVoicePlayer.mIsPlaying)
                     Main2Activity.mVoicePlayer.stopPlaying();
 
                 //참조1 : http://mainia.tistory.com/2017
@@ -232,9 +232,19 @@ public class PlayListActivity extends AppCompatActivity {
                                     public void onClick(DialogInterface dialog, int id) {
                                         delBtnClicked = false;
                                         //해당파일을 삭제한다.
-                                        for(int i = 0; i < deleteList.size(); i++) {
+                                        for (int i = 0; i < deleteList.size(); i++) {
                                             delFunction(deleteList.get(i));
+                                            Log.d("어때", i + " " + deleteList.get(i));
                                         }
+
+                                        int cnt = db.getAllPlayListNum();
+                                        if (cnt == 0) { //파일이 없으면 끝낸다.
+                                            if (PlayActivity.Pactivity != null) {
+                                                PlayActivity.Pactivity.finish();
+                                            }
+                                            finish();
+                                        }
+
                                         deleteBtn.callOnClick();
                                         onStart();
 //                                        //다시 재생 시작
@@ -283,15 +293,24 @@ public class PlayListActivity extends AppCompatActivity {
                 //전체 선택 취소 누를 경우 전체선택 기능 구현
                 allSeleteState = !allSeleteState;
 
+                Log.d("어때", db.getAllPlayListNum() + " " + viewArr.length);
+
                 if (allSeleteState) {
                     allSeleteBtn.setText("전체 선택 취소하기");
                     for (int i = 0; i < db.getAllPlayListNum(); i++) {
-                        viewArr[i].checkbox.setChecked(true);
+                        System.out.println("전체 선택" + i);
+                        if (viewArr[i].checkbox.isChecked() == false) {
+                            viewArr[i].checkbox.callOnClick();
+                        }
+                        adapter.notifyDataSetChanged(); //adapter 내용 변경 - 리스트뷰 갱신 ***
                     }
                 } else {
                     allSeleteBtn.setText("전체 선택하기");
                     for (int i = 0; i < db.getAllPlayListNum(); i++) {
-                        viewArr[i].checkbox.setChecked(false);
+                        if (viewArr[i].checkbox.isChecked() == true) {
+                            viewArr[i].checkbox.callOnClick();
+                        }
+                        adapter.notifyDataSetChanged(); //adapter 내용 변경 - 리스트뷰 갱신 ***
                     }
                 }
             }
@@ -355,6 +374,7 @@ public class PlayListActivity extends AppCompatActivity {
 
         makeList2();
         listView.setAdapter(adapter);
+        listView.setSelection(db.getAllPlayListNum() - 1);
         nowStarted = true;
 
         //onPause상태에 있었다가 onStart된다면 -> 홈버튼을 눌러서 onPause가 되었다가 다시 실행시킨 경우.
@@ -412,7 +432,6 @@ public class PlayListActivity extends AppCompatActivity {
      */
     public void makeList2() {
         adapter = new PlaylistAdapter();
-        viewArr = new PlaylistView[100];
         count = db.getAllPlayListNum();
         ContentAnalysis contentAnalysis = new ContentAnalysis();
 
@@ -492,6 +511,7 @@ public class PlayListActivity extends AppCompatActivity {
         public View getView(int position, View convertView, ViewGroup viewGroup) {
             PlaylistView view = new PlaylistView(getApplicationContext());
             Playlist item = items.get(position);
+            final int position2 = position;
 
             view.setContent(item.getContent());
             if (!(item.getAlarmTime()).equals("알람정보 없음")) { //알람시간이 있는 경우에만
@@ -518,7 +538,23 @@ public class PlayListActivity extends AppCompatActivity {
                 view.setGone();
             }
 
+            view.checkbox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (items.get(position2).isCheckedState == false) {
+                        items.get(position2).setCheckedState();
+                    } else
+                        items.get(position2).setUnCheckedState();
+                }
+            });
+
+            if (items.get(position2).isCheckedState == true) {
+                view.checkbox.setChecked(true);
+            } else
+                view.checkbox.setChecked(false);
+
             //모든 리스트들의 view를 arr로 저장한다.
+            System.out.println("position: " + position);
             viewArr[position] = view;
 
             return view;
@@ -572,7 +608,7 @@ public class PlayListActivity extends AppCompatActivity {
         SharedPreferences tempPref = getSharedPreferences("piPref", MODE_PRIVATE);
         int rCode = tempPref.getInt(fileNameArr[deletePos], -1); //fileNameArr[playingPos]에 해당하는 값이 없으면 -1을 받아온다.
         System.out.println("알람삭제 : " + rCode);
-        if(rCode != -1) {
+        if (rCode != -1) {
             AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent("com.google.cloud.android.reminderapp.ALARM_START");
             PendingIntent sender = PendingIntent.getBroadcast(getApplicationContext(), rCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -583,10 +619,5 @@ public class PlayListActivity extends AppCompatActivity {
         }
 
         Toast.makeText(this, "삭제 완료", Toast.LENGTH_SHORT).show();
-
-        int cnt = db.getAllPlayListNum();
-        if(cnt == 0) { //파일이 없으면 끝낸다.
-            finish();
-        }
     }
 }
