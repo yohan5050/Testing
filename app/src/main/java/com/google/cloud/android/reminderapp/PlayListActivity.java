@@ -302,7 +302,6 @@ public class PlayListActivity extends AppCompatActivity {
                         if (viewArr[i].checkbox.isChecked() == false) {
                             viewArr[i].checkbox.callOnClick();
                         }
-                        adapter.notifyDataSetChanged(); //adapter 내용 변경 - 리스트뷰 갱신 ***
                     }
                 } else {
                     allSeleteBtn.setText("전체 선택하기");
@@ -310,9 +309,9 @@ public class PlayListActivity extends AppCompatActivity {
                         if (viewArr[i].checkbox.isChecked() == true) {
                             viewArr[i].checkbox.callOnClick();
                         }
-                        adapter.notifyDataSetChanged(); //adapter 내용 변경 - 리스트뷰 갱신 ***
                     }
                 }
+                adapter.notifyDataSetChanged(); //adapter 내용 변경 - 리스트뷰 갱신 ***
             }
         });
 
