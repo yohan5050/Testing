@@ -1,8 +1,12 @@
 package com.google.cloud.android.reminderapp;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -11,6 +15,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.CalendarContract;
 import android.support.annotation.ColorRes;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -45,9 +50,7 @@ public class PlayListActivity extends AppCompatActivity {
 
     //listing
     ListView listView;
-    //    TextView textView;
     PlaylistAdapter adapter;
-    //    ImageButton imageButton;
     ImageButton homeBtn;
 
     //삭제하는 버튼들
@@ -55,11 +58,18 @@ public class PlayListActivity extends AppCompatActivity {
     Button deletefinalBtn;
     Button allSeleteBtn;
 
+    //삭제 다이얼로그
+    boolean delBtnClicked = false;
+    AlertDialog alertDialog;
+
+    int count;
+
     int tempPos = -1, tempPos2 = -1;
     boolean nowStarted = false;
     boolean isAfterOnPause = false; //onPause 상태였다가 onStart하는 것인지 아닌지 체크하기 위함.
     boolean isBackPressed = false;
     boolean wasPlaying = false; //onPause전에 재생 중이었는지 아닌지 체크
+
     int playingPos = -1;
     public static Handler phandler; // 재생중인 리스트 처리 핸들러
 
@@ -67,8 +77,10 @@ public class PlayListActivity extends AppCompatActivity {
     boolean deleteState = false;
     boolean deleteFinalState = false;
     boolean allSeleteState = false;
+    ArrayList<Integer> deleteList;
 
-    PlaylistView viewArr[] = new PlaylistView[100]; //list의 각 아이템들의 view값을 담고 있다.
+    //리스트 뷰의 속성들을 저장
+    PlaylistView viewArr[]; //list의 각 아이템들의 view값을 담고 있다.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,14 +89,23 @@ public class PlayListActivity extends AppCompatActivity {
 
         PLactivity = this; //재생이 모두 끝나면 list화면도 같이 종료하는 데에 사용됨.
 //        imageButton = (ImageButton) findViewById(R.id.imageButton);
+
         homeBtn = (ImageButton) findViewById(R.id.homeBtn);
         deleteBtn = (ImageButton) findViewById(R.id.deleteBtn);
         deletefinalBtn = (Button) findViewById(R.id.deletefinalBtn);
         allSeleteBtn = (Button) findViewById(R.id.allSeleteBtn);
         listView = (ListView) findViewById(R.id.listView);
+
 //        textView = (TextView) findViewById(R.id.text);
 //        textView.setMovementMethod(new ScrollingMovementMethod());
+
+
         db = Main2Activity.getDBInstance();
+        count = db.getAllPlayListNum();
+
+//        test = new String[count];
+//        test = db.getAllContent();
+
 
 //        //재생 중인지 아닌지에 따라 재생/중지 버튼 표시 -> onStart()에서 해주는 걸로...
 //        if(Main2Activity.mVoicePlayer.mIsPlaying) {
@@ -137,6 +158,8 @@ public class PlayListActivity extends AppCompatActivity {
 //                }
 //            }
 //        });
+
+        //홈버튼
         homeBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (PlayActivity.Pactivity != null) {
@@ -146,9 +169,9 @@ public class PlayListActivity extends AppCompatActivity {
             }
         });
 
+        //휴지통 버튼 누를시
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 //휴지통 버튼을 누를시, 전체 삭제와, 삭제하기 버튼이 등장
                 // 처음엔 숨긴다.
                 if (deletefinalBtn.getVisibility() == View.VISIBLE) {
@@ -162,6 +185,11 @@ public class PlayListActivity extends AppCompatActivity {
 
                 //휴지통 버튼이 눌렸는지 상태를 체크
                 deleteState = !deleteState;
+
+                //모두 선택을 초기화
+                allSeleteState = false;
+
+                //새로 갱신
                 adapter.notifyDataSetChanged();
             }
         });
@@ -169,9 +197,79 @@ public class PlayListActivity extends AppCompatActivity {
         //마지막 삭제 작업
         deletefinalBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                //딜리트할 리스트를 넣어준다.
+                deleteList = new ArrayList<Integer>();
+
                 for (int i = 0; i < db.getAllPlayListNum(); i++) {
-                    Log.d("여기도냐", viewArr[i].getTitle() + " " + viewArr[i].getIsChecked());
+
+                    if (viewArr[i].getIsChecked() == true) {
+                        deleteList.add(count - i - 1);
+                    }
+                    //Log.d("여기도냐", viewArr[i].getTitle() + " " + viewArr[i].getIsChecked());
                 }
+
+                //최종 삭제 버튼을 클릭했다는 걸 표시
+                delBtnClicked = true;
+
+                //현재 재생중이었다면 중지
+                if(Main2Activity.mVoicePlayer.mIsPlaying)
+                    Main2Activity.mVoicePlayer.stopPlaying();
+
+                //참조1 : http://mainia.tistory.com/2017
+                //참조2 : http://pluu.github.io/blog/rxjava/2017/02/04/android-alertdialog/
+
+                //다이얼 로그 실행
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PlayListActivity.this);
+
+                // AlertDialog setting
+                alertDialogBuilder
+                        .setTitle("삭제하기")
+                        .setMessage("현재 선택한 파일을 모두 삭제하시겠습니까?")
+                        .setIcon(R.drawable.del_btn)
+                        .setCancelable(false)
+                        .setPositiveButton("예",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        delBtnClicked = false;
+                                        //해당파일을 삭제한다.
+                                        for(int i = 0; i < deleteList.size(); i++) {
+                                            delFunction(deleteList.get(i));
+                                        }
+                                        deleteBtn.callOnClick();
+                                        onStart();
+//                                        //다시 재생 시작
+//                                        onPause();
+//                                        onResume();
+                                    }
+                                })
+                        .setNegativeButton("아니요",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        delBtnClicked = false;
+                                        //dialog를 취소
+                                        dialog.cancel();
+//                                        //다시 재생 시작
+//                                        onPause();
+//                                        onResume();
+                                        onStart();
+                                        deleteBtn.callOnClick();
+                                    }
+                                });
+
+                // Dialog 생성
+                alertDialog = alertDialogBuilder.create();
+
+                // show Dialog
+                alertDialog.show();
+
+                // 메시지 택스트의 크기 와 가운데 정렬한다.
+                TextView textView = (TextView) alertDialog.findViewById(android.R.id.message);
+                textView.setTextSize(20.0f);
+                textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                Button cancelBtn = (Button) alertDialog.findViewById(android.R.id.button1);
+                Button okBtn = (Button) alertDialog.findViewById(android.R.id.button2);
+                cancelBtn.setTextSize(17.0f);
+                okBtn.setTextSize(17.0f);
             }
         });
 
@@ -227,6 +325,10 @@ public class PlayListActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        deleteState = false;
+        deleteFinalState = false;
+        allSeleteState = false;
+
         //재생 중인지 아닌지에 따라 재생/중지 버튼 표시
 //        if(Main2Activity.mVoicePlayer.mIsPlaying) {
 //            imageButton.setImageResource(R.drawable.stop_btn2);
@@ -280,7 +382,6 @@ public class PlayListActivity extends AppCompatActivity {
                 wasPlaying = false;
             }
         }
-
         isBackPressed = false;
     }
 
@@ -302,7 +403,6 @@ public class PlayListActivity extends AppCompatActivity {
 //        intent.putExtra("playcount", -100);
 //        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //PlayActivity위의 activity 모두 삭제
 //        startActivity(intent);
-
         finish();
     }
 
@@ -311,6 +411,8 @@ public class PlayListActivity extends AppCompatActivity {
      */
     public void makeList2() {
         adapter = new PlaylistAdapter();
+        viewArr = new PlaylistView[100];
+        count = db.getAllPlayListNum();
         ContentAnalysis contentAnalysis = new ContentAnalysis();
 
         String[] contentNameArr = db.getAllContent();
@@ -452,5 +554,38 @@ public class PlayListActivity extends AppCompatActivity {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
+    }
+
+    public void delFunction(int deletePos) {
+        String fileNameArr[] = db.getAllFileName();
+        String alarmTimeArr[] = db.getAllAlarmTime();
+
+        //db에서 파일이름 삭제
+        db.delete(fileNameArr[deletePos]);
+
+        //내부 저장소의 음성파일 삭제
+        Context context = getApplicationContext();
+        context.deleteFile(fileNameArr[deletePos]);
+
+        //파일 이름에 해당하는 알람이 있으면 취소////////////////////////////////////////////
+        SharedPreferences tempPref = getSharedPreferences("piPref", MODE_PRIVATE);
+        int rCode = tempPref.getInt(fileNameArr[deletePos], -1); //fileNameArr[playingPos]에 해당하는 값이 없으면 -1을 받아온다.
+        System.out.println("알람삭제 : " + rCode);
+        if(rCode != -1) {
+            AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent("com.google.cloud.android.reminderapp.ALARM_START");
+            PendingIntent sender = PendingIntent.getBroadcast(getApplicationContext(), rCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            if (sender != null) {
+                am.cancel(sender);
+                sender.cancel();
+            }
+        }
+
+        Toast.makeText(this, "삭제 완료", Toast.LENGTH_SHORT).show();
+
+        int cnt = db.getAllPlayListNum();
+        if(cnt == 0) { //파일이 없으면 끝낸다.
+            finish();
+        }
     }
 }
