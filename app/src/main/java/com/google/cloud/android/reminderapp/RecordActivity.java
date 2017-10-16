@@ -27,11 +27,12 @@ public class RecordActivity extends AppCompatActivity {
     DataBase db;
     public static CountDownTimer timer; //AlarmSoundService에서 사용
     TextView mText;
-    ImageButton stopBtn, recStartBtn, homeBtn;
+//    ImageButton stopBtn, homeBtn;
+    ImageButton stopBtn;
     ImageView recordImage;
     int value;
     String fileName;
-    boolean isRecStartButtonClicked = false;
+    //boolean isRecStartButtonClicked = false;
 
     private SpeechService mSpeechService;
 
@@ -48,15 +49,15 @@ public class RecordActivity extends AppCompatActivity {
         RActivity = this;
         db = Main2Activity.getDBInstance();
         stopBtn = (ImageButton) findViewById(R.id.stop_btn);
-        recStartBtn = (ImageButton) findViewById(R.id.rec_start_btn);
-        homeBtn = (ImageButton) findViewById(R.id.home);
+//        recStartBtn = (ImageButton) findViewById(R.id.rec_start_btn);
+//        homeBtn = (ImageButton) findViewById(R.id.home);
         mText = (TextView) findViewById(R.id.text);
         recordImage = (ImageView) findViewById(R.id.recordImage);
 
         timeAnalysis = new TimeAnalysis();
         contentAnalysis = new ContentAnalysis();
 
-        isRecStartButtonClicked = false;
+       // isRecStartButtonClicked = false;
 
         //녹음 중일시
         anim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.scale);
@@ -81,19 +82,20 @@ public class RecordActivity extends AppCompatActivity {
                 recordImage.clearAnimation();
                 timer.cancel();
                 mText.setText("등록 중...");
-                stopBtn.setVisibility(View.GONE);
-                homeBtn.setVisibility(View.VISIBLE);
+                stopBtn.setEnabled(false);
+//                stopBtn.setVisibility(View.GONE);
+//                homeBtn.setVisibility(View.VISIBLE);
             }
         };
 
-        recStartBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                isRecStartButtonClicked = true;
-                recStartBtn.setVisibility(View.GONE);
-                stopBtn.setVisibility(View.VISIBLE);
-                onStart();
-            }
-        });
+//        recStartBtn.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                isRecStartButtonClicked = true;
+//                recStartBtn.setVisibility(View.GONE);
+//                stopBtn.setVisibility(View.VISIBLE);
+//                onStart();
+//            }
+//        });
 
         stopBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -102,17 +104,18 @@ public class RecordActivity extends AppCompatActivity {
                     recordImage.clearAnimation();
                     timer.cancel();
                     mText.setText("등록 중...");
-                    stopBtn.setVisibility(View.GONE);
-                    homeBtn.setVisibility(View.VISIBLE);
+                    stopBtn.setEnabled(false);
+//                    stopBtn.setVisibility(View.GONE);
+//                    homeBtn.setVisibility(View.VISIBLE);
                 }
             }
         });
 
-        homeBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+//        homeBtn.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                onBackPressed();
+//            }
+//        });
     }
 
     @Override
@@ -120,7 +123,7 @@ public class RecordActivity extends AppCompatActivity {
         super.onStart();
         //녹음 시작 버튼을 누르지 않았으면 시작하지 않는다.
         //녹음 시작 버튼을 눌러야 녹음을 시작한다.
-        if(!isRecStartButtonClicked) return;
+        //if(!isRecStartButtonClicked) return;
 
         // Prepare Cloud Speech API
         bindService(new Intent(this, SpeechService.class), mServiceConnection, BIND_AUTO_CREATE);

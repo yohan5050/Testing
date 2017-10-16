@@ -28,7 +28,7 @@
         android:shadowDx="2"
         android:shadowDy="2"
         android:shadowRadius="2.0"
-        android:text="녹음을 시작하시려면\n아래 버튼을 누르세요"
+        android:text="녹음중"
         android:textSize = "40dp"
         android:textStyle="bold"/>
 
@@ -40,14 +40,14 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="99dp">
 
-        <ImageButton
-            android:id="@+id/rec_start_btn"
-            android:layout_width="93dp"
-            android:layout_height="93dp"
-            android:background="#00000000"
-            android:gravity="center"
-            android:scaleType="fitXY"
-            android:src="@drawable/rec_start_btn2" />
+        <!--<ImageButton-->
+            <!--android:id="@+id/rec_start_btn"-->
+            <!--android:layout_width="93dp"-->
+            <!--android:layout_height="93dp"-->
+            <!--android:background="#00000000"-->
+            <!--android:gravity="center"-->
+            <!--android:scaleType="fitXY"-->
+            <!--android:src="@drawable/rec_start_btn2" />-->
 
         <ImageButton
             android:id="@+id/stop_btn"
@@ -56,8 +56,7 @@
             android:background="#00000000"
             android:gravity="center"
             android:scaleType="fitXY"
-            android:src="@drawable/stop_btn"
-            android:visibility="gone" />
+            android:src="@drawable/stop_btn" />
 
         <ImageButton
             android:id="@+id/home"
