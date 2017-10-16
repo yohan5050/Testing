@@ -251,8 +251,9 @@ public class PlayListActivity extends AppCompatActivity {
 //                                        //다시 재생 시작
 //                                        onPause();
 //                                        onResume();
-                                        onStart();
                                         deleteBtn.callOnClick();
+                                        onStart();
+
                                     }
                                 });
 
@@ -388,14 +389,14 @@ public class PlayListActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //super.onBackPressed() 전에 setResult()를 해줘야 resultCode가 전달됨!!
-        Intent intent = new Intent();
-        intent.putExtra("key", playingPos);
-        setResult(-100, intent);
-
-        System.out.println("여기에는 onback!!");
-
-        isBackPressed = true;
-        super.onBackPressed();
+//        Intent intent = new Intent();
+//        intent.putExtra("key", playingPos);
+//        setResult(-100, intent);
+//
+//        System.out.println("여기에는 onback!!");
+//
+//        isBackPressed = true;
+//        super.onBackPressed();
 
         //PlayActivity 호출 -> back button을 눌렀을 때는 intent에 -1을 보내서 처음부터 재생이 되도록 한다.
         //PlayActivity 호출 -> back button을 눌렀을 때는 intent에 -100을 보내서 현재 진행중인 상태 그대로 이어나가도록 한다
@@ -403,7 +404,7 @@ public class PlayListActivity extends AppCompatActivity {
 //        intent.putExtra("playcount", -100);
 //        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //PlayActivity위의 activity 모두 삭제
 //        startActivity(intent);
-        finish();
+        //finish();
     }
 
     /**
