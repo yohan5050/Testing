@@ -10,57 +10,47 @@
         android:id="@+id/recordImage"
         android:layout_width="90dp"
         android:layout_height="90dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/record_btn"
-        android:layout_marginTop="98dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="114dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/record_btn" />
 
     <TextView
         android:id="@+id/text"
-        android:layout_below="@+id/recordImage"
-        android:layout_above="@+id/linear"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="300dp"
         android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:gravity="center"
+        android:padding="30dp"
         android:shadowColor="#FF464646"
         android:shadowDx="2"
         android:shadowDy="2"
         android:shadowRadius="2.0"
         android:text="녹음중"
-        android:textSize = "40dp"
-        android:textStyle="bold"/>
-
-    <LinearLayout
-        android:id="@+id/linear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="99dp">
-
-        <ImageButton
-            android:id="@+id/home"
-            android:layout_width="93dp"
-            android:layout_height="93dp"
-            android:background="#00000000"
-            android:gravity="center"
-            android:scaleType="fitXY"
-            android:src="@drawable/home"
-            android:visibility="gone" />
-
-    </LinearLayout>
+        android:textSize="40dp"
+        android:textStyle="bold" />
 
     <ImageButton
-        android:id="@+id/stop_btn"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:id="@+id/home"
+        android:layout_width="93dp"
+        android:layout_height="93dp"
         android:background="#00000000"
         android:gravity="center"
         android:scaleType="fitXY"
-        android:src="@drawable/stop_btn"
-        android:layout_marginBottom="24dp"
+        android:src="@drawable/home"
+        android:visibility="gone" />
+
+    <ImageButton
+        android:id="@+id/stop_btn"
+        android:layout_width="93dp"
+        android:layout_height="93dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="99dp"
+        android:background="#00000000"
+        android:gravity="center"
+        android:scaleType="fitXY"
+        android:src="@drawable/stop_btn" />
 </RelativeLayout>
