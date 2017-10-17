@@ -586,7 +586,7 @@ public class PlayListActivity extends AppCompatActivity {
                 view.setBackgroundColor(Color.parseColor("#B4F0B4"));
 //                view.setBackgroundColor(Color.rgb(92, 224, 189)); // #5CE0BD
             } else {
-                view.textView.setBackgroundColor(Color.WHITE);
+                view.textView.setBackgroundColor(Color.parseColor("#00000000"));
             }
 
             //휴지통 버튼을 누를시 true값이 되고, 체크 박스가 등장
