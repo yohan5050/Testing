@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -45,6 +46,7 @@ public class PlayListActivity extends AppCompatActivity {
 
     public static Activity PLactivity; //PlayActivity에서 사용됨
     DataBase db;
+
     int SampleRate = 16000;
     int BufferSize = 1024;
 
@@ -56,15 +58,19 @@ public class PlayListActivity extends AppCompatActivity {
     //삭제하는 버튼들
     ImageButton deleteBtn;
     Button deletefinalBtn;
-    Button allSeleteBtn;
+    CheckBox allSeleteBtn;
+
+    //취소버튼
+    Button cancelBtn;
+    TextView countText;
 
     //삭제 다이얼로그
     boolean delBtnClicked = false;
     AlertDialog alertDialog;
 
     int count;
-
     int tempPos = -1, tempPos2 = -1;
+
     boolean nowStarted = false;
     boolean isAfterOnPause = false; //onPause 상태였다가 onStart하는 것인지 아닌지 체크하기 위함.
     boolean isBackPressed = false;
@@ -77,10 +83,13 @@ public class PlayListActivity extends AppCompatActivity {
     boolean deleteState = false;
     boolean deleteFinalState = false;
     boolean allSeleteState = false;
+
+    //삭제 리스트
     ArrayList<Integer> deleteList;
 
     //리스트 뷰의 속성들을 저장
-    PlaylistView viewArr[] = viewArr = new PlaylistView[100]; //list의 각 아이템들의 view값을 담고 있다.
+    PlaylistView viewArr[] = new PlaylistView[100]; //list의 각 아이템들의 view값을 담고 있다.
+    Playlist listArr[] = new Playlist[100];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +102,9 @@ public class PlayListActivity extends AppCompatActivity {
         homeBtn = (ImageButton) findViewById(R.id.homeBtn);
         deleteBtn = (ImageButton) findViewById(R.id.deleteBtn);
         deletefinalBtn = (Button) findViewById(R.id.deletefinalBtn);
-        allSeleteBtn = (Button) findViewById(R.id.allSeleteBtn);
+        cancelBtn = (Button)findViewById(R.id.cancelBtn);
+        countText = (TextView)findViewById(R.id.countText);
+        allSeleteBtn = (CheckBox) findViewById(R.id.allSeleteBtn);
         listView = (ListView) findViewById(R.id.listView);
 
 //        textView = (TextView) findViewById(R.id.text);
@@ -174,20 +185,37 @@ public class PlayListActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //휴지통 버튼을 누를시, 전체 삭제와, 삭제하기 버튼이 등장
                 // 처음엔 숨긴다.
-                if (deletefinalBtn.getVisibility() == View.VISIBLE) {
-                    deletefinalBtn.setVisibility(View.GONE);
-                    allSeleteBtn.setVisibility(View.GONE);
-
-                } else {
-                    deletefinalBtn.setVisibility(View.VISIBLE);
-                    allSeleteBtn.setVisibility(View.VISIBLE);
-                }
 
                 //휴지통 버튼이 눌렸는지 상태를 체크
                 deleteState = !deleteState;
 
-                //모두 선택을 초기화
-                allSeleteState = false;
+                if (deletefinalBtn.getVisibility() == View.VISIBLE) {
+                    countText.setVisibility(View.GONE);
+                    cancelBtn.setVisibility(View.GONE);
+                    deletefinalBtn.setVisibility(View.GONE);
+                    allSeleteBtn.setVisibility(View.GONE);
+
+                    //모두 선택을 초기화
+                    deleteFinalState = false;
+                    allSeleteState = false;
+                    allSeleteBtn.setChecked(false);
+                    allSeleteBtn.setText("전체 선택하기");
+
+                    for(int i = 0; i < count; i++)
+                    {
+                        listArr[i].isCheckedState = false;
+                    }
+
+
+                    checkCount();
+                    onStart();
+
+                } else if (deletefinalBtn.getVisibility() == View.GONE) {
+                    countText.setVisibility(View.VISIBLE);
+                    cancelBtn.setVisibility(View.VISIBLE);
+                    deletefinalBtn.setVisibility(View.VISIBLE);
+                    allSeleteBtn.setVisibility(View.VISIBLE);
+                }
 
                 //새로 갱신
                 adapter.notifyDataSetChanged();
@@ -202,7 +230,7 @@ public class PlayListActivity extends AppCompatActivity {
 
                 for (int i = 0; i < db.getAllPlayListNum(); i++) {
 
-                    if (viewArr[i].getIsChecked() == true) {
+                    if (listArr[i].isCheckedState == true) {
                         deleteList.add(count - i - 1);
                     }
                     Log.d("여기도냐", viewArr[i].getTitle() + " " + viewArr[i].getIsChecked());
@@ -298,20 +326,28 @@ public class PlayListActivity extends AppCompatActivity {
                 if (allSeleteState) {
                     allSeleteBtn.setText("전체 선택 취소하기");
                     for (int i = 0; i < db.getAllPlayListNum(); i++) {
-                        System.out.println("전체 선택" + i);
-                        if (viewArr[i].checkbox.isChecked() == false) {
+                        System.out.println("전체 선택" + i +" "+ viewArr[i].checkbox.isChecked());
+                        if (listArr[i].isCheckedState == false) {
                             viewArr[i].checkbox.callOnClick();
                         }
                     }
                 } else {
                     allSeleteBtn.setText("전체 선택하기");
                     for (int i = 0; i < db.getAllPlayListNum(); i++) {
-                        if (viewArr[i].checkbox.isChecked() == true) {
+                        System.out.println("전체 선택" + i +" "+ viewArr[i].checkbox.isChecked());
+                        if (listArr[i].isCheckedState == true) {
                             viewArr[i].checkbox.callOnClick();
                         }
                     }
                 }
                 adapter.notifyDataSetChanged(); //adapter 내용 변경 - 리스트뷰 갱신 ***
+            }
+        });
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteBtn.callOnClick();
             }
         });
 
@@ -426,6 +462,29 @@ public class PlayListActivity extends AppCompatActivity {
         //finish();
     }
 
+    public void checkCount() {
+        int checkCount = 0;
+        {
+            for (int i = 0; i < count; i++) {
+
+                if (listArr[i].isCheckedState == true) {
+                    checkCount++;
+                }
+                Log.d("여기도냐2", checkCount + "");
+            }
+
+            if(checkCount > 0){
+                deletefinalBtn.setEnabled(true);
+                countText.setText("선택된 리스트의 수는 " + checkCount+"개" );
+            }
+            else if(checkCount == 0)
+            {
+                deletefinalBtn.setEnabled(false);
+                countText.setText("선택된 리스트의 수는 " + checkCount+"개");
+            }
+        }
+    }
+
     /**
      * 재생 목록을 만드는 메소드, 재생 목록에는 각 컨텐츠들이 보여진다.
      */
@@ -510,6 +569,7 @@ public class PlayListActivity extends AppCompatActivity {
         public View getView(int position, View convertView, ViewGroup viewGroup) {
             PlaylistView view = new PlaylistView(getApplicationContext());
             Playlist item = items.get(position);
+            listArr[position] = items.get(position);
             final int position2 = position;
 
             view.setContent(item.getContent());
@@ -540,16 +600,20 @@ public class PlayListActivity extends AppCompatActivity {
             view.checkbox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    System.out.println("position2" + position2 + " " + items.get(position2).isCheckedState );
                     if (items.get(position2).isCheckedState == false) {
                         items.get(position2).setCheckedState();
-                    } else
+                        checkCount();
+                    } else if(items.get(position2).isCheckedState == true) {
                         items.get(position2).setUnCheckedState();
+                        checkCount();
+                    }
                 }
             });
 
             if (items.get(position2).isCheckedState == true) {
                 view.checkbox.setChecked(true);
-            } else
+            } else if(items.get(position2).isCheckedState == false)
                 view.checkbox.setChecked(false);
 
             //모든 리스트들의 view를 arr로 저장한다.
@@ -616,7 +680,5 @@ public class PlayListActivity extends AppCompatActivity {
                 sender.cancel();
             }
         }
-
-        Toast.makeText(this, "삭제 완료", Toast.LENGTH_SHORT).show();
     }
 }
