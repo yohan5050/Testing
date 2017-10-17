@@ -187,6 +187,8 @@ public class PlayListActivity extends AppCompatActivity {
         //휴지통 버튼 누를시
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                listView.setSelection(db.getAllPlayListNum() - 1);
+                listView.setAdapter(adapter);
                 //휴지통 버튼을 누를시, 전체 삭제와, 삭제하기 버튼이 등장
                 // 처음엔 숨긴다.
 
@@ -577,6 +579,7 @@ public class PlayListActivity extends AppCompatActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup viewGroup) {
+            System.out.println("getView: " + position + " " + convertView + " " + viewGroup);
             PlaylistView view = new PlaylistView(getApplicationContext());
             Playlist item = items.get(position);
             listArr[position] = items.get(position);
