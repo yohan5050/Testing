@@ -12,7 +12,7 @@
         android:layout_height="90dp"
         android:scaleType="fitXY"
         android:src="@drawable/record_btn"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="98dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
@@ -60,7 +60,7 @@
         android:gravity="center"
         android:scaleType="fitXY"
         android:src="@drawable/stop_btn"
+        android:layout_marginBottom="24dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/recordImage"
-        android:layout_marginBottom="24dp" />
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
