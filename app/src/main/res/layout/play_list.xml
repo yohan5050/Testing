@@ -8,25 +8,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <CheckBox
-            android:id="@+id/checkbox"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="55dp"
-            android:gravity="center_vertical"
-            android:visibility="gone"
-            />
+            android:layout_height="wrap_content"
+            android:id="@+id/checkbox_layout">
+
+            <CheckBox
+                android:id="@+id/checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="55dp"
+                android:gravity="center_vertical"
+                android:visibility="gone" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_toRightOf="@+id/checkbox"
-            android:layout_height="55dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_toRightOf="@+id/checkbox_layout"
+            android:layout_toLeftOf="@+id/imageView"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:text="안녕하세요"
             android:gravity="center_vertical"
             android:textSize="27dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            />
 
         <ImageView
             android:id="@+id/imageView"

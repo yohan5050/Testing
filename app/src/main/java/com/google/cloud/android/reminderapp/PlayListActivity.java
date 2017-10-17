@@ -473,12 +473,14 @@ public class PlayListActivity extends AppCompatActivity {
             }
 
             if (contentNameArr[i].equals("")) {
-                adapter.addItem(new Playlist((i + 1) + ". " + "내용 없음", timeFormatFunc(alarmTimeArr[i]), R.drawable.alarm, strColor));
+                adapter.addItem(new Playlist((i + 1) + "." + "내용 없음", timeFormatFunc(alarmTimeArr[i]), R.drawable.alarm, strColor));
             } else {
                 if (alarmTimeArr[i].equals("일반 메모"))
-                    adapter.addItem(new Playlist((i + 1) + ". " + contentTime(contentNameArr[i], 11), "알람정보 없음", R.drawable.memo, strColor));
+                    adapter.addItem(new Playlist((i + 1) + "." + contentNameArr[i], "알람정보 없음", R.drawable.memo, strColor));
+                    //adapter.addItem(new Playlist((i + 1) + ". " + contentTime(contentNameArr[i], 11), "알람정보 없음", R.drawable.memo, strColor));
                 else
-                    adapter.addItem(new Playlist((i + 1) + ". " + contentTime(contentNameArr[i], 7), timeFormatFunc(alarmTimeArr[i]), R.drawable.alarm, strColor));
+                    adapter.addItem(new Playlist((i + 1) + "." + contentNameArr[i], timeFormatFunc(alarmTimeArr[i]), R.drawable.alarm, strColor));
+                    //adapter.addItem(new Playlist((i + 1) + ". " + contentTime(contentNameArr[i], 7), timeFormatFunc(alarmTimeArr[i]), R.drawable.alarm, strColor));
             }
         }
     }
