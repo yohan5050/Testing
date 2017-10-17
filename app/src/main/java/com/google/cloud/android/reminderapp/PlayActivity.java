@@ -42,8 +42,10 @@ public class PlayActivity extends AppCompatActivity {
     int SampleRate = 16000;
     int BufferSize = 1024;
     int playingPos = -3; //onPause에서 +1하면 -2가 되도록
+
     boolean listBtnClicked = false, delBtnClicked = false;
     boolean wasPlaying = true; //onPause전에 재생 중이었는지 아닌지를 체크
+
     AlertDialog alertDialog;
     int resCode = -1;
 
@@ -80,7 +82,7 @@ public class PlayActivity extends AppCompatActivity {
                 else {
                     System.out.println("왜 재생이 안되니??" + playingPos);
                     Main2Activity.mVoicePlayer.startPlaying(SampleRate, BufferSize, playingPos + 1);
-                    button.setImageResource(R.drawable.stop_btn3);
+                    button.setImageResource(R.drawable.stop_btn);
                 }
 //                //메인 화면으로 돌아간다
 //                finish();
@@ -113,7 +115,7 @@ public class PlayActivity extends AppCompatActivity {
 
                         //한 파일을 재생하고 중지하기 때문에, playingPos가 자동으로 변경되지 않음. 여기서 변경
                         playingPos++;
-                        button.setImageResource(R.drawable.stop_btn3); //버튼도 변경해줘야 함.
+                        button.setImageResource(R.drawable.stop_btn); //버튼도 변경해줘야 함.
 
                         //재생 화면에 녹음 시간, 알람 시간 출력
                         showTime(playingPos);
@@ -295,7 +297,7 @@ public class PlayActivity extends AppCompatActivity {
                     button.setImageResource(R.drawable.play_btn3);
                 }
                 else if (Main2Activity.mVoicePlayer.isPlaying()) {
-                    button.setImageResource(R.drawable.stop_btn3);
+                    button.setImageResource(R.drawable.stop_btn);
                     String alarmTime = (String) msg.obj;
                     String[] words = alarmTime.split(":");
 
@@ -336,7 +338,7 @@ public class PlayActivity extends AppCompatActivity {
         //list에서 back button으로 play화면으로 돌아올 때, 재생 중인지 아닌지에 따라 재생/중지 버튼 표시
         if(Main2Activity.mVoicePlayer.mIsPlaying) {
             System.out.println("재생중이냐? " + Main2Activity.mVoicePlayer.mIsPlaying);
-            button.setImageResource(R.drawable.stop_btn3);
+            button.setImageResource(R.drawable.stop_btn);
         }
         else {
             button.setImageResource(R.drawable.play_btn3);
@@ -417,7 +419,7 @@ public class PlayActivity extends AppCompatActivity {
 
         //재생 중인지 아닌지에 따라 재생/중지 버튼 표시 //-> onResume이 onStart뒤에 실행될 경우, onStart에서 재생 여부를 알 수 없다.
         if(Main2Activity.mVoicePlayer.mIsPlaying) {
-            button.setImageResource(R.drawable.stop_btn3);
+            button.setImageResource(R.drawable.stop_btn);
         }
         else {
             button.setImageResource(R.drawable.play_btn3);

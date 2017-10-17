@@ -124,7 +124,7 @@ public class AlarmActivity extends AppCompatActivity {
                     //리스트 화면에서 알람화면으로 전환되고 나서 OutOfMemory에러가 나서, stop_btn2이미지 크기를 줄였다...!!!
                     //이 부분은 bitmap관련해서 heap메모리와 관련있는 것 같은데, 나중에 따로 공부좀 해봐야 함.
                     //일단은 임시방편으로 이미지 크기를 줄여서 넘어감...
-                    rBtn.setImageResource(R.drawable.stop_btn3);
+                    rBtn.setImageResource(R.drawable.stop_btn);
 //                    textView.setText(alarmText);
                     if(vibrator != null) {
                         vibrator.cancel(); //진동 취소
