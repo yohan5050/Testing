@@ -193,7 +193,7 @@ public class PlayListActivity extends AppCompatActivity {
                     countText.setVisibility(View.GONE);
                     cancelBtn.setVisibility(View.GONE);
                     deletefinalBtn.setVisibility(View.GONE);
-                    allSeleteBtn.setVisibility(View.GONE);
+                    allSeleteBtn.setVisibility(View.INVISIBLE);
 
                     //모두 선택을 초기화
                     deleteFinalState = false;
