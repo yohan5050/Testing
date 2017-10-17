@@ -57,11 +57,11 @@ public class PlayListActivity extends AppCompatActivity {
 
     //삭제하는 버튼들
     ImageButton deleteBtn;
-    Button deletefinalBtn;
+    ImageButton deletefinalBtn;
     CheckBox allSeleteBtn;
 
     //취소버튼
-    Button cancelBtn;
+    ImageButton cancelBtn;
     TextView countText;
 
     //삭제 다이얼로그
@@ -101,8 +101,8 @@ public class PlayListActivity extends AppCompatActivity {
 
         homeBtn = (ImageButton) findViewById(R.id.homeBtn);
         deleteBtn = (ImageButton) findViewById(R.id.deleteBtn);
-        deletefinalBtn = (Button) findViewById(R.id.deletefinalBtn);
-        cancelBtn = (Button)findViewById(R.id.cancelBtn);
+        deletefinalBtn = (ImageButton) findViewById(R.id.deletefinalBtn);
+        cancelBtn = (ImageButton)findViewById(R.id.cancelBtn);
         countText = (TextView)findViewById(R.id.countText);
         allSeleteBtn = (CheckBox) findViewById(R.id.allSeleteBtn);
         listView = (ListView) findViewById(R.id.listView);
