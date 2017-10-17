@@ -7,17 +7,23 @@ import android.util.StringBuilderPrinter;
  */
 
 public class Playlist {
+    String numStr;
     String content;
     String alarmTime;
     int resId;
     String strColor;
     boolean isCheckedState = false;
 
-    public Playlist(String content, String alarmTime, int resId, String strColor) {
+    public Playlist(String numStr, String content, String alarmTime, int resId, String strColor) {
+        this.numStr = numStr;
         this.content = content;
         this.alarmTime = alarmTime;
         this.resId = resId;
         this.strColor = strColor;
+    }
+
+    public String getNumStr() {
+        return numStr;
     }
 
     public String getContent() {

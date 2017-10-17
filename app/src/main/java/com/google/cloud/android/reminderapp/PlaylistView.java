@@ -20,6 +20,7 @@ import android.widget.TextView;
 public class PlaylistView extends LinearLayout {
     TextView textView;
     TextView textView2;
+    TextView textView3;
     ImageView imageView;
     CheckBox checkbox;
     boolean checkState = false;
@@ -42,6 +43,7 @@ public class PlaylistView extends LinearLayout {
 
         textView = (TextView) findViewById(R.id.textView);
         textView2 = (TextView) findViewById(R.id.textView2);
+        textView3 = (TextView) findViewById(R.id.textViewNum);
         imageView = (ImageView) findViewById(R.id.imageView);
         checkbox = (CheckBox) findViewById(R.id.checkbox);
 
@@ -87,6 +89,10 @@ public class PlaylistView extends LinearLayout {
 
     public void setAlarmTime(String alarmTime) {
         textView2.setText(alarmTime);
+    }
+
+    public void setNumber(String numStr) {
+        textView3.setText(numStr);
     }
 
     public void setImage(int resId) {
