@@ -45,12 +45,12 @@
         android:src="@drawable/home" />
 
     <ImageButton
-        android:layout_toRightOf="@+id/homeBtn"
         android:id="@+id/deleteBtn"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/homeBtn"
         android:background="#00000000"
         android:scaleType="fitXY"
         android:src="@drawable/del_btn" />
@@ -70,25 +70,52 @@
 
     <!--</LinearLayout>-->
 
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/homeBtn"
+        android:layout_marginTop="15dp"
+        android:background="#388e3c"
+        android:gravity="center"
+        android:text="메모 리스트"
+        android:textColor="@android:color/white"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:visibility="visible" />
+
+
     <CheckBox
         android:id="@+id/allSeleteBtn"
         android:layout_width="200dp"
-        android:layout_height="25dp"
+        android:layout_height="45dp"
         android:layout_below="@+id/homeBtn"
+        android:layout_centerVertical="true"
         android:layout_marginTop="15dp"
         android:text="전체 선택하기"
-        android:visibility="invisible" />
+        android:textColor="@android:color/white"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:buttonTint="@android:color/white"
+        />
 
     <TextView
         android:id="@+id/countText"
         android:layout_width="wrap_content"
-        android:layout_height="25dp"
+        android:layout_height="45dp"
         android:layout_alignBaseline="@+id/allSeleteBtn"
         android:layout_alignBottom="@+id/allSeleteBtn"
         android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="3dp"
         android:layout_marginTop="15dp"
         android:paddingTop="4dp"
-        android:text="선택된 리스트의 수는 0개"
+        android:text="0개 선택됨"
+        android:textColor="@android:color/white"
+        android:textSize="15dp"
+        android:textStyle="bold"
         android:visibility="gone" />
 
     <ListView
@@ -96,7 +123,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/deletefinalBtn"
-        android:layout_below="@+id/allSeleteBtn"
+        android:layout_below="@+id/header"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp" />
 
@@ -118,15 +145,15 @@
         android:layout_width="120dp"
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/cancelBtn"
-        android:layout_marginLeft="30dp"
         android:layout_marginBottom="10dp"
+        android:layout_marginLeft="30dp"
         android:layout_marginStart="13dp"
         android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/cancelBtn"
         android:background="#00000000"
         android:enabled="false"
         android:scaleType="fitXY"
-        android:src="@drawable/del_btn_list"
+        android:src="@drawable/del_btn_list2"
         android:visibility="gone" />
 
 

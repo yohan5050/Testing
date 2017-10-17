@@ -60,6 +60,9 @@ public class PlayListActivity extends AppCompatActivity {
     ImageButton deletefinalBtn;
     CheckBox allSeleteBtn;
 
+    //header
+    TextView header;
+
     //취소버튼
     ImageButton cancelBtn;
     TextView countText;
@@ -106,6 +109,7 @@ public class PlayListActivity extends AppCompatActivity {
         countText = (TextView)findViewById(R.id.countText);
         allSeleteBtn = (CheckBox) findViewById(R.id.allSeleteBtn);
         listView = (ListView) findViewById(R.id.listView);
+        header = (TextView)findViewById(R.id.header);
 
 //        textView = (TextView) findViewById(R.id.text);
 //        textView.setMovementMethod(new ScrollingMovementMethod());
@@ -193,6 +197,7 @@ public class PlayListActivity extends AppCompatActivity {
                     countText.setVisibility(View.GONE);
                     cancelBtn.setVisibility(View.GONE);
                     deletefinalBtn.setVisibility(View.GONE);
+                    header.setText("메모 리스트");
                     allSeleteBtn.setVisibility(View.INVISIBLE);
 
                     //모두 선택을 초기화
@@ -215,6 +220,7 @@ public class PlayListActivity extends AppCompatActivity {
                     cancelBtn.setVisibility(View.VISIBLE);
                     deletefinalBtn.setVisibility(View.VISIBLE);
                     allSeleteBtn.setVisibility(View.VISIBLE);
+                    header.setText("");
                 }
 
                 //새로 갱신
@@ -475,12 +481,14 @@ public class PlayListActivity extends AppCompatActivity {
 
             if(checkCount > 0){
                 deletefinalBtn.setEnabled(true);
-                countText.setText("선택된 리스트의 수는 " + checkCount+"개" );
+                deletefinalBtn.setImageResource(R.drawable.del_btn_list);
+                countText.setText(checkCount+"개 선택됨" );
             }
             else if(checkCount == 0)
             {
                 deletefinalBtn.setEnabled(false);
-                countText.setText("선택된 리스트의 수는 " + checkCount+"개");
+                deletefinalBtn.setImageResource(R.drawable.del_btn_list2);
+                countText.setText(checkCount+"개 선택됨");
             }
         }
     }
