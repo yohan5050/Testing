@@ -27,6 +27,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -66,6 +67,9 @@ public class PlayListActivity extends AppCompatActivity {
     //취소버튼
     ImageButton cancelBtn;
     TextView countText;
+
+    //cancelBtn과 deletefinalBtn을 포함하고 있는 linearlayout
+    LinearLayout underBtnsLinear;
 
     //삭제 다이얼로그
     boolean delBtnClicked = false;
@@ -110,6 +114,9 @@ public class PlayListActivity extends AppCompatActivity {
         allSeleteBtn = (CheckBox) findViewById(R.id.allSeleteBtn);
         listView = (ListView) findViewById(R.id.listView);
         header = (TextView)findViewById(R.id.header);
+
+        //cancelBtn과 deletefinalBtn을 포함하고 있는 linearlayout
+        underBtnsLinear = (LinearLayout) findViewById(R.id.underBtnsLinear);
 
 //        textView = (TextView) findViewById(R.id.text);
 //        textView.setMovementMethod(new ScrollingMovementMethod());
@@ -196,6 +203,7 @@ public class PlayListActivity extends AppCompatActivity {
                 deleteState = !deleteState;
 
                 if (deletefinalBtn.getVisibility() == View.VISIBLE) {
+                    underBtnsLinear.setVisibility(View.GONE); //리니어 레이아웃으로 cancel과 deletefinal묶음
                     countText.setVisibility(View.GONE);
                     cancelBtn.setVisibility(View.GONE);
                     deletefinalBtn.setVisibility(View.GONE);
@@ -218,6 +226,7 @@ public class PlayListActivity extends AppCompatActivity {
                     onStart();
 
                 } else if (deletefinalBtn.getVisibility() == View.GONE) {
+                    underBtnsLinear.setVisibility(View.VISIBLE); //리니어 레이아웃으로 cancel과 deletefinal묶음
                     countText.setVisibility(View.VISIBLE);
                     cancelBtn.setVisibility(View.VISIBLE);
                     deletefinalBtn.setVisibility(View.VISIBLE);
@@ -633,8 +642,7 @@ public class PlayListActivity extends AppCompatActivity {
     // make list2에서 사용 (컨텐츠 명으로 나타내기 위해서)
     public String contentTime(String contentName, int len) {
         contentName = contentName.replaceAll(" ", "");
-        //if (contentName.length() > len) return contentName.substring(0, len) + ".. ";
-        if (contentName.length() > len) return contentName.substring(0, len);
+        if (contentName.length() > len) return contentName.substring(0, len) + "..";
         else return contentName;
     }
 

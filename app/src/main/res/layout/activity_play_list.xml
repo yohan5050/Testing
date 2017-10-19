@@ -122,39 +122,47 @@
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/deletefinalBtn"
+        android:layout_above="@+id/underBtnsLinear"
         android:layout_below="@+id/header"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp" />
 
-    <ImageButton
-        android:id="@+id/cancelBtn"
-        android:layout_width="120dp"
-        android:layout_height="40dp"
+    <LinearLayout
+        android:id="@+id/underBtnsLinear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="55dp"
-        android:layout_marginTop="10dp"
-        android:background="#00000000"
-        android:scaleType="fitXY"
-        android:src="@drawable/del_cancle"
-        android:visibility="gone" />
+        android:background="#dcdcdc"
+        android:visibility="gone"
+        >
+        <ImageButton
+            android:id="@+id/cancelBtn"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="55dp"
+            android:layout_marginTop="10dp"
+            android:background="#00000000"
+            android:scaleType="fitXY"
+            android:src="@drawable/del_cancle"
+            android:visibility="gone" />
 
-    <ImageButton
-        android:id="@+id/deletefinalBtn"
-        android:layout_width="120dp"
-        android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginStart="13dp"
-        android:layout_marginTop="10dp"
-        android:layout_toRightOf="@+id/cancelBtn"
-        android:background="#00000000"
-        android:enabled="false"
-        android:scaleType="fitXY"
-        android:src="@drawable/del_btn_list2"
-        android:visibility="gone" />
-
+        <ImageButton
+            android:id="@+id/deletefinalBtn"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginStart="13dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/cancelBtn"
+            android:background="#00000000"
+            android:enabled="false"
+            android:scaleType="fitXY"
+            android:src="@drawable/del_btn_list2"
+            android:visibility="gone" />
+    </LinearLayout>
 
 </RelativeLayout>
