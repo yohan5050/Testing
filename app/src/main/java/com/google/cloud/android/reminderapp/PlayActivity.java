@@ -91,6 +91,27 @@ public class PlayActivity extends AppCompatActivity {
 
         backwardsBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                //재생 중이어도 뒤로가기나 앞으로가기를 누르면 재생이 중지된 상태로 유지한다.
+                if(Main2Activity.mVoicePlayer.mIsPlaying) { //재생 중인 경우
+                    //현재 재생 중인 파일 재생 중지하기
+                    playingPos = Main2Activity.mVoicePlayer.stopPlaying();
+                    //스탑 버튼을 재생 버튼으로 변경
+                    button.setImageResource(R.drawable.play_btn3);
+                }
+
+                if(playingPos == db.getAllPlayListNum() - 1) { //맨 앞인 경우
+                    Toast.makeText(getApplicationContext(), "이전 재생 파일이 없습니다", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    //TextView 변경
+                    String returnedValue[] = db.getAllContent();
+                    textView.setText(returnedValue[playingPos + 1].replaceAll(" ", ""));
+                    playingPos++; //***
+
+                    //재생 화면에 녹음 시간, 알람 시간 출력
+                    showTime(playingPos);
+                }
+                /* //재생 중일 때는 다음 파일도 재생하는 코드
                 if(Main2Activity.mVoicePlayer.mIsPlaying) { //재생 중인 경우
                     //현재 재생 중인 파일 재생 중지 후
                     playingPos = Main2Activity.mVoicePlayer.stopPlaying();
@@ -126,7 +147,6 @@ public class PlayActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "이전 재생 파일이 없습니다", Toast.LENGTH_LONG).show();
                     }
                     else {
-                        System.out.println("여기에 안들어오노? backwardsbtn");
                         //TextView 변경
                         String returnedValue[] = db.getAllContent();
                         textView.setText(returnedValue[playingPos + 1].replaceAll(" ", ""));
@@ -135,12 +155,34 @@ public class PlayActivity extends AppCompatActivity {
                         //재생 화면에 녹음 시간, 알람 시간 출력
                         showTime(playingPos);
                     }
-                }
+                }*/
             }
         });
 
         forwardBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                //재생 중이어도 뒤로가기나 앞으로가기를 누르면 재생이 중지된 상태로 유지한다.
+                if(Main2Activity.mVoicePlayer.mIsPlaying) { //재생 중인 경우
+                    //현재 재생 중인 파일 재생 중지 후
+                    playingPos = Main2Activity.mVoicePlayer.stopPlaying();
+                    //스탑 버튼을 재생 버튼으로 변경
+                    button.setImageResource(R.drawable.play_btn3);
+                }
+
+                if(playingPos == 0) { //맨 뒤인 경우
+                    Toast.makeText(getApplicationContext(), "다음 재생 파일이 없습니다", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    System.out.println("여기에 안들어오노? forwardbtn");
+                    //TextView 변경
+                    String returnedValue[] = db.getAllContent();
+                    textView.setText(returnedValue[playingPos - 1].replaceAll(" ", ""));
+                    playingPos--;  //***
+
+                    //재생 화면에 녹음 시간, 알람 시간 출력
+                    showTime(playingPos);
+                }
+                /* //재생 중일 때는 다음 파일도 재생하는 코드
                 if(Main2Activity.mVoicePlayer.mIsPlaying) { //재생 중인 경우
                     //현재 재생 중인 파일 재생 중지 후
                     playingPos = Main2Activity.mVoicePlayer.stopPlaying();
@@ -187,7 +229,7 @@ public class PlayActivity extends AppCompatActivity {
                         //재생 화면에 녹음 시간, 알람 시간 출력
                         showTime(playingPos);
                     }
-                }
+                }*/
             }
         });
 
@@ -408,13 +450,16 @@ public class PlayActivity extends AppCompatActivity {
             return;
         }
         System.out.println("삭제 취소하면 여기로 1");
-        if (!Main2Activity.mVoicePlayer.isPlaying()) {
-            Main2Activity.mVoicePlayer.startPlaying(SampleRate, BufferSize, playCount);
-            System.out.println("삭제 취소하면 여기로 2 와서 재생돼야 하지 않음?");
-            playCount = -2;
-        }
+//        if (!Main2Activity.mVoicePlayer.isPlaying()) {
+//            Main2Activity.mVoicePlayer.startPlaying(SampleRate, BufferSize, playCount);
+//            System.out.println("삭제 취소하면 여기로 2 와서 재생돼야 하지 않음?");
+//            playCount = -2;
+//        }
+        //TextView 변경
+        String returnedValue[] = db.getAllContent();
+        textView.setText(returnedValue[playingPos].replaceAll(" ", ""));
 
-        //녹음시간, 알람시간 표시
+        //재생 화면에 녹음 시간, 알람 시간 출력
         showTime(playingPos);
 
         //재생 중인지 아닌지에 따라 재생/중지 버튼 표시 //-> onResume이 onStart뒤에 실행될 경우, onStart에서 재생 여부를 알 수 없다.

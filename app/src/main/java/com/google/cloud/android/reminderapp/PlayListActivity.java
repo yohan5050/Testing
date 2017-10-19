@@ -324,7 +324,6 @@ public class PlayListActivity extends AppCompatActivity {
         allSeleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 //전체 선택을 누를 경우 전체 선택 취소기능 구현
                 //전체 선택 취소 누를 경우 전체선택 기능 구현
                 allSeleteState = !allSeleteState;
@@ -373,13 +372,6 @@ public class PlayListActivity extends AppCompatActivity {
                 startActivity(intent);
 
                 finish();
-//                //목록에서 재생화면으로 넘어갈 때 하이라이트 잔상이 남길래... test... 나중에 생각하자.
-//                try {
-//                    System.out.println("피니시를 해도 여기로 올 수 있을까?");
-//                    Thread.sleep(500);
-//                } catch(InterruptedException e) {
-//                    e.printStackTrace();
-//                }
             }
         });
     }
@@ -545,11 +537,11 @@ public class PlayListActivity extends AppCompatActivity {
                 adapter.addItem(new Playlist((i + 1) + "." , "내용 없음", timeFormatFunc(alarmTimeArr[i]), R.drawable.alarm, strColor));
             } else {
                 if (alarmTimeArr[i].equals("일반 메모"))
-                    adapter.addItem(new Playlist((i + 1) + "." , contentNameArr[i], "알람정보 없음", R.drawable.memo, strColor));
-                    //adapter.addItem(new Playlist((i + 1) + ". " + contentTime(contentNameArr[i], 11), "알람정보 없음", R.drawable.memo, strColor));
+                    //adapter.addItem(new Playlist((i + 1) + "." , contentNameArr[i], "알람정보 없음", R.drawable.memo, strColor));
+                    adapter.addItem(new Playlist((i + 1) + ".",  contentTime(contentNameArr[i], 20), "알람정보 없음", R.drawable.memo, strColor));
                 else
-                    adapter.addItem(new Playlist((i + 1) + ".", contentNameArr[i], timeFormatFunc(alarmTimeArr[i]), R.drawable.alarm, strColor));
-                    //adapter.addItem(new Playlist((i + 1) + ". " + contentTime(contentNameArr[i], 7), timeFormatFunc(alarmTimeArr[i]), R.drawable.alarm, strColor));
+                    //adapter.addItem(new Playlist((i + 1) + ".", contentNameArr[i], timeFormatFunc(alarmTimeArr[i]), R.drawable.alarm, strColor));
+                    adapter.addItem(new Playlist((i + 1) + ".", contentTime(contentNameArr[i], 14), timeFormatFunc(alarmTimeArr[i]), R.drawable.alarm, strColor));
             }
         }
     }
@@ -641,7 +633,8 @@ public class PlayListActivity extends AppCompatActivity {
     // make list2에서 사용 (컨텐츠 명으로 나타내기 위해서)
     public String contentTime(String contentName, int len) {
         contentName = contentName.replaceAll(" ", "");
-        if (contentName.length() > len) return contentName.substring(0, len) + ".. ";
+        //if (contentName.length() > len) return contentName.substring(0, len) + ".. ";
+        if (contentName.length() > len) return contentName.substring(0, len);
         else return contentName;
     }
 
