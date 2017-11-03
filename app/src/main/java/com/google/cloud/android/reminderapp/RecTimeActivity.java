@@ -21,7 +21,7 @@ public class RecTimeActivity extends AppCompatActivity {
     public static Activity RTActivity;
     String fileName, returnedValue, alarmTime, contentValue;
     DataBase db;
-    TextView textView;
+    TextView textView, textContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,7 @@ public class RecTimeActivity extends AppCompatActivity {
         RTActivity = this;
         db = Main2Activity.getDBInstance();
         textView = (TextView) findViewById(R.id.text);
+        textContent = (TextView) findViewById(R.id.textContent);
 
         ImageButton button = (ImageButton) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +68,8 @@ public class RecTimeActivity extends AppCompatActivity {
         else {
 //            textView.setText(timeRegistered + "\n" + recordCutValue(contentValue, 2));
 //            alarmText = timeRegistered + "\n" + recordCutValue(contentValue, 2);
-            textView.setText(timeRegistered + "\n" + contentValue);
+            textView.setText(timeRegistered);
+            textContent.setText(contentValue);
             alarmText = timeRegistered + "\n" + contentValue;
         }
 
