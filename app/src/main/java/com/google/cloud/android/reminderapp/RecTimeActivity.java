@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -134,6 +135,20 @@ public class RecTimeActivity extends AppCompatActivity {
                 mCalendar.getTimeInMillis(),
                 mPendingIntent
         );
+
+        //화면을 2초간 보여주고 메인화면으로 이동
+        CountDownTimer timer = new CountDownTimer(2000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                //
+            }
+
+            public void onFinish() {
+                //2초뒤 home(메인) 화면으로 이동
+                finish();
+            }
+        };
+        timer.start();
     }
 
     @Override

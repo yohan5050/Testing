@@ -62,7 +62,7 @@ public class RecordActivity extends AppCompatActivity {
         //녹음 중일시
         anim = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.scale);
 
-        //timer - 시간 제한 7초.
+        //timer - 시간 제한 9초.
         value = 0;
         timer = new CountDownTimer(9000, 880) { // modified 7000 to 9000 (7sec -> 9sec)
             @Override
