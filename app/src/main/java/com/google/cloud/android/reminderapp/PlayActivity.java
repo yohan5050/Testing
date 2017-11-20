@@ -244,6 +244,7 @@ public class PlayActivity extends AppCompatActivity {
                 listBtnClicked = true;
                 //PlayListActivity 호출
                 Intent intent = new Intent(getApplicationContext(), PlayListActivity.class);
+                intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
                 System.out.println("list 호출!! 왔어 " + playingPos);
                 intent.putExtra("playingpos", playingPos);
                 //알람 액티비티가 뜨는데 시간이 좀 걸리는데, 그 직전에 리스트 버튼을 클릭하면 onUserLeaveHint()에 들어가서
@@ -273,7 +274,17 @@ public class PlayActivity extends AppCompatActivity {
 //        });
         homeBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                onBackPressed();
+                if(Main2Activity.mVoicePlayer.mIsPlaying) {
+                    Main2Activity.mVoicePlayer.stopPlaying();
+                }
+                if(delBtnClicked) { //삭제 여부 확인 다이얼로그가 띄워져 있다면 dialog도 종료시킨다.
+                    alertDialog.cancel();
+                }
+
+                Intent intent = new Intent(getApplicationContext(), Main2Activity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //Main2Activity위의 activity 모두 삭제
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -518,6 +529,8 @@ public class PlayActivity extends AppCompatActivity {
         if(delBtnClicked) { //삭제 여부 확인 다이얼로그가 띄워져 있다면 dialog도 종료시킨다.
             alertDialog.cancel();
         }
+
+        listBtn.callOnClick(); // listBtn누르는 효과.
         finish();
     }
 

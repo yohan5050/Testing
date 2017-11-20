@@ -382,7 +382,7 @@ public class PlayListActivity extends AppCompatActivity {
                 System.out.println("stopPoint in PlayListActivity : " + (playCount - position));
                 startActivity(intent);
 
-                finish();
+//                finish();
             }
         });
     }
@@ -454,6 +454,11 @@ public class PlayListActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
+        if (PlayActivity.Pactivity != null) {
+            PlayActivity.Pactivity.finish();
+        }
+        finish();
         //super.onBackPressed() 전에 setResult()를 해줘야 resultCode가 전달됨!!
 //        Intent intent = new Intent();
 //        intent.putExtra("key", playingPos);
