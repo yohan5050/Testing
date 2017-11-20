@@ -6,6 +6,7 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.os.Message;
+import android.widget.ProgressBar;
 
 import java.io.DataInputStream;
 import java.io.FileInputStream;
@@ -132,6 +133,11 @@ public class VoicePlayer {
                 audioTrack.play();
 //                audioTrack.setVolume()
 
+                //progress bar의 범위인 0 ~ 100 에 맞도록 한 번에 채울 바의 크기를 계산
+                int totalLength = dis.available(); //스트림으로부터 읽어들일 수 있는 바이트의 추정치 리턴
+                int barVal = 0;
+                PlayActivity.progress.setMax(totalLength); // progress bar의 최대범위 설정
+
                 while (((count = dis.read(data, 0, mBufferSize)) > -1)&&mIsPlaying) {
                     if(PlayListActivity.phandler != null) {
                         //재생 중인 파일 하이라이트하기 위해 position정보를 보낸다.(phandler이용)
@@ -144,11 +150,18 @@ public class VoicePlayer {
                     float volume = preference.getFloat("volume", 1f);
                     audioTrack.setVolume(volume);
                     audioTrack.write(data, 0, count);
+
+                    //progress bar 채우기
+                    barVal += mBufferSize;
+                    PlayActivity.progress.setProgress(barVal);
                 }
                 audioTrack.stop();
                 audioTrack.release();
                 dis.close();
                 fis.close();
+
+                //progress bar 초기화
+                PlayActivity.progress.setProgress(0);
 
                 if(mIsPlaying == false) { //재생 중간에 종료한 경우 -> 아래쪽 핸들러를 피함으로써 버튼 변경이 부드럽게 되도록 한다.
                     return;

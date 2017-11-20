@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +51,7 @@ public class PlayActivity extends AppCompatActivity {
     int resCode = -1;
 
     public static Handler vhandler; // 재생중 화면 처리 핸들러
+    public static ProgressBar progress; // 재생 progress bar,  VoicePlayer.java에서 쓰임.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +70,8 @@ public class PlayActivity extends AppCompatActivity {
         atText1 = (TextView) findViewById(R.id.alarmTime1);
         atText2 = (TextView) findViewById(R.id.alarmTime2);
         atImage = (ImageView) findViewById(R.id.alarm_image);
+
+        progress = (ProgressBar) findViewById(R.id.progress);
 
         backwardsBtn = (ImageButton) findViewById(R.id.backwards_btn);
         forwardBtn = (ImageButton) findViewById(R.id.forward_btn);
