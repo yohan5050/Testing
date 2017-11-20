@@ -64,11 +64,11 @@ public class RecordActivity extends AppCompatActivity {
 
         //timer - 시간 제한 7초.
         value = 0;
-        timer = new CountDownTimer(7000, 880) {
+        timer = new CountDownTimer(9000, 880) { // modified 7000 to 9000 (7sec -> 9sec)
             @Override
             public void onTick(long millisUntilFinished) {
                 recordImage.startAnimation(anim);
-                mText.setText("녹음 중\n" + (7 - value) + "초 후 종료");
+                mText.setText("녹음 중\n" + (9 - value) + "초 후 종료"); // 7 -> 9
                 value++;
             }
 
