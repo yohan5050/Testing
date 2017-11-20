@@ -89,7 +89,11 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        backwardsBtn.setOnClickListener(new View.OnClickListener() {
+        //backwardsBtn과 forwardBtn의 역할을 바꾸라는 피드백
+        //기존에는 backwardsBtn을 누르면 최신 것으로, forwardBtn을 누르면 과거의 것으로(녹음 시간 기준) 이동했는데
+        //반대로 수정.
+//        backwardsBtn.setOnClickListener(new View.OnClickListener() {
+        forwardBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //재생 중이어도 뒤로가기나 앞으로가기를 누르면 재생이 중지된 상태로 유지한다.
                 if(Main2Activity.mVoicePlayer.mIsPlaying) { //재생 중인 경우
@@ -100,7 +104,8 @@ public class PlayActivity extends AppCompatActivity {
                 }
 
                 if(playingPos == db.getAllPlayListNum() - 1) { //맨 앞인 경우
-                    Toast.makeText(getApplicationContext(), "이전 재생 파일이 없습니다", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getApplicationContext(), "이전 재생 파일이 없습니다", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "다음 재생 파일이 없습니다", Toast.LENGTH_LONG).show();
                 }
                 else {
                     //TextView 변경
@@ -159,7 +164,8 @@ public class PlayActivity extends AppCompatActivity {
             }
         });
 
-        forwardBtn.setOnClickListener(new View.OnClickListener() {
+//        forwardBtn.setOnClickListener(new View.OnClickListener() {
+        backwardsBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //재생 중이어도 뒤로가기나 앞으로가기를 누르면 재생이 중지된 상태로 유지한다.
                 if(Main2Activity.mVoicePlayer.mIsPlaying) { //재생 중인 경우
@@ -170,10 +176,10 @@ public class PlayActivity extends AppCompatActivity {
                 }
 
                 if(playingPos == 0) { //맨 뒤인 경우
-                    Toast.makeText(getApplicationContext(), "다음 재생 파일이 없습니다", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "이전 재생 파일이 없습니다", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(getApplicationContext(), "다음 재생 파일이 없습니다", Toast.LENGTH_LONG).show();
                 }
                 else {
-                    System.out.println("여기에 안들어오노? forwardbtn");
                     //TextView 변경
                     String returnedValue[] = db.getAllContent();
                     textView.setText(returnedValue[playingPos - 1].replaceAll(" ", ""));
