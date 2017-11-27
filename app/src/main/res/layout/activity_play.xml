@@ -34,12 +34,12 @@
         android:id="@+id/deleteImage"
         android:layout_width="70dp"
         android:layout_height="70dp"
+        android:layout_alignEnd="@+id/text"
+        android:layout_alignTop="@+id/homeBtn"
         android:layout_marginLeft="20dp"
         android:background="#00000000"
         android:scaleType="fitXY"
-        android:src="@drawable/del_btn"
-        android:layout_alignTop="@+id/homeBtn"
-        android:layout_alignEnd="@+id/text" />
+        android:src="@drawable/del_btn" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -55,6 +55,8 @@
         android:id="@+id/text"
         android:layout_width="280dp"
         android:layout_height="200dp"
+        android:layout_alignTop="@+id/alarmTime2"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:gravity="center"
@@ -62,53 +64,51 @@
         android:text="Contents"
         android:textColor="#000000"
         android:textSize="40dp"
-        android:textStyle="bold"
-        android:layout_alignTop="@+id/alarmTime2"
-        android:layout_centerHorizontal="true" />
+        android:textStyle="bold" />
 
-        <ImageButton
-            android:id="@+id/backwards_btn"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_gravity="center_vertical"
-            android:background="#00000000"
-            android:scaleType="fitXY"
-            android:src="@drawable/backwards_btn"
-            android:layout_alignTop="@+id/forward_btn"
-            android:layout_alignEnd="@+id/listImage" />
+    <ImageButton
+        android:id="@+id/backwards_btn"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignEnd="@+id/listImage"
+        android:layout_alignTop="@+id/forward_btn"
+        android:layout_gravity="center_vertical"
+        android:background="#00000000"
+        android:scaleType="fitXY"
+        android:src="@drawable/backwards_btn" />
 
-        <ImageButton
-            android:id="@+id/button"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="center_vertical"
-            android:background="#00000000"
-            android:scaleType="fitXY"
-            android:src="@drawable/stop_btn"
-            android:layout_marginBottom="16dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
+    <ImageButton
+        android:id="@+id/button"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="16dp"
+        android:background="#00000000"
+        android:scaleType="fitXY"
+        android:src="@drawable/stop_btn" />
 
-        <ImageButton
-            android:id="@+id/forward_btn"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_gravity="center_vertical"
-            android:background="#00000000"
-            android:scaleType="fitXY"
-            android:src="@drawable/forward_btn"
-            android:layout_alignBottom="@+id/button"
-            android:layout_alignStart="@+id/deleteImage"
-            android:layout_marginBottom="12dp" />
+    <ImageButton
+        android:id="@+id/forward_btn"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignBottom="@+id/button"
+        android:layout_alignStart="@+id/deleteImage"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="12dp"
+        android:background="#00000000"
+        android:scaleType="fitXY"
+        android:src="@drawable/forward_btn" />
 
     <LinearLayout
         android:id="@+id/rtLinear"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
         android:layout_below="@+id/text"
         android:layout_centerHorizontal="true"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
         android:layout_marginTop="25dp">
 
         <TextView
@@ -135,48 +135,50 @@
             android:textSize="18dp"
             android:textStyle="bold" />
     </LinearLayout>
-        <ProgressBar
-            android:id="@+id/progress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:paddingRight="30dp"
-            android:paddingLeft="30dp"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/imageView"
-            android:layout_above="@+id/button"/>
 
-        <ImageView
+    <ProgressBar
+        android:id="@+id/progress"
+        style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button"
+        android:layout_below="@+id/imageView"
+        android:layout_centerHorizontal="true"
+        android:layout_weight="2"
+        android:paddingBottom="15dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:paddingTop="15dp"
+        />
+
+    <ImageView
         android:id="@+id/alarm_image"
         android:layout_width="40dp"
         android:layout_height="40dp"
-            android:layout_gravity="center_vertical"
-        android:scaleType="fitXY"
-            android:layout_alignTop="@+id/alarmTime1"
-            android:layout_toStartOf="@+id/alarmTime1" />
+        android:layout_alignTop="@+id/alarmTime1"
+        android:layout_gravity="center_vertical"
+        android:layout_toStartOf="@+id/alarmTime1"
+        android:scaleType="fitXY" />
 
-        <TextView
-            android:id="@+id/alarmTime1"
-            android:layout_width="wrap_content"
-            android:layout_height="60dp"
-            android:text="18:00"
-            android:textColor="#747474"
-            android:textSize="60dp"
-            android:layout_marginTop="36dp"
-            android:layout_alignTop="@+id/imageView"
-            android:layout_toStartOf="@+id/alarmTime2" />
+    <TextView
+        android:id="@+id/alarmTime1"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_alignTop="@+id/imageView"
+        android:layout_marginTop="36dp"
+        android:layout_toStartOf="@+id/alarmTime2"
+        android:text="18:00"
+        android:textColor="#747474"
+        android:textSize="60dp" />
 
-        <TextView
+    <TextView
         android:id="@+id/alarmTime2"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-            android:text="10월 26일"
-        android:textSize="25dp"
-            android:textColor="#8b8b8b"
-            android:layout_alignBottom="@+id/alarmTime1"
-            android:layout_alignEnd="@+id/text" />
+        android:layout_alignBottom="@+id/alarmTime1"
+        android:layout_alignEnd="@+id/text"
+        android:text="10월 26일"
+        android:textColor="#8b8b8b"
+        android:textSize="25dp" />
 
 </RelativeLayout>

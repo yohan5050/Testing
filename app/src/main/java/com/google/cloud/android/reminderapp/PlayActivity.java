@@ -74,7 +74,7 @@ public class PlayActivity extends AppCompatActivity {
         atImage = (ImageView) findViewById(R.id.alarm_image);
 
         progress = (ProgressBar) findViewById(R.id.progress);
-        progress.getProgressDrawable().setColorFilter(Color.argb(100,128,158,182), PorterDuff.Mode.SRC_IN);
+//        progress.getProgressDrawable().setColorFilter(Color.argb(100,128,158,182), PorterDuff.Mode.SRC_IN);
 
         backwardsBtn = (ImageButton) findViewById(R.id.backwards_btn);
         forwardBtn = (ImageButton) findViewById(R.id.forward_btn);

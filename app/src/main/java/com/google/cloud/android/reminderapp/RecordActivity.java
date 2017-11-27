@@ -26,7 +26,7 @@ public class RecordActivity extends AppCompatActivity {
     public static Activity RActivity; // AlarmSoundService에서 사용됨
     DataBase db;
     public static CountDownTimer timer; //AlarmSoundService에서 사용
-    TextView mText;
+    TextView mText, mText2;
 //    ImageButton stopBtn, homeBtn;
     ImageButton stopBtn;
     ImageView recordImage;
@@ -52,6 +52,7 @@ public class RecordActivity extends AppCompatActivity {
 //        recStartBtn = (ImageButton) findViewById(R.id.rec_start_btn);
 //        homeBtn = (ImageButton) findViewById(R.id.home);
         mText = (TextView) findViewById(R.id.text);
+        mText2 = (TextView) findViewById(R.id.text2);
         recordImage = (ImageView) findViewById(R.id.recordImage);
 
         timeAnalysis = new TimeAnalysis();
@@ -68,7 +69,8 @@ public class RecordActivity extends AppCompatActivity {
             @Override
             public void onTick(long millisUntilFinished) {
                 recordImage.startAnimation(anim);
-                mText.setText("녹음 중\n" + (9 - value) + "초 후 종료"); // 7 -> 9
+//                mText.setText("녹음 중\n" + (9 - value) + "초 후 종료"); // 7 -> 9
+                mText2.setText((9 - value) + "초 후 종료");
                 value++;
             }
 
