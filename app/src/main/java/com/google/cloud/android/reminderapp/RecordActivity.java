@@ -84,6 +84,7 @@ public class RecordActivity extends AppCompatActivity {
                 recordImage.clearAnimation();
                 timer.cancel();
                 mText.setText("등록 중...");
+                mText2.setText("");
                 stopBtn.setEnabled(false);
 //                stopBtn.setVisibility(View.GONE);
 //                homeBtn.setVisibility(View.VISIBLE);
@@ -106,6 +107,7 @@ public class RecordActivity extends AppCompatActivity {
                     recordImage.clearAnimation();
                     timer.cancel();
                     mText.setText("등록 중...");
+                    mText2.setText("");
                     stopBtn.setEnabled(false);
 //                    stopBtn.setVisibility(View.GONE);
 //                    homeBtn.setVisibility(View.VISIBLE);
