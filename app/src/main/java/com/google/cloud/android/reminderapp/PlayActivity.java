@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Handler;
 import android.os.Message;
 import android.support.constraint.ConstraintLayout;
@@ -72,6 +74,7 @@ public class PlayActivity extends AppCompatActivity {
         atImage = (ImageView) findViewById(R.id.alarm_image);
 
         progress = (ProgressBar) findViewById(R.id.progress);
+        progress.getProgressDrawable().setColorFilter(Color.argb(100,128,158,182), PorterDuff.Mode.SRC_IN);
 
         backwardsBtn = (ImageButton) findViewById(R.id.backwards_btn);
         forwardBtn = (ImageButton) findViewById(R.id.forward_btn);

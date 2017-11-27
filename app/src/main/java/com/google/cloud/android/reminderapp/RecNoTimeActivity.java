@@ -25,13 +25,13 @@ public class RecNoTimeActivity extends AppCompatActivity {
         db = Main2Activity.getDBInstance();
         textView = (TextView) findViewById(R.id.text);
 
-        ImageButton button = (ImageButton) findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //메인으로 돌아간다
-                finish();
-            }
-        });
+//        ImageButton button = (ImageButton) findViewById(R.id.button);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                //메인으로 돌아간다
+//                finish();
+//            }
+//        });
 
         //RecordActivity로부터 전달 받은 인텐트를 확인한다
         Intent intent = getIntent();

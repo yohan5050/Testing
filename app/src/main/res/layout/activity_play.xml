@@ -144,7 +144,7 @@
             android:paddingLeft="30dp"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
-            style="@android:style/Widget.ProgressBar.Horizontal"
+            style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/imageView"
             android:layout_above="@+id/button"/>
