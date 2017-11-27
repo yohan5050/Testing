@@ -86,7 +86,7 @@ public class RecTimeActivity extends AppCompatActivity {
             System.out.println("db에 시간메모 저장");
         }
 
-        Toast.makeText(getApplicationContext(), returnedValue, Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), returnedValue, Toast.LENGTH_LONG).show();
 
         ///////////////////////////////알람 설정 //////////////////////////////////////////
         ///////////////////////알람 설정//////////////////////////
