@@ -33,7 +33,7 @@
         android:gravity="center"
         android:text="등록 결과"
         android:textColor="#388E3C"
-        android:textSize="50dp" />
+        android:textSize="45dp" />
 
     <TextView
         android:id="@+id/text"
@@ -48,7 +48,7 @@
         android:shadowDy="2"
         android:shadowRadius="2.0"
         android:text="강상우 교수님 스피커 반납"
-        android:textSize="40dp"
+        android:textSize="35dp"
         android:textStyle="bold" />
     </LinearLayout>
 </RelativeLayout>
