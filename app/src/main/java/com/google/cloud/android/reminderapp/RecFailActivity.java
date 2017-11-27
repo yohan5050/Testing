@@ -16,13 +16,13 @@ public class RecFailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rec_fail);
 
-        ImageButton button = (ImageButton) findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //메인으로 돌아간다.
-                finish();
-            }
-        });
+//        ImageButton button = (ImageButton) findViewById(R.id.button);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                //메인으로 돌아간다.
+//                finish();
+//            }
+//        });
 
         //화면을 2초간 보여주고 메인화면으로 이동
         CountDownTimer timer = new CountDownTimer(2000, 1000) {
