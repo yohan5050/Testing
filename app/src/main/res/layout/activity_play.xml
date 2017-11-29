@@ -10,7 +10,7 @@
         android:id="@+id/listImage"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_alignStart="@+id/text"
+        android:layout_alignStart="@+id/scroll"
         android:layout_alignTop="@+id/homeBtn"
         android:layout_marginRight="20dp"
         android:background="#00000000"
@@ -34,7 +34,7 @@
         android:id="@+id/deleteImage"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_alignEnd="@+id/text"
+        android:layout_alignEnd="@+id/scroll"
         android:layout_alignTop="@+id/homeBtn"
         android:layout_marginLeft="20dp"
         android:background="#00000000"
@@ -51,20 +51,30 @@
         android:layout_marginRight="20dp"
         android:background="@drawable/post2" />
 
-    <TextView
-        android:id="@+id/text"
+    <ScrollView
+        android:id="@+id/scroll"
         android:layout_width="280dp"
         android:layout_height="200dp"
         android:layout_alignTop="@+id/alarmTime2"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:gravity="center"
-        android:padding="5dp"
-        android:text="Contents"
-        android:textColor="#000000"
-        android:textSize="40dp"
-        android:textStyle="bold" />
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            android:text="Contents"
+            android:textColor="#55608F"
+            android:textSize="40dp"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+            android:gravity="center" />
+    </ScrollView>
 
     <ImageButton
         android:id="@+id/backwards_btn"
@@ -105,7 +115,7 @@
         android:id="@+id/rtLinear"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
-        android:layout_below="@+id/text"
+        android:layout_below="@+id/scroll"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="3dp"
         android:layout_marginRight="3dp"
@@ -176,7 +186,7 @@
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_alignBottom="@+id/alarmTime1"
-        android:layout_alignEnd="@+id/text"
+        android:layout_alignEnd="@+id/scroll"
         android:text="10월 26일"
         android:textColor="#8b8b8b"
         android:textSize="25dp" />

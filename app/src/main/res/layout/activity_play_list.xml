@@ -83,7 +83,7 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/linearTopBtn"
         android:layout_marginTop="15dp"
-        android:background="#388e3c"
+        android:background="#A0556080"
         android:gravity="center"
         android:text="메모 리스트"
         android:textColor="@android:color/white"

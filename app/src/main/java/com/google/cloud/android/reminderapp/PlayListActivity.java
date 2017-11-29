@@ -602,7 +602,7 @@ public class PlayListActivity extends AppCompatActivity {
             }
 
             if (position == tempPos2) {
-                view.setBackgroundColor(Color.parseColor("#B4F0B4"));
+                view.setBackgroundColor(Color.parseColor("#20556080"));
 //                view.setBackgroundColor(Color.rgb(92, 224, 189)); // #5CE0BD
             } else {
                 view.textView.setBackgroundColor(Color.parseColor("#00000000"));
