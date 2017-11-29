@@ -63,7 +63,8 @@ public class RecTimeActivity extends AppCompatActivity {
         String alarmText = new String();
 
         if (contentValue.equals("")) {
-            textView.setText(timeRegistered + "\n" + "내용 없음");
+            textView.setText(timeRegistered);
+            textContent.setText("내용 없음");
             alarmText = timeRegistered;
         }
         else {
