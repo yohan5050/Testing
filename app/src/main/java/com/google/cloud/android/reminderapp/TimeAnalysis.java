@@ -72,6 +72,7 @@ public class TimeAnalysis {
         isNextDay = false;
         isTime = false;
 
+        System.out.println("extract " + target);
         Calendar cal = Calendar.getInstance();
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yy:MM:dd:hh:mm:ss:a");
@@ -331,6 +332,7 @@ public class TimeAnalysis {
 
         regex = "[다다음날|다음날|내일|낼|명일|모레|내일모레|내일모래|낼모레|낼모래|모래|글피|익일|명일]+";
         int ret = extract100(searchTarget, regex);
+        System.out.println("extract ret " + ret);
         if (ret > 0) {
             isNextDay = true;
             calDay += ret;
@@ -764,6 +766,7 @@ public class TimeAnalysis {
             System.out.println("extract4");
             isExtracted = true;
             isTime = true;
+            isNextDay = false;
             result = matcher.group(0);
             result = result.replaceAll("오전", "");
             result = result.replaceAll("오후", "");
@@ -977,9 +980,9 @@ public class TimeAnalysis {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(searchTarget);
         int maxi = 0;
-        isNextDay = true;
         String temp[] = new String[2];
         while (matcher.find()) {
+            isNextDay = true;
             System.out.println("extract103");
             String match = matcher.group(0);
             String result = match;
@@ -1174,9 +1177,9 @@ public class TimeAnalysis {
             calA = "오후";
             if (calHour < 12)
                 calHour += 12;
-
+            System.out.println("extract " + calDay + ":" + calHour + ":" + calMinute);
+            System.out.println("extract " + (calHour * 60 + calMinute) + " extract " + (curHour * 60 + curMinute) + " " + isNextDay );
             if (calHour * 60 + calMinute < curHour * 60 + curMinute && !isNextDay) {
-
                 calDay += 1;
                 int day_num = days[calMonth];
                 calMonth += calDay / day_num;
@@ -1438,7 +1441,8 @@ public class TimeAnalysis {
             regex = "오전|오후";
             extract101(searchTarget, regex);
 
-            if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour * 60 + curMinute <= calHour * 60 + calMinute) {
+            //if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour * 60 + curMinute <= calHour * 60 + calMinute) {
+                if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek)){
                 //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (0 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 0 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
@@ -1493,7 +1497,8 @@ public class TimeAnalysis {
             atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), 30);
 
             //TODO 오류 수정 바람
-            if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour <= calHour) {
+            //if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour <= calHour) {
+            if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek)){
                 //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (0 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 0 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
@@ -1552,7 +1557,11 @@ public class TimeAnalysis {
             regex = "오전|오후";
             extract101(searchTarget, regex);
 
-            if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour <= calHour) {
+
+            System.out.println("extract wmap : " + wMap.get(curDayOfWeek) + " " + wMap.get(dayofweek) + " " + curHour + " " + calHour);
+
+            //if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour <= calHour) {
+            if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek)) {
                 //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (0 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 0 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
@@ -1607,7 +1616,8 @@ public class TimeAnalysis {
             temp = result.split("시|분");
             atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), Integer.parseInt(temp[1].replaceAll(" ", "")));
 
-            if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour * 60 + curMinute <= calHour * 60 + calMinute) {
+            //if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour * 60 + curMinute <= calHour * 60 + calMinute) {
+            if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek)) {
                 //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (0 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 0 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
@@ -1662,7 +1672,8 @@ public class TimeAnalysis {
 
             atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), 30);
 
-            if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour <= calHour) {
+            //if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour <= calHour) {
+            if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek)) {
                 //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (0 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 0 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
@@ -1715,7 +1726,8 @@ public class TimeAnalysis {
             temp = result.split("시");
             atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), 0);
 
-            if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour <= calHour) {
+            //if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour <= calHour) {
+            if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek)){
                 //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (0 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 0 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
