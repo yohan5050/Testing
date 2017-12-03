@@ -2,11 +2,16 @@ package com.google.cloud.android.reminderapp;
 
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.CountDownTimer;
 import android.os.IBinder;
+import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,6 +25,8 @@ import com.tsengvn.typekit.TypekitContextWrapper;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 
 public class RecordActivity extends AppCompatActivity {

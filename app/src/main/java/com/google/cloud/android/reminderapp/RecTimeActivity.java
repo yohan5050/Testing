@@ -3,10 +3,14 @@ package com.google.cloud.android.reminderapp;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.CountDownTimer;
+import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -61,6 +65,14 @@ public class RecTimeActivity extends AppCompatActivity {
 
         String timeRegistered = words[3] + ":" + words[4] + "(" + words[2] + "일" + ")" + "알람";
         String alarmText = new String();
+
+        int year = Integer.parseInt("20" + words[0]);
+        int month = Integer.parseInt(words[1]) - 1;
+        int day = Integer.parseInt(words[2]);
+        int hour = Integer.parseInt(words[3]);
+        int minute = Integer.parseInt(words[4]);
+        // calendar에 추가한다.
+        insertEvent(year, month, day, hour, minute, contentValue);
 
         if (contentValue.equals("")) {
             textView.setText(timeRegistered);
@@ -150,6 +162,46 @@ public class RecTimeActivity extends AppCompatActivity {
             }
         };
         timer.start();
+    }
+
+    // 캘린더 연동, 캘린더에 알림 시간 기록하기.
+    /*
+    출처 : https://developer.android.com/guide/topics/providers/calendar-provider.html?hl=ko#calendar
+     */
+    private void insertEvent(int year, int month, int day, int hour, int minute, String content) {
+        long calID = 3;
+        long startMillis = 0;
+        long endMillis = 0;
+        Calendar beginTime = Calendar.getInstance();
+        beginTime.set(year, month, day, hour, minute);
+        startMillis = beginTime.getTimeInMillis();
+        Calendar endTime = Calendar.getInstance();
+        endTime.set(year, month, day, hour, minute);
+        endMillis = endTime.getTimeInMillis();
+
+        ContentResolver cr = getContentResolver();
+        ContentValues values = new ContentValues();
+        values.put(CalendarContract.Events.DTSTART, startMillis);
+        values.put(CalendarContract.Events.DTEND, endMillis);
+        values.put(CalendarContract.Events.TITLE, content);
+        values.put(CalendarContract.Events.DESCRIPTION, content);
+        values.put(CalendarContract.Events.CALENDAR_ID, calID);
+        values.put(CalendarContract.Events.EVENT_TIMEZONE, "Asia/Korea");
+        Uri uri = null;
+        try {
+            uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
+        } catch(SecurityException e) {
+            e.printStackTrace();
+        }
+
+        // get the event ID that is the last element in the Uri
+        long eventID;
+        if(uri != null)
+            eventID = Long.parseLong(uri.getLastPathSegment());
+//
+// ... do something with event ID
+//
+//
     }
 
     @Override

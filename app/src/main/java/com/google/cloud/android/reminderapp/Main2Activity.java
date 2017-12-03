@@ -70,14 +70,34 @@ public class Main2Activity extends AppCompatActivity {
         String pCntStr = "" + playCount;
         countList.setText(pCntStr);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
-                == PackageManager.PERMISSION_GRANTED) {
-        } else if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                Manifest.permission.RECORD_AUDIO)) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+        }
+        else if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO) ) {
             showPermissionMessageDialog();
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},
-                    REQUEST_RECORD_AUDIO_PERMISSION);
+        }
+        else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO_PERMISSION);
+        }
+
+
+        /*
+        출처 : http://mommoo.tistory.com/49
+         */
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED){
+            //Manifest.permission.READ_CALENDAR이 접근 승낙 상태 일때
+        } else{
+            //Manifest.permission.READ_CALENDAR이 접근 거절 상태 일때
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.WRITE_CALENDAR)){
+                //사용자가 다시 보지 않기에 체크를 하지 않고, 권한 설정을 거절한 이력이 있는 경우
+            } else{
+                //사용자가 다시 보지 않기에 체크하고, 권한 설정을 거절한 이력이 있는 경우
+            }
+
+            //사용자에게 접근권한 설정을 요구하는 다이얼로그를 띄운다.
+            //만약 사용자가 다시 보지 않기에 체크를 했을 경우엔 권한 설정 다이얼로그가 뜨지 않고,
+            //곧바로 OnRequestPermissionResult가 실행된다.
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_CALENDAR},0);
+
         }
 
     }
@@ -149,16 +169,16 @@ public class Main2Activity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION || requestCode == 0) {
             if (permissions.length == 1 && grantResults.length == 1
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                startVoiceRecorder();
-//                stopVoiceRecorder();
+
             } else {
                 showPermissionMessageDialog();
             }
         } else {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 
