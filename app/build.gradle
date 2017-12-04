@@ -45,7 +45,7 @@ android {
     productFlavors {
         dev {
             // Minimum version with platform multi-dex support
-            minSdkVersion 21
+            minSdkVersion 23 //21 -> 23
         }
         prod {
             // Minimum version that can run gRPC (TLS extension)

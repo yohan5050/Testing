@@ -26,6 +26,12 @@
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+
+
+    출처: http://sksmsvmfhrmfoajek.tistory.com/entry/Android-구글-Account-정보-가져오기 ["개"발 공간]
+
     <application
         android:name=".CustomStartApp"
         android:allowBackup="true"

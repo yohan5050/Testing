@@ -41,6 +41,13 @@ public class DataBase {
         db.insert(tableName, null, values);
     }
 
+//    //사용자 계정 저장하는 함수
+//    public void insertUserAccount(String userAccount) {
+//        db = helper.getWritableDatabase();
+//        ContentValues values = new ContentValues();
+//        values.put("userAccount", userAccount);
+//        db.insert(tableName, null, values);
+//    }
 
 //    /**
 //     * 녹음 파일의 이름을 가지고 알람 시간을 데이터베이스에 업데이트 시켜준다.
@@ -179,6 +186,19 @@ public class DataBase {
         }
         return temp;
     }
+
+//    // 사용자 계정 얻어오는 함수
+//    public String getUserAccount() {
+//        db = helper.getReadableDatabase();
+//        String SQL = "SELECT userAccount FROM " + tableName + ";";
+//        Cursor c = db.rawQuery(SQL, null);
+//        int num = c.getCount();
+//        String temp = new String();
+//        temp = c.getString(0);
+//
+//        if(num == 0) return "null";
+//        return temp;
+//    }
 
     public int getAllPlayListNum()
     {

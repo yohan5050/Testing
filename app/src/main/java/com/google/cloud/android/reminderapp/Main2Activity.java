@@ -1,8 +1,11 @@
 package com.google.cloud.android.reminderapp;
 
 import android.Manifest;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
@@ -34,6 +37,7 @@ public class Main2Activity extends AppCompatActivity {
     public static DataBase db;
     public static VoiceRecorder mVoiceRecorder;
     public static VoicePlayer mVoicePlayer;
+    public static String userAccount;
 
     private SpeechService mSpeechService;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 1; //추가
@@ -41,6 +45,8 @@ public class Main2Activity extends AppCompatActivity {
 
     long bpTime = 0;
     Toast bpToast;
+
+    boolean isFirstAuth = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +66,10 @@ public class Main2Activity extends AppCompatActivity {
 //        play = (Button) findViewById(R.id.play);
         countList = (Button) findViewById(R.id.countlist);
         bpToast = Toast.makeText(this, "뒤로가기를 한번 더 누르면 앱이 종료됩니다.", Toast.LENGTH_SHORT);
+
+
+
+
     }
 
     @Override
@@ -70,34 +80,43 @@ public class Main2Activity extends AppCompatActivity {
         String pCntStr = "" + playCount;
         countList.setText(pCntStr);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+            isFirstAuth = false;
         }
-        else if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO) ) {
+        else if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.RECORD_AUDIO)  ) {
             showPermissionMessageDialog();
         }
         else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO_PERMISSION);
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_CALENDAR, Manifest.permission.RECORD_AUDIO},0);
+           // ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO_PERMISSION);
         }
 
+//  /*
+//        출처 : http://mommoo.tistory.com/49
+//         */
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED){
+//            //Manifest.permission.READ_CALENDAR이 접근 승낙 상태 일때
+//        } else{
+//            //Manifest.permission.READ_CALENDAR이 접근 거절 상태 일때
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.WRITE_CALENDAR)){
+//                //사용자가 다시 보지 않기에 체크를 하지 않고, 권한 설정을 거절한 이력이 있는 경우
+//                showPermissionMessageDialog();
+//            } else{
+//                //사용자가 다시 보지 않기에 체크하고, 권한 설정을 거절한 이력이 있는 경우
+//            }
+//
+//            //사용자에게 접근권한 설정을 요구하는 다이얼로그를 띄운다.
+//            //만약 사용자가 다시 보지 않기에 체크를 했을 경우엔 권한 설정 다이얼로그가 뜨지 않고,
+//            //곧바로 OnRequestPermissionResult가 실행된다.
+//            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_CALENDAR, Manifest.permission.RECORD_AUDIO},0);
+//
+//        }
 
-        /*
-        출처 : http://mommoo.tistory.com/49
-         */
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED){
-            //Manifest.permission.READ_CALENDAR이 접근 승낙 상태 일때
-        } else{
-            //Manifest.permission.READ_CALENDAR이 접근 거절 상태 일때
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.WRITE_CALENDAR)){
-                //사용자가 다시 보지 않기에 체크를 하지 않고, 권한 설정을 거절한 이력이 있는 경우
-            } else{
-                //사용자가 다시 보지 않기에 체크하고, 권한 설정을 거절한 이력이 있는 경우
-            }
 
-            //사용자에게 접근권한 설정을 요구하는 다이얼로그를 띄운다.
-            //만약 사용자가 다시 보지 않기에 체크를 했을 경우엔 권한 설정 다이얼로그가 뜨지 않고,
-            //곧바로 OnRequestPermissionResult가 실행된다.
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_CALENDAR},0);
-
+        //        //  출처: http://shnoble.tistory.com/80 [노블의 개발이야기]
+        // 사용자 계정 얻어오기.
+        if(isFirstAuth) {
+            chooseAccountIntent();
         }
 
     }
@@ -175,7 +194,7 @@ public class Main2Activity extends AppCompatActivity {
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
             } else {
-                showPermissionMessageDialog();
+                //showPermissionMessageDialog();
             }
         } else {
             //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -220,4 +239,36 @@ public class Main2Activity extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
+
+
+//    출처: http://shnoble.tistory.com/80 [노블의 개발이야기]
+    int REQUEST_CODE = 300;
+    private void chooseAccountIntent() {
+        Intent intent = AccountManager.newChooseAccountIntent(
+                null, null, new String[]{"com.google"}, null, null, null, null);
+        startActivityForResult(intent, REQUEST_CODE);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE) {
+            if (data != null) {
+                Bundle extras = data.getExtras();
+                final String accountName = extras.getString(AccountManager.KEY_ACCOUNT_NAME);
+                final String accountType = extras.getString(AccountManager.KEY_ACCOUNT_TYPE);
+                System.out.println("Account Name: " + accountName);
+                System.out.println("Account Type: " + accountType);
+
+                userAccount = accountName;
+
+                //SharedPreferences 사용해서 누적된 알람의 개수 저장
+                SharedPreferences uaPref = getSharedPreferences("uaPref", MODE_PRIVATE);
+                SharedPreferences.Editor editor = uaPref.edit();
+                editor.putString("userAccount", userAccount); // 값 수정.
+                editor.commit();
+            }
+        }
+    }
+
 }

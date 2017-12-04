@@ -1,5 +1,7 @@
 package com.google.cloud.android.reminderapp;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -8,11 +10,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.CountDownTimer;
 import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -21,6 +26,7 @@ import android.widget.Toast;
 import com.tsengvn.typekit.TypekitContextWrapper;
 
 import java.util.Calendar;
+import java.util.TimeZone;
 
 public class RecTimeActivity extends AppCompatActivity {
     public static Activity RTActivity;
@@ -72,6 +78,7 @@ public class RecTimeActivity extends AppCompatActivity {
         int hour = Integer.parseInt(words[3]);
         int minute = Integer.parseInt(words[4]);
         // calendar에 추가한다.
+        System.out.println("test alarm : " + alarmTime);
         insertEvent(year, month, day, hour, minute, contentValue);
 
         if (contentValue.equals("")) {
@@ -167,9 +174,68 @@ public class RecTimeActivity extends AppCompatActivity {
     // 캘린더 연동, 캘린더에 알림 시간 기록하기.
     /*
     출처 : https://developer.android.com/guide/topics/providers/calendar-provider.html?hl=ko#calendar
+
      */
+    // Projection array. Creating indices for this array instead of doing
+// dynamic lookups improves performance.
+    public static final String[] EVENT_PROJECTION = new String[] {
+            CalendarContract.Calendars._ID,                           // 0
+            CalendarContract.Calendars.ACCOUNT_NAME,                  // 1
+            CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,         // 2
+            CalendarContract.Calendars.OWNER_ACCOUNT                  // 3
+    };
+
+    // The indices for the projection array above.
+    private static final int PROJECTION_ID_INDEX = 0;
+    private static final int PROJECTION_ACCOUNT_NAME_INDEX = 1;
+    private static final int PROJECTION_DISPLAY_NAME_INDEX = 2;
+    private static final int PROJECTION_OWNER_ACCOUNT_INDEX = 3;
+
     private void insertEvent(int year, int month, int day, int hour, int minute, String content) {
-        long calID = 3;
+
+        SharedPreferences uaPref = getSharedPreferences("uaPref", MODE_PRIVATE);
+        String userAccount = uaPref.getString("userAccount", "null");
+        System.out.println("what the account " + userAccount);
+
+/// Run query
+        Cursor cur = null;
+        ContentResolver cr = getContentResolver();
+        Uri uri = CalendarContract.Calendars.CONTENT_URI;
+        String selection = "((" + CalendarContract.Calendars.ACCOUNT_NAME + " = ?) AND ("
+                + CalendarContract.Calendars.ACCOUNT_TYPE + " = ?) AND ("
+                + CalendarContract.Calendars.OWNER_ACCOUNT + " = ?))";
+        String[] selectionArgs = new String[] {userAccount, "com.google",
+                userAccount};
+// Submit the query and get a Cursor object back.
+        try {
+            cur = cr.query(uri, EVENT_PROJECTION, selection, selectionArgs, null);
+        } catch(SecurityException e) {
+            e.printStackTrace();
+        }
+
+        // Use the cursor to step through the returned records
+        System.out.println("account cur" + cur);
+        long tmp = 3;
+        while (cur.moveToNext()) {
+            long calID = 0;
+            String displayName = null;
+            String accountName = null;
+            String ownerName = null;
+
+            // Get the field values
+            calID = cur.getLong(PROJECTION_ID_INDEX);
+            displayName = cur.getString(PROJECTION_DISPLAY_NAME_INDEX);
+            accountName = cur.getString(PROJECTION_ACCOUNT_NAME_INDEX);
+            ownerName = cur.getString(PROJECTION_OWNER_ACCOUNT_INDEX);
+
+            // Do something with the values...
+            System.out.println("test account : " +  calID + " " + accountName);
+            tmp = calID;
+            break;
+        }
+
+        //long calID = 3; //3은 local인듯...
+        long calID = tmp;
         long startMillis = 0;
         long endMillis = 0;
         Calendar beginTime = Calendar.getInstance();
@@ -179,15 +245,15 @@ public class RecTimeActivity extends AppCompatActivity {
         endTime.set(year, month, day, hour, minute);
         endMillis = endTime.getTimeInMillis();
 
-        ContentResolver cr = getContentResolver();
+      //  ContentResolver cr = getContentResolver();
         ContentValues values = new ContentValues();
         values.put(CalendarContract.Events.DTSTART, startMillis);
         values.put(CalendarContract.Events.DTEND, endMillis);
         values.put(CalendarContract.Events.TITLE, content);
         values.put(CalendarContract.Events.DESCRIPTION, content);
         values.put(CalendarContract.Events.CALENDAR_ID, calID);
-        values.put(CalendarContract.Events.EVENT_TIMEZONE, "Asia/Korea");
-        Uri uri = null;
+        values.put(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().toString());
+      //  Uri uri = null;
         try {
             uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
         } catch(SecurityException e) {
@@ -202,7 +268,22 @@ public class RecTimeActivity extends AppCompatActivity {
 // ... do something with event ID
 //
 //
+//        Calendar beginTime = Calendar.getInstance();
+//        beginTime.set(year, month, day, hour, minute);
+//        Calendar endTime = Calendar.getInstance();
+//        endTime.set(year, month, day, hour, minute);
+//        Intent intent = new Intent(Intent.ACTION_INSERT)
+//                .setData(CalendarContract.Events.CONTENT_URI)
+//                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
+//                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
+//                .putExtra(CalendarContract.Events.TITLE, content)
+//                .putExtra(CalendarContract.Events.DESCRIPTION, content)
+////                .putExtra(CalendarContract.Events.EVENT_LOCATION, "The gym")
+//                .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY);
+////                .putExtra(Intent.EXTRA_EMAIL, "rowan@example.com,trevor@example.com");
+//        startActivity(intent);
     }
+
 
     @Override
     public void onBackPressed() {
