@@ -147,6 +147,8 @@ public class TimeAnalysis {
         String calTime = calYear + ":" + calMonth + ":" + calDay + ":" + calHour + ":" + calMinute ;
         //추출한 표현값 리턴
 
+        System.out.println("extract result:" + calTime );
+
         //시간표현이 없을 때 일반 메모로 인식하기 위해 note라는 문자열을 리턴함.
         if(calTime.equals(curTime))
             return "note";
@@ -773,6 +775,7 @@ public class TimeAnalysis {
             temp = result.split("시");
 
             atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), 30);
+            System.out.println("extract :result" + curYear);
         }
         return isExtracted;
     }
@@ -1003,7 +1006,7 @@ public class TimeAnalysis {
             int day_num = days[curMonth];
             calMonth += calDay == day_num ? 0 : calDay / day_num;
             calDay = calDay % day_num == 0 ? day_num : calDay % day_num;
-            calYear += calMonth / 12;
+            calYear += calMonth / 13;
             calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
 
         }
@@ -1098,7 +1101,7 @@ public class TimeAnalysis {
             int day_num = days[curMonth];
             calMonth += calDay / day_num;
             calDay = calDay % day_num == 0 ? day_num : calDay % day_num;
-            calYear += calMonth / 12;
+            calYear += calMonth / 13;
             calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
         }
         return isExtracted;
@@ -1146,7 +1149,7 @@ public class TimeAnalysis {
                 calMonth += calDay / day_num;
             }
             calDay = calDay % day_num == 0 ? day_num : calDay % day_num;
-            calYear += calMonth / 12;
+            calYear += calMonth / 13;
             calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
 
         }
@@ -1177,28 +1180,38 @@ public class TimeAnalysis {
             calA = "오후";
             if (calHour < 12)
                 calHour += 12;
-            System.out.println("extract " + calDay + ":" + calHour + ":" + calMinute);
-            System.out.println("extract " + (calHour * 60 + calMinute) + " extract " + (curHour * 60 + curMinute) + " " + isNextDay );
             if (calHour * 60 + calMinute < curHour * 60 + curMinute && !isNextDay) {
                 calDay += 1;
                 int day_num = days[calMonth];
                 calMonth += calDay / day_num;
                 calDay = calDay % day_num == 0 ? day_num : calDay % day_num;
 
-                calYear += calMonth / 12;
+                calYear += calMonth / 13;
                 calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
             }
         } else if (result.equals("오전") || calA.equals("오전")) { //오전
             calA = "오전";
+            System.out.println("extract " + calDay + ":" + calHour + ":" + calMinute);
+            System.out.println("extract " + (calHour * 60 + calMinute) + " extract " + (curHour * 60 + curMinute) + " " + isNextDay );
             if (calHour * 60 + calMinute < curHour * 60 + curMinute && !isNextDay) {
 
                 calDay += 1;
+                System.out.println("extract day : " + calDay);
                 int day_num = days[calMonth];
+
+                System.out.println("extract daynum : " + day_num);
                 calMonth += calDay / day_num;
+
+                System.out.println("extract month : " + calMonth);
                 calDay = calDay % day_num == 0 ? day_num : calDay % day_num;
 
-                calYear += calMonth / 12;
+                calYear += calMonth / 13;
+
+                System.out.println("extract year : " + calYear);
                 calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
+
+
+                System.out.println("extract Month : " + calMonth);
             }
         } else { //오전, 오후가 입력되지 않았다면, working time(8am - 8pm, 8 - 20) 범위내에서 처리
             System.out.println("extract200");
@@ -1221,7 +1234,7 @@ public class TimeAnalysis {
                 calMonth += calDay == day_num ? 0 : calDay / day_num;
                 calDay = calDay % day_num == 0 ? day_num : calDay % day_num;
 
-                calYear += calMonth / 12;
+                calYear += calMonth / 13;
                 calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
             }
         }
@@ -1282,7 +1295,7 @@ public class TimeAnalysis {
             int day_num = days[curMonth];
             calMonth += calDay / day_num;
             calDay = calDay % day_num == 0 ? day_num : calDay % day_num;
-            calYear += calMonth / 12;
+            calYear += calMonth / 13;
             calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
 
         }
@@ -1341,7 +1354,7 @@ public class TimeAnalysis {
             int day_num = days[curMonth];
             calMonth += calDay / day_num;
             calDay = calDay % day_num == 0 ? day_num : calDay % day_num;
-            calYear += calMonth / 12;
+            calYear += calMonth / 13;
             calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
         }
         return isExtracted;
@@ -1399,7 +1412,7 @@ public class TimeAnalysis {
             int day_num = days[curMonth];
             calMonth += calDay / day_num;
             calDay = calDay % day_num == 0 ? day_num : calDay % day_num;
-            calYear += calMonth / 12;
+            calYear += calMonth / 13;
             calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
         }
         return isExtracted;
@@ -1442,7 +1455,7 @@ public class TimeAnalysis {
             extract101(searchTarget, regex);
 
             //if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek) && curHour * 60 + curMinute <= calHour * 60 + calMinute) {
-                if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek)){
+            if (wMap.get(curDayOfWeek) <= wMap.get(dayofweek)){
                 //int calweekday = (-1 * (wMap.get(curDayOfWeek) - 1) + (0 * 7 + wMap.get(dayofweek) - 1));
                 int calweekday = 0 * 7 + (wMap.get(dayofweek) - (wMap.get(curDayOfWeek)));
                 calDay += calweekday;
@@ -1455,7 +1468,7 @@ public class TimeAnalysis {
             int day_num = days[curMonth];
             calMonth += calDay / day_num;
             calDay = calDay % day_num == 0 ? day_num : calDay % day_num;
-            calYear += calMonth / 12;
+            calYear += calMonth / 13;
             calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
         }
         return isExtracted;
@@ -1512,7 +1525,7 @@ public class TimeAnalysis {
             int day_num = days[curMonth];
             calMonth += calDay / day_num;
             calDay = calDay % day_num == 0 ? day_num : calDay % day_num;
-            calYear += calMonth / 12;
+            calYear += calMonth / 13;
             calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
         }
         return isExtracted;
@@ -1576,7 +1589,7 @@ public class TimeAnalysis {
             int day_num = days[curMonth];
             calMonth += calDay / day_num;
             calDay = calDay % day_num == 0 ? day_num : calDay % day_num;
-            calYear += calMonth / 12;
+            calYear += calMonth / 13;
             calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
         }
         return isExtracted;
@@ -1631,7 +1644,7 @@ public class TimeAnalysis {
             int day_num = days[curMonth];
             calMonth += calDay / day_num;
             calDay = calDay % day_num == 0 ? day_num : calDay % day_num;
-            calYear += calMonth / 12;
+            calYear += calMonth / 13;
             calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
         }
         return isExtracted;
@@ -1687,7 +1700,7 @@ public class TimeAnalysis {
             int day_num = days[curMonth];
             calMonth += calDay / day_num;
             calDay = calDay % day_num == 0 ? day_num : calDay % day_num;
-            calYear += calMonth / 12;
+            calYear += calMonth / 13;
             calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
         }
         return isExtracted;
@@ -1741,7 +1754,7 @@ public class TimeAnalysis {
             int day_num = days[curMonth];
             calMonth += calDay / day_num;
             calDay = calDay % day_num == 0 ? day_num : calDay % day_num;
-            calYear += calMonth / 12;
+            calYear += calMonth / 13;
             calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
         }
         return isExtracted;
@@ -1791,9 +1804,8 @@ public class TimeAnalysis {
         int day_num = days[curMonth];
         calMonth += calDay == day_num ? 0 : calDay / day_num;
         calDay = calDay % day_num == 0 ? day_num : calDay % day_num;
-        calYear += calMonth / 12;
+        calYear += calMonth / 13;
         calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
-
         if (calHour >= 12) calA = "오후";
     }
 
