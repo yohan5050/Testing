@@ -279,7 +279,7 @@ public class RecordActivity extends AppCompatActivity {
                 intent.putExtra("f_name", fileName);
                 intent.putExtra("r_value", returnedValue);
                 intent.putExtra("a_time", alarmTime);
-                intent.putExtra("c_value", contentValue);
+                intent.putExtra("c_value", returnedValue); //여기 수정했음(returnedValue로) <- contentValue였음
                 startActivity(intent);
 
                 finish();

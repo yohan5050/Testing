@@ -155,6 +155,7 @@ public class PlayListActivity extends AppCompatActivity {
                     if (tempPos != position) {
                         tempPos = position;
 
+                        //String[] contentNameArr = db.getAllContent();
                         String[] contentNameArr = db.getAllContent();
                         int cnt = contentNameArr.length;
 //                        textView.setText(contentNameArr[cnt -1 - position].replaceAll(" ", ""));
@@ -519,7 +520,7 @@ public class PlayListActivity extends AppCompatActivity {
         System.out.println("Play Count : " + playCount);
         for (int i = playCount - 1; i >= 0; i--) {
             //각 녹음 파일의 일정 내용을 목록에 출력하는 코드.
-            contentNameArr[i] = contentAnalysis.Analysis(contentNameArr[i]);
+            //contentNameArr[i] = contentAnalysis.Analysis(contentNameArr[i]);
 
             //현재 시간과 알람 시간을 비교해서 종료된 알람과 앞으로 예정된 알람을 색깔로 구분하자.
             String strColor = new String();
