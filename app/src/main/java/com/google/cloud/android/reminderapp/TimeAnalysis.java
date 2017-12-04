@@ -88,7 +88,7 @@ public class TimeAnalysis {
         //curSecond = Integer.parseInt(temp[5]);
 
         curA = temp[6];
-        calA = temp[6];
+        //calA = temp[6]; //오전을 기본값으로 두고 있었기에 에러가 났으므로 수정함.
 
         //현재 요일을 가져온다.
         cal.set(Calendar.YEAR, curYear);
@@ -334,7 +334,7 @@ public class TimeAnalysis {
 
         regex = "[다다음날|다음날|내일|낼|명일|모레|내일모레|내일모래|낼모레|낼모래|모래|글피|익일|명일]+";
         int ret = extract100(searchTarget, regex);
-        System.out.println("extract ret " + ret);
+        System.out.println("extract ret " + ret + calA);
         if (ret > 0) {
             isNextDay = true;
             calDay += ret;
@@ -775,7 +775,7 @@ public class TimeAnalysis {
             temp = result.split("시");
 
             atTime(curYear, curMonth, curDay, Integer.parseInt(temp[0].replaceAll(" ", "")), 30);
-            System.out.println("extract :result" + curYear);
+            System.out.println("extract :result" + curYear + calA);
         }
         return isExtracted;
     }
@@ -1190,6 +1190,8 @@ public class TimeAnalysis {
                 calMonth = calMonth % 12 == 0 ? 12 : calMonth % 12;
             }
         } else if (result.equals("오전") || calA.equals("오전")) { //오전
+            System.out.println("extract " + result + "extract2 " + calA);
+
             calA = "오전";
             System.out.println("extract " + calDay + ":" + calHour + ":" + calMinute);
             System.out.println("extract " + (calHour * 60 + calMinute) + " extract " + (curHour * 60 + curMinute) + " " + isNextDay );
