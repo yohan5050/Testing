@@ -14,7 +14,7 @@
         android:layout_marginRight="10dp"
         android:textSize="12dp"
         android:id="@+id/version"
-        android:text="VERSION 1.8"
+        android:text="VERSION 1.9"
         android:layout_marginBottom="13dp" />
 
     <ImageView
