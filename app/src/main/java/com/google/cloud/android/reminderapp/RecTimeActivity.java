@@ -261,27 +261,17 @@ public class RecTimeActivity extends AppCompatActivity {
         }
 
         // get the event ID that is the last element in the Uri
-        long eventID;
+        long eventID = -1;
         if(uri != null)
             eventID = Long.parseLong(uri.getLastPathSegment());
 //
 // ... do something with event ID
-//
-//
-//        Calendar beginTime = Calendar.getInstance();
-//        beginTime.set(year, month, day, hour, minute);
-//        Calendar endTime = Calendar.getInstance();
-//        endTime.set(year, month, day, hour, minute);
-//        Intent intent = new Intent(Intent.ACTION_INSERT)
-//                .setData(CalendarContract.Events.CONTENT_URI)
-//                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
-//                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
-//                .putExtra(CalendarContract.Events.TITLE, content)
-//                .putExtra(CalendarContract.Events.DESCRIPTION, content)
-////                .putExtra(CalendarContract.Events.EVENT_LOCATION, "The gym")
-//                .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY);
-////                .putExtra(Intent.EXTRA_EMAIL, "rowan@example.com,trevor@example.com");
-//        startActivity(intent);
+        //SharedPreferences 사용해서 파일 이름에 해당하는 eventID 저장
+        SharedPreferences calIntentPref = getSharedPreferences("calPref", MODE_PRIVATE);
+        SharedPreferences.Editor piEditor = calIntentPref.edit();
+        piEditor.putLong(fileName, eventID);
+        piEditor.commit();
+
     }
 
 

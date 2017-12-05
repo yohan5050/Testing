@@ -3,6 +3,9 @@ package com.google.cloud.android.reminderapp;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.CalendarContract;
@@ -703,5 +707,18 @@ public class PlayListActivity extends AppCompatActivity {
                 sender.cancel();
             }
         }
+
+        // 파일 이름에 해당하는 캘린더 일정 삭제
+        SharedPreferences calTempPref = getSharedPreferences("calPref", MODE_PRIVATE);
+        long eventID = calTempPref.getLong(fileNameArr[deletePos], -1); //fileNameArr[playingPos]에 해당하는 값이 없으면 -1을 받아온다.
+
+        // delete calendar
+        ContentResolver cr = getContentResolver();
+        ContentValues values = new ContentValues();
+        Uri deleteUri = null;
+        deleteUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID);
+        int rows = getContentResolver().delete(deleteUri, null, null);
+
+        System.out.println("test : " + eventID + " 삭제");
     }
 }
