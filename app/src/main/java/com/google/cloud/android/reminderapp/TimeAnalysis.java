@@ -147,11 +147,50 @@ public class TimeAnalysis {
         String calTime = calYear + ":" + calMonth + ":" + calDay + ":" + calHour + ":" + calMinute ;
         //추출한 표현값 리턴
 
-        System.out.println("extract result:" + calTime );
+        System.out.println("extract result1:" + calTime );
 
         //시간표현이 없을 때 일반 메모로 인식하기 위해 note라는 문자열을 리턴함.
         if(calTime.equals(curTime))
             return "note";
+
+        //15분을 뺀 시간으로 적는다.
+        if(calMinute > 15) //분
+        {
+            calMinute = calMinute - 15;
+        }
+        else
+        {
+            calMinute = calMinute - 15 + 60;
+            if(calHour > 0) //시
+            {
+                calHour= calHour - 1;
+            }
+            else
+            {
+                calHour= calHour -1 + 24;
+                if(calDay > 1)//일
+                {
+                    calDay = calDay -1;
+                }
+                else
+                {
+                    calDay = calDay - 1 + days[calMonth];
+                    if(calMonth > 1) //월
+                    {
+                        calMonth = calMonth - 1;
+                    }
+                    else
+                    {
+                        calMonth = calMonth -1 + 12;
+                        calYear = calYear - 1;
+                    }
+                }
+            }
+        }
+
+        calTime = calYear + ":" + calMonth + ":" + calDay + ":" + calHour + ":" + calMinute ;
+        System.out.println("extract result2:" + calTime );
+
         return calTime;
     }
     /**
