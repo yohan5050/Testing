@@ -712,13 +712,15 @@ public class PlayListActivity extends AppCompatActivity {
         SharedPreferences calTempPref = getSharedPreferences("calPref", MODE_PRIVATE);
         long eventID = calTempPref.getLong(fileNameArr[deletePos], -1); //fileNameArr[playingPos]에 해당하는 값이 없으면 -1을 받아온다.
 
-        // delete calendar
-        ContentResolver cr = getContentResolver();
-        ContentValues values = new ContentValues();
-        Uri deleteUri = null;
-        deleteUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID);
-        int rows = getContentResolver().delete(deleteUri, null, null);
+        if(eventID != -1) {
+            // delete calendar
+            ContentResolver cr = getContentResolver();
+            ContentValues values = new ContentValues();
+            Uri deleteUri = null;
+            deleteUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID);
+            int rows = getContentResolver().delete(deleteUri, null, null);
 
-        System.out.println("test : " + eventID + " 삭제");
+            System.out.println("test : " + eventID + " 삭제");
+        }
     }
 }
